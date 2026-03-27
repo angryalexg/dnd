@@ -175,6 +175,10 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
 /* INSPIRATION */
 .insp-pip{width:16px;height:16px;border-radius:50%;background:transparent;border:2px solid var(--gold-l);cursor:pointer;transition:background .15s;flex-shrink:0;}
 .insp-pip.active{background:var(--gold-l);}
+/* CHARACTER NOTES */
+.char-notes{width:100%;min-height:90px;font-size:11px;line-height:1.6;border:.5px solid var(--bd);border-radius:6px;background:var(--sec);color:var(--ink);font-family:inherit;padding:7px 9px;resize:vertical;outline:none;}
+.char-notes::placeholder{color:var(--ink2);}
+.char-notes:focus{border-color:var(--gold);}
 /* COVER */
 .cover-row{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:4px;}
 .cover-btn{font-size:11px;padding:3px 11px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--ink2);cursor:pointer;font-family:inherit;transition:all .15s;}
@@ -350,6 +354,10 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
           <div><b style="color:var(--ink);">Resistances:</b> Radiant, Necrotic</div>
         </div>
       </div>
+      <div class="sec">
+        <div class="sec-t">Background &amp; Notes</div>
+        <textarea class="char-notes" id="charNotes" placeholder="Backstory, personality traits, bonds, flaws, session notes, NPC names..." oninput="saveNotes()"></textarea>
+      </div>
     </div>
     <div class="col">
       <div class="sec">
@@ -399,6 +407,8 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Spare the Dying (cantrip)</span><span class="badge b-free">At will · 15ft</span><span class="utool-arr">▶</span></div><div class="utool-desc">Stabilize any downed ally at 15ft instantly — no slot. Use this instead of Healing Word when someone just needs to not die. Save the BA heal for when they need to get back up and fight.</div></div>
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Healing Hands (Aasimar)</span><span class="badge b-lr">1/Long Rest</span><span class="utool-arr">▶</span></div><div class="utool-desc">Magic action: touch a creature, restore 3d4 HP. Completely free — no spell slot. Use every long rest without thinking. Great for topping someone off between fights.</div></div>
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Detect Magic (ritual)</span><span class="badge b-free">No slot if ritual</span><span class="utool-arr">▶</span></div><div class="utool-desc">You have this prepared! Cast as a 10-minute ritual (no slot) to sense magical auras within 30ft. Use when exploring a new room, checking a suspicious object, or wondering if an NPC is enchanted. Never burn a slot — always ritual it.</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Thaumaturgy (cantrip)</span><span class="badge b-free">At will · Flavor</span><span class="utool-arr">▶</span></div><div class="utool-desc">From your Thaumaturge Divine Order. Minor magical effects lasting up to 1 minute — boom your voice to fill a room, cause harmless tremors underfoot, flicker or change the color of flames, make your eyes glow, cause a door or window to slam open, create an unsettling echo. Completely at will, no action economy cost beyond your action. Great for establishing Deb's divine authority before a tough conversation.</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Prayer of Healing (rest time)</span><span class="badge b-sr">10-min cast · 2nd slot</span><span class="utool-arr">▶</span></div><div class="utool-desc">10-minute cast means it can ONLY be used outside combat — but that makes it perfect for short rests. Up to 5 creatures each gain 2d8+3 HP. Suggest this whenever the party takes a breather between fights. Easy to forget because it has no in-combat use.</div></div>
       </div>
       <div class="util-card">
         <div class="util-hdr">Channel Divinity smart plays</div>
@@ -419,6 +429,8 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Persuasion +4</span><span class="utool-arr">▶</span></div><div class="utool-desc">Your second strong social skill. Use when you want to genuinely convince someone vs. Intimidation's coercion. Pair with Guidance (+d4) on high-stakes social rolls.</div></div>
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Medicine +3</span><span class="utool-arr">▶</span></div><div class="utool-desc">Diagnose illness or poison (DC 10-15), stabilize dying creatures, determine cause of death. Check Medicine before burning a Lesser Restoration slot — you might not need the spell.</div></div>
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Lesser Restoration timing</span><span class="utool-arr">▶</span></div><div class="utool-desc">Only a Bonus Action in 2024! When an ally is Blinded, Paralyzed, or Poisoned, removing that condition is often worth more than any damage you could deal. You can remove the condition AND still attack on the same turn.</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Military Rank (Soldier background)</span><span class="badge b-free">Always on</span><span class="utool-arr">▶</span></div><div class="utool-desc">Soldiers loyal to your former military organization still recognize your authority and defer to you. You can invoke your rank to get free lodging and food at military encampments, forts, and garrisons. You can also sometimes requisition equipment or horses for temporary use. DMs love when players actually use this — don't forget it exists when you're near any military presence.</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Celestial Revelation — social weapon</span><span class="badge b-lr">1/Long Rest</span><span class="utool-arr">▶</span></div><div class="utool-desc">Activating Celestial Revelation outside of combat (glowing eyes, spectral wings, necrotic shroud) makes it visually obvious Deb is not fully human. Ask your DM if this grants Advantage on Intimidation or Persuasion checks when relevant — revealing divine power to intimidate a gang, or proving legitimacy to a skeptical noble. The Necrotic Shroud version (enemies must save or be Frightened) can also potentially end a social confrontation before it becomes combat.</div></div>
       </div>
     </div>
   </div>
@@ -752,6 +764,9 @@ function renderRes(res){
 }
 function renderAllRes(){ALL_RES.forEach(r=>renderRes(r));}
 
+// ── Character notes ────────────────────────────────────
+function saveNotes(){const s=getState();s.notes=document.getElementById('charNotes').value;localStorage.setItem(STORE_KEY,JSON.stringify(s));}
+
 // ── Cover ──────────────────────────────────────────────
 let coverBonus=0;
 function setCover(val,btn){
@@ -927,6 +942,7 @@ function ts(row){
   // Resources + spells
   loadState();
   // Concentration
+  if(s.notes)document.getElementById('charNotes').value=s.notes;
   if(s.conc)document.getElementById('concSpell').value=s.conc;
   // Inspiration
   if(s.inspired){inspired=true;document.getElementById('inspPip').classList.add('active');}
