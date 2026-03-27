@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- TODO: Update title -->
+<title>CHARACTER NAME — CLASS LEVEL</title>
+<style>
+:root{--gold:#8B6914;--gold-l:#c9a84c;--gold-p:#f5e9c8;--bg:#faf8f3;--card:#fff;--sec:#f5f2ea;--ink:#1a1a18;--ink2:#6b6860;--bd:rgba(0,0,0,0.12);--r:8px;--green:#1D9E75;--purple:#534AB7;--red:#D85A30;--amber:#BA7517;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;}
+.sheet{max-width:960px;margin:0 auto;padding:16px;}
+/* HEADER */
+.hdr{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;margin-bottom:12px;padding-bottom:12px;border-bottom:2px solid var(--gold-l);}
+.cname{font-size:22px;font-weight:700;}
+.meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.pill{font-size:11px;background:var(--sec);border:0.5px solid var(--bd);border-radius:20px;padding:2px 9px;color:var(--ink2);}
+.pill b{font-weight:700;color:var(--ink);}
+.hdr-r{display:flex;flex-direction:column;gap:7px;align-items:flex-end;}
+.srow{display:flex;gap:7px;}
+.sb{text-align:center;background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:6px 12px;min-width:58px;}
+.sb .v{font-size:18px;font-weight:700;}.sb .l{font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px;margin-top:1px;}
+/* HP TRACKER */
+.hp-box{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:10px 14px;margin-bottom:12px;}
+.hp-top{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.hp-nums{display:flex;align-items:baseline;gap:3px;}
+.hp-cur{font-size:30px;font-weight:700;min-width:38px;text-align:center;}
+.hp-sep{font-size:20px;color:var(--ink2);}
+.hp-max{font-size:20px;color:var(--ink2);}
+.hp-lbl{font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;}
+.hp-bar-wrap{flex:1;background:var(--sec);border-radius:4px;height:7px;overflow:hidden;}
+.hp-bar{height:7px;border-radius:4px;background:var(--green);transition:width .25s,background .25s;}
+.hp-pct{font-size:11px;color:var(--ink2);min-width:34px;text-align:right;}
+.tmp-info{font-size:11px;color:var(--purple);font-weight:600;min-width:50px;}
+.hp-controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.hp-controls input{width:70px;padding:5px 7px;font-size:13px;border:0.5px solid var(--bd);border-radius:var(--r);background:var(--card);color:var(--ink);font-family:inherit;}
+.btn{font-size:12px;padding:5px 11px;border:0.5px solid var(--bd);border-radius:var(--r);cursor:pointer;background:transparent;color:var(--ink);font-family:inherit;}
+.btn:hover{background:var(--sec);}
+.btn-dmg{border-color:var(--red);color:var(--red);}
+.btn-heal{border-color:var(--green);color:var(--green);}
+.btn-sr{border-color:var(--amber);color:var(--amber);}
+.btn-sm{font-size:11px;padding:4px 8px;color:var(--ink2);}
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;}
+.tab{font-size:12px;padding:5px 13px;border:0.5px solid var(--bd);border-radius:20px;cursor:pointer;background:transparent;color:var(--ink2);font-family:inherit;}
+.tab.active,.tab:hover{background:var(--gold);color:#fff;border-color:var(--gold);}
+.panel{display:none;}.panel.active{display:block;}
+/* LAYOUT */
+.grid2{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:10px;}
+.grid2x{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;}
+.col{display:flex;flex-direction:column;gap:8px;}
+.sec{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:9px;}
+.sec-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--gold);margin-bottom:7px;border-bottom:.5px solid var(--bd);padding-bottom:4px;}
+/* ABILITY SCORES */
+.ab6{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
+.ab{background:var(--sec);border-radius:6px;padding:5px 3px;text-align:center;}
+.abm{font-size:15px;font-weight:700;}.abs{font-size:11px;color:var(--ink2);margin-top:1px;}.abn{font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.3px;margin-top:1px;}
+.pos{color:var(--green);}.neg{color:var(--red);}
+/* SKILLS GROUPED */
+.sg{background:var(--sec);border-radius:6px;padding:6px 7px;margin-bottom:4px;}
+.sg-h{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;}
+.sk{display:flex;align-items:center;gap:5px;font-size:12px;padding:1px 0;}
+.dot{width:7px;height:7px;border-radius:50%;border:1.5px solid var(--bd);flex-shrink:0;}
+.dot.p{background:var(--gold);border-color:var(--gold);}
+.skn{flex:1;color:var(--ink2);}
+.skv{font-weight:700;color:var(--ink);}
+.sk-note{font-size:10px;color:var(--purple);font-style:italic;}
+.sk-bonus{font-size:10px;color:var(--gold);margin-left:3px;}
+.sk.hi .skn{color:var(--green);font-weight:700;}.sk.hi .skv{color:var(--green);}
+/* PASSIVES */
+.prow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
+.pbox{background:var(--sec);border-radius:6px;padding:5px;text-align:center;}
+.pv{font-size:16px;font-weight:700;}.pl{font-size:9px;color:var(--ink2);text-transform:uppercase;}
+/* USE TRACKERS */
+.ut{background:var(--sec);border-radius:6px;padding:7px 9px;margin-bottom:5px;}
+.ut-top{display:flex;align-items:center;gap:7px;margin-bottom:4px;}
+.ut-name{font-size:12px;font-weight:700;flex:1;}
+.badge{font-size:10px;padding:1px 7px;border-radius:3px;font-weight:600;}
+.b-lr{background:#EEEDFE;color:var(--purple);}
+.b-sr{background:#E1F5EE;color:#0F6E56;}
+.b-free{background:#EAF3DE;color:#3B6D11;}
+.udots{display:flex;gap:5px;flex-wrap:wrap;}
+.udot{width:13px;height:13px;border-radius:50%;background:var(--gold-l);cursor:pointer;border:none;transition:opacity .15s;flex-shrink:0;}
+.udot.used{opacity:.18;background:var(--ink2);}
+.ut-desc{font-size:11px;color:var(--ink2);line-height:1.5;}
+/* WEAPONS */
+.wtb{width:100%;border-collapse:collapse;font-size:12px;}
+.wtb th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);padding:4px 6px;border-bottom:.5px solid var(--bd);font-weight:700;}
+.wtb td{padding:5px 6px;border-bottom:.5px solid rgba(0,0,0,.05);}
+.hbadge{background:var(--sec);border:.5px solid var(--bd);border-radius:4px;padding:2px 6px;font-weight:700;}
+.cpill{font-size:11px;background:var(--sec);border:.5px solid var(--bd);border-radius:20px;padding:3px 9px;display:inline-block;margin:2px;}
+/* SPELLS */
+.slot-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px;}
+.slot-box{text-align:center;background:var(--sec);border-radius:6px;padding:7px;}
+.slot-lbl{font-size:10px;color:var(--ink2);text-transform:uppercase;}
+.slot-n{font-size:14px;font-weight:700;}
+.sdots{display:flex;justify-content:center;gap:4px;margin-top:5px;}
+.sdot{width:11px;height:11px;border-radius:50%;background:var(--gold-l);cursor:pointer;border:none;transition:opacity .15s;}
+.sdot.used{opacity:.18;background:var(--ink2);}
+.sl-lbl{font-size:11px;font-weight:700;color:var(--ink2);padding:5px 0 3px;}
+/* SPELL ROWS */
+.sr{display:flex;align-items:center;gap:7px;font-size:12px;padding:5px 7px;border-radius:5px;background:var(--sec);margin-bottom:3px;cursor:pointer;transition:background .1s;user-select:none;}
+.sr:hover,.sr.open{background:var(--gold-p);}
+.sr.open{border-radius:5px 5px 0 0;margin-bottom:0;}
+.sr.aw{border-left:2px solid var(--gold);}
+.slvl{font-size:10px;background:var(--card);border:.5px solid var(--bd);border-radius:3px;padding:1px 5px;min-width:20px;text-align:center;color:var(--ink2);}
+.sn{flex:1;font-weight:600;}
+.stag{font-size:10px;color:var(--ink2);}
+.sarr{font-size:10px;color:var(--ink2);margin-left:3px;transition:transform .15s;}
+.sr.open .sarr{transform:rotate(90deg);}
+.sd{display:none;font-size:11px;color:var(--ink2);line-height:1.6;padding:7px 9px;background:var(--gold-p);border-radius:0 0 5px 5px;margin-bottom:3px;border-left:2px solid var(--gold-l);}
+.sd.open{display:block;}
+.sdm{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px;}
+.sdm span{font-size:10px;background:rgba(139,105,20,.12);border-radius:3px;padding:2px 6px;color:var(--gold);font-weight:700;}
+/* FEATURES */
+.ft{padding:7px 9px;background:var(--sec);border-radius:6px;margin-bottom:5px;}
+.ftn{font-size:12px;font-weight:700;}
+.ftd{font-size:11px;color:var(--ink2);margin-top:3px;line-height:1.55;}
+/* CD OPTIONS */
+.cd-opt{background:var(--sec);border-radius:6px;padding:7px 9px;margin-bottom:4px;cursor:pointer;border:.5px solid transparent;}
+.cd-opt:hover,.cd-opt.open{border-color:var(--bd);}
+.cd-hdr{display:flex;align-items:center;gap:6px;}
+.cd-name{font-size:12px;font-weight:700;flex:1;}
+.cd-tag{font-size:10px;padding:1px 6px;border-radius:3px;font-weight:600;}
+.t-act{background:#FAEEDA;color:#854F0B;}
+.t-ba{background:#E1F5EE;color:#0F6E56;}
+.t-react{background:#FAECE7;color:#993C1D;}
+.t-spec{background:#EEEDFE;color:var(--purple);}
+.cd-arr{font-size:10px;color:var(--ink2);transition:transform .15s;}
+.cd-opt.open .cd-arr{transform:rotate(90deg);}
+.cd-desc{display:none;font-size:11px;color:var(--ink2);line-height:1.55;margin-top:5px;padding-top:5px;border-top:.5px solid var(--bd);}
+.cd-opt.open .cd-desc{display:block;}
+/* UTILITY */
+.util-card{background:var(--card);border:.5px solid var(--bd);border-radius:var(--r);padding:9px;margin-bottom:8px;}
+.util-hdr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);margin-bottom:7px;padding-bottom:4px;border-bottom:.5px solid var(--bd);}
+.utool{padding:5px 7px;border-radius:5px;margin-bottom:3px;cursor:pointer;border:.5px solid transparent;}
+.utool:hover,.utool.open{background:var(--sec);border-color:var(--bd);}
+.utool-hdr{display:flex;align-items:center;gap:6px;}
+.utool-name{font-size:12px;font-weight:700;flex:1;}
+.utool-arr{font-size:10px;color:var(--ink2);transition:transform .15s;}
+.utool.open .utool-arr{transform:rotate(90deg);}
+.utool-desc{display:none;font-size:11px;color:var(--ink2);line-height:1.55;margin-top:5px;padding-top:5px;border-top:.5px solid var(--bd);}
+.utool.open .utool-desc{display:block;}
+@media(max-width:600px){.grid2,.grid2x{grid-template-columns:1fr;}.hdr{grid-template-columns:1fr;}.ab6{grid-template-columns:repeat(3,1fr);}.slot-grid{grid-template-columns:1fr 1fr 1fr;}}
+/* DARK MODE */
+body.dark{--bg:#1b1917;--card:#242220;--sec:#2d2b28;--ink:#e8e4da;--ink2:#9b9890;--bd:rgba(255,255,255,0.1);--gold:#c9a84c;--gold-l:#4a3808;--gold-p:#2a2008;--green:#18a06b;--purple:#7c73d4;--red:#d96040;--amber:#c98a20;}
+body.dark .hp-bar{background:#18a06b;}
+body.dark .hbadge{background:var(--sec);}
+body.dark .cd-opt:hover,body.dark .cd-opt.open,body.dark .utool:hover,body.dark .utool.open{background:var(--gold-p);}
+body.dark .sr:hover,body.dark .sr.open{background:var(--gold-p);}
+body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
+/* CONCENTRATION SPELL ROWS */
+.sr.conc-spell{border-left:2px solid var(--purple);}
+.conc-cast{font-size:10px;padding:2px 6px;border-radius:3px;border:1px solid var(--purple);color:var(--purple);background:transparent;cursor:pointer;margin-right:4px;white-space:nowrap;flex-shrink:0;}
+.conc-cast:hover{background:rgba(83,74,183,0.12);}
+.stag .ci{color:var(--purple);font-weight:700;}
+/* DARK TOGGLE BUTTON */
+.dark-btn{font-size:18px;background:none;border:none;cursor:pointer;padding:2px 4px;line-height:1;border-radius:4px;}
+.dark-btn:hover{background:var(--sec);}
+/* TEMP HP INLINE */
+.tmp-badge{display:none;font-size:13px;font-weight:700;color:var(--purple);background:rgba(83,74,183,0.12);border:1.5px solid var(--purple);border-radius:6px;padding:2px 8px;margin-left:6px;align-items:baseline;gap:3px;}
+.tmp-badge.visible{display:inline-flex;}
+/* CONCENTRATION TRACKER */
+.conc-box{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.conc-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--purple);flex-shrink:0;}
+.conc-input{flex:1;min-width:120px;font-size:13px;border:none;background:transparent;color:var(--ink);font-family:inherit;outline:none;}
+.conc-input::placeholder{color:var(--ink2);}
+.conc-clear{font-size:11px;color:var(--ink2);background:none;border:none;cursor:pointer;padding:2px 5px;}
+/* DEATH SAVES */
+.ds-box{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:.5px solid var(--bd);}
+.ds-label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);flex-shrink:0;}
+.ds-group{display:flex;gap:5px;align-items:center;}
+.ds-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--bd);background:transparent;cursor:pointer;flex-shrink:0;}
+.ds-dot.suc{background:var(--green);border-color:var(--green);}
+.ds-dot.fail{background:var(--red);border-color:var(--red);}
+/* INSPIRATION */
+.insp-pip{width:16px;height:16px;border-radius:50%;background:transparent;border:2px solid var(--gold-l);cursor:pointer;transition:background .15s;flex-shrink:0;}
+.insp-pip.active{background:var(--gold-l);}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <!-- TODO: Character name -->
+    <div class="cname">Character Name</div>
+    <div class="meta">
+      <!-- TODO: Class + level, subclass, race, background, alignment -->
+      <span class="pill">Class <b>1</b></span>
+      <span class="pill">Subclass</span>
+      <span class="pill">Race</span>
+      <span class="pill">Background</span>
+      <span class="pill">Alignment</span>
+      <!-- TODO: Prof bonus, Save DC, Spell Attack bonus (remove spell pills if not a caster) -->
+      <span class="pill">Prof <b>+2</b></span>
+      <span class="pill">Save DC <b>—</b></span>
+      <span class="pill">Spell Atk <b>—</b></span>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;justify-content:flex-end;">
+      <span style="font-size:10px;color:var(--ink2);">Inspiration</span>
+      <div class="insp-pip" id="inspPip" onclick="toggleInspiration()" title="Heroic Inspiration"></div>
+      <button class="dark-btn" onclick="toggleDark()" title="Toggle dark mode" id="darkBtn">🌙</button>
+    </div>
+    <div class="srow">
+      <!-- TODO: Starting AC, Initiative modifier, Speed -->
+      <div class="sb"><div class="v" id="acHeader">10</div><div class="l">AC</div></div>
+      <div class="sb"><div class="v">+0</div><div class="l">Init</div></div>
+      <div class="sb"><div class="v">30ft</div><div class="l">Speed</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- CONCENTRATION TRACKER -->
+<div class="conc-box">
+  <span class="conc-label">Concentrating on</span>
+  <input class="conc-input" id="concSpell" placeholder="— nothing —" oninput="saveConc()">
+  <button class="conc-clear" onclick="clearConc()">✕ drop</button>
+</div>
+
+<!-- HP TRACKER -->
+<div class="hp-box">
+  <div class="hp-top">
+    <div>
+      <div class="hp-lbl">Hit Points</div>
+      <div style="display:flex;align-items:baseline;gap:4px;flex-wrap:wrap;">
+        <div class="hp-nums">
+          <div class="hp-cur" id="hpCur">0</div>
+          <div class="hp-sep">/</div>
+          <!-- TODO: Max HP value here AND in the script block below -->
+          <div class="hp-max">0</div>
+        </div>
+        <span class="tmp-badge" id="tmpBadge">+<span id="tmpVal">0</span>&nbsp;tmp</span>
+      </div>
+    </div>
+    <div class="hp-bar-wrap"><div class="hp-bar" id="hpBar" style="width:100%"></div></div>
+    <div class="hp-pct" id="hpPct">100%</div>
+  </div>
+  <div class="hp-controls">
+    <input type="number" id="hpAmt" placeholder="Amount" min="0">
+    <button class="btn btn-dmg" onclick="applyDmg()">Take Damage</button>
+    <button class="btn btn-heal" onclick="applyHeal()">Heal</button>
+    <button class="btn btn-sm" onclick="setTmp()">Set Temp HP</button>
+    <button class="btn btn-sm" onclick="resetLR()">Long Rest</button>
+    <button class="btn btn-sr" onclick="shortRest()">Short Rest</button>
+  </div>
+  <!-- Death saves — shown automatically at 0 HP -->
+  <div class="ds-box" id="deathSaves" style="display:none;">
+    <span class="ds-label">Death Saves</span>
+    <div class="ds-group">
+      <span style="font-size:10px;color:var(--green);margin-right:3px;">Success</span>
+      <div class="ds-dot" id="ds-s0" onclick="toggleDS('s',0)"></div>
+      <div class="ds-dot" id="ds-s1" onclick="toggleDS('s',1)"></div>
+      <div class="ds-dot" id="ds-s2" onclick="toggleDS('s',2)"></div>
+    </div>
+    <div class="ds-group">
+      <span style="font-size:10px;color:var(--red);margin-right:3px;">Failure</span>
+      <div class="ds-dot" id="ds-f0" onclick="toggleDS('f',0)"></div>
+      <div class="ds-dot" id="ds-f1" onclick="toggleDS('f',1)"></div>
+      <div class="ds-dot" id="ds-f2" onclick="toggleDS('f',2)"></div>
+    </div>
+    <button class="btn btn-sm" onclick="clearDS()">Clear</button>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('stats',this)">Stats &amp; Roleplay</button>
+  <button class="tab" onclick="showTab('combat',this)">Combat</button>
+  <!-- TODO: Remove Spells tab if not a caster -->
+  <button class="tab" onclick="showTab('spells',this)">Spells</button>
+  <button class="tab" onclick="showTab('features',this)">Features &amp; Traits</button>
+  <button class="tab" onclick="showTab('equipment',this)">Equipment</button>
+</div>
+
+<!-- ═══ STATS & ROLEPLAY ═══ -->
+<div id="stats" class="panel active">
+  <div class="grid2">
+    <div class="col">
+      <div class="sec">
+        <div class="sec-t">Ability Scores</div>
+        <!-- TODO: Fill in modifiers and scores. Order: STR/DEX/CHA top row, INT/WIS/CON bottom row -->
+        <!-- Use class="pos" for positive mods, "neg" for negative -->
+        <div class="ab6">
+          <div class="ab"><div class="abm">+0</div><div class="abs">10</div><div class="abn">STR</div></div>
+          <div class="ab"><div class="abm">+0</div><div class="abs">10</div><div class="abn">DEX</div></div>
+          <div class="ab"><div class="abm">+0</div><div class="abs">10</div><div class="abn">CHA</div></div>
+          <div class="ab"><div class="abm">+0</div><div class="abs">10</div><div class="abn">INT</div></div>
+          <div class="ab"><div class="abm">+0</div><div class="abs">10</div><div class="abn">WIS</div></div>
+          <div class="ab"><div class="abm">+0</div><div class="abs">10</div><div class="abn">CON</div></div>
+        </div>
+      </div>
+      <div class="sec">
+        <!-- TODO: Mark proficient saves with purple border + ✦ -->
+        <div class="sec-t">Saving Throws — ✦ proficient</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:5px;">
+          <div class="pbox"><div class="pv">+0</div><div class="pl">STR</div></div>
+          <div class="pbox"><div class="pv">+0</div><div class="pl">DEX</div></div>
+          <div class="pbox"><div class="pv">+0</div><div class="pl">CHA</div></div>
+          <div class="pbox"><div class="pv">+0</div><div class="pl">INT</div></div>
+          <div class="pbox"><div class="pv">+0</div><div class="pl">WIS</div></div>
+          <div class="pbox"><div class="pv">+0</div><div class="pl">CON</div></div>
+        </div>
+        <!-- TODO: Add any special save notes (e.g. Advantage on CON saves) or remove this line -->
+        <div style="font-size:10px;color:var(--ink2);"></div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Passives</div>
+        <!-- TODO: Passive Perception = 10 + WIS mod (+ prof if proficient), same for Insight/Investigation -->
+        <div class="prow">
+          <div class="pbox"><div class="pv">10</div><div class="pl">Percep.</div></div>
+          <div class="pbox"><div class="pv">10</div><div class="pl">Insight</div></div>
+          <div class="pbox"><div class="pv">10</div><div class="pl">Investig.</div></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Proficiencies</div>
+        <!-- TODO: Fill in proficiencies and resistances for this character -->
+        <div style="font-size:11px;color:var(--ink2);line-height:1.8;">
+          <div><b style="color:var(--ink);">Armor:</b> —</div>
+          <div><b style="color:var(--ink);">Weapons:</b> —</div>
+          <div><b style="color:var(--ink);">Tools:</b> —</div>
+          <div><b style="color:var(--ink);">Languages:</b> Common</div>
+          <!-- TODO: Add Darkvision line if applicable, remove if not -->
+          <!-- <div><b style="color:var(--ink);">Darkvision:</b> 60ft</div> -->
+          <!-- TODO: Add Resistances line if applicable, remove if not -->
+          <!-- <div><b style="color:var(--ink);">Resistances:</b> —</div> -->
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="sec">
+        <!-- TODO: Update modifiers in headers, mark proficient skills with class="dot p", add class="sk hi" to frequently-used skills -->
+        <div class="sec-t">Skills by Ability — filled dot = proficient</div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;">
+          <div>
+            <div class="sg"><div class="sg-h">STR +0</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Athletics</span><span class="skv">+0</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">DEX +0</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Acrobatics</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Sleight of Hand</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Stealth</span><span class="skv">+0</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">CHA +0</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Deception</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Intimidation</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Performance</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Persuasion</span><span class="skv">+0</span></div>
+            </div>
+          </div>
+          <div>
+            <div class="sg"><div class="sg-h">INT +0</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Arcana</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">History</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Investigation</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Nature</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Religion</span><span class="skv">+0</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">WIS +0</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Animal Handling</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Insight</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Medicine</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Perception</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Survival</span><span class="skv">+0</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">CON +0</div>
+              <!-- TODO: Add any CON-related notes, or remove this group entirely if nothing to show -->
+              <div class="sk"><span class="sk-note">No special CON notes</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--gold);padding-bottom:4px;border-bottom:.5px solid var(--bd);">Roleplay &amp; Exploration Cheat Sheet</div>
+      <!-- TODO: Replace the card contents below with this character's relevant at-will abilities,
+           key skills, and pre-combat buffs. Remove cards that don't apply. -->
+      <div class="util-card" style="margin-top:6px;">
+        <div class="util-hdr">Always free — no slot needed</div>
+        <!-- TODO: Add at-will / free / ritual abilities here -->
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Ability name</span><span class="badge b-free">At will</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">Description of the ability and when to use it.</div>
+        </div>
+      </div>
+      <div class="util-card">
+        <div class="util-hdr">Key skills to remember</div>
+        <!-- TODO: Add expandable reminders for this character's standout skills -->
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Skill name +X</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">When and how to use this skill. Passive value, common situations.</div>
+        </div>
+      </div>
+      <!-- TODO: Add more util-card sections as needed (pre-combat buffs, class-specific smart plays, etc.) -->
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMBAT ═══ -->
+<div id="combat" class="panel">
+  <div style="display:flex;flex-direction:column;gap:9px;">
+    <div class="sec">
+      <div class="sec-t">Weapons</div>
+      <!-- TODO: Fill in weapons. Hit = ability mod + prof. Damage = die + ability mod -->
+      <table class="wtb">
+        <tr><th>Weapon</th><th>Hit</th><th>Damage</th><th>Type</th><th>Notes</th></tr>
+        <tr><td><b>Weapon Name</b></td><td><span class="hbadge">+0</span></td><td>1d6+0</td><td>Type</td><td style="color:var(--ink2);">Notes</td></tr>
+      </table>
+    </div>
+    <!-- TODO: Add a cantrips quick-reference section if this character is a caster -->
+    <!-- <div class="sec">
+      <div class="sec-t">Cantrips (at will)</div>
+      <div><span class="cpill">Cantrip — save/attack info</span></div>
+    </div> -->
+
+    <!-- TODO: Add a Channel Divinity / class resource section if applicable.
+         Give all dots the same data-res value (e.g. data-res="cd") so they sync across tabs.
+         Register the resource in RES_MAX and resRem in the script block. -->
+    <!-- <div class="sec">
+      <div class="sec-t">Channel Divinity — X uses · recharge info</div>
+      <div class="ut" style="margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;font-weight:700;flex:1;">Uses remaining</span>
+          <div class="udots">
+            <button class="udot" data-res="cd" onclick="toggleDot(this)"></button>
+            <button class="udot" data-res="cd" onclick="toggleDot(this)"></button>
+          </div>
+        </div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Option Name</span><span class="cd-tag t-act">Action</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">Description of what this CD option does.</div>
+      </div>
+    </div> -->
+
+    <div class="sec">
+      <div class="sec-t">Limited Use Combat Abilities</div>
+      <!-- TODO: Add limited-use abilities with data-res dots.
+           data-res must match a key in RES_MAX/resRem in the script block.
+           Use badge b-lr for Long Rest, b-sr for Short/Long Rest. -->
+      <div class="ut">
+        <div class="ut-top">
+          <span class="ut-name">Ability Name</span>
+          <span class="badge b-lr">Long Rest</span>
+          <div class="udots">
+            <button class="udot" data-res="ability-key" onclick="toggleDot(this)"></button>
+          </div>
+        </div>
+        <div class="ut-desc">Description of the ability.</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Key Advantages &amp; Notes</div>
+      <!-- TODO: Notable combat rules, passive bonuses, resistances to remember -->
+      <div style="font-size:12px;color:var(--ink2);line-height:1.8;">
+        <div><b style="color:var(--ink);">Note:</b> Reminder text here</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SPELLS ═══ -->
+<!-- TODO: Remove this entire panel and its tab button if not a caster -->
+<div id="spells" class="panel">
+  <div style="display:flex;flex-direction:column;gap:9px;">
+    <div class="sec">
+      <div class="sec-t">Spell Slots — click dots to track</div>
+      <!-- TODO: Add/remove slot boxes to match your spell slot progression.
+           Common patterns:
+             Level 1: 2 slots | Level 2: 3 slots | Level 3: 4+2 slots ...
+           Full casters: up to 9th level. Half casters (Paladin/Ranger): up to 5th.
+           Remove this section entirely for non-casters. -->
+      <div class="slot-grid">
+        <div class="slot-box"><div class="slot-lbl">1st Level</div><div class="slot-n">2 slots</div><div class="sdots"><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button></div></div>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sec-t">Prepared Spells — click to expand · ★ = always prepared</div>
+      <!-- TODO: Add spell rows. Format:
+             .sr.aw = always prepared (gold left border)
+             .slvl = "C" for cantrip, "1"–"9" for level, "★1" for always-prepared
+             .stag = include "Conc" for concentration spells — Cast button + purple border added automatically
+             .sd = expanded detail block
+
+           Spell row template:
+           <div class="sr" onclick="ts(this)"><span class="slvl">1</span><span class="sn">Spell Name</span><span class="stag">Conc · Range · Effect summary</span><span class="sarr">▶</span></div>
+           <div class="sd"><div class="sdm"><span>Level · School</span><span>Action</span><span>Range</span><span>Duration</span></div>Full description.</div>
+      -->
+      <div class="sl-lbl">Cantrips</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">C</span><span class="sn">Cantrip Name</span><span class="stag">Range · Effect</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>Cantrip · School</span><span>Action</span><span>Range</span><span>Duration</span></div>Description.</div>
+
+      <div class="sl-lbl">1st Level (2 slots)</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">1</span><span class="sn">Spell Name</span><span class="stag">Conc · Range · Effect</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>1st · School</span><span>Action</span><span>Range</span><span>Conc 1 min</span></div>Description.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FEATURES & TRAITS ═══ -->
+<div id="features" class="panel">
+  <div class="grid2x">
+    <div class="col">
+      <!-- TODO: Add racial traits, feats, and other features here -->
+      <div class="sec">
+        <div class="sec-t">Racial Traits</div>
+        <!-- TODO: Add racial trait blocks with .ut for limited-use and .ft for passive -->
+        <div class="ft"><div class="ftn">Trait Name</div><div class="ftd">Description of the trait.</div></div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Feats</div>
+        <div class="ft"><div class="ftn">Feat Name</div><div class="ftd">Description of the feat.</div></div>
+      </div>
+    </div>
+    <div class="col">
+      <!-- TODO: Add class features here, organized by subclass / core class -->
+      <div class="sec">
+        <div class="sec-t">Class Features</div>
+        <!-- TODO: Limited-use resources should have data-res matching RES_MAX keys -->
+        <div class="ut">
+          <div class="ut-top"><span class="ut-name">Resource Name</span><span class="badge b-sr">Short/Long Rest</span>
+            <div class="udots">
+              <button class="udot" data-res="ability-key" onclick="toggleDot(this)"></button>
+            </div>
+          </div>
+          <div class="ut-desc">Description of the resource and how to use it.</div>
+        </div>
+        <div class="ft"><div class="ftn">Passive Feature Name</div><div class="ftd">Description.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EQUIPMENT ═══ -->
+<div id="equipment" class="panel">
+  <div style="display:flex;flex-direction:column;gap:9px;">
+
+    <div class="sec">
+      <div class="sec-t">Armor &amp; AC Tracker — click to equip/unequip</div>
+      <!-- TODO: Update armor objects in script block AND these slot divs to match character's actual armor.
+           id="slot-KEY" must match the key in the armor object in the script.
+           Remove slots that don't apply, add any that do. -->
+      <div style="font-size:11px;color:var(--ink2);margin-bottom:8px;">Toggle items to see your current AC.</div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px;">
+        <div class="armor-slot" id="slot-armor1" onclick="toggleArmor('armor1')" style="cursor:pointer;background:var(--sec);border:2px solid var(--gold);border-radius:var(--r);padding:9px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;">Armor Name</div>
+          <div style="font-size:10px;color:var(--ink2);">Armor Type</div>
+          <div style="font-size:18px;font-weight:700;margin-top:3px;">AC 10</div>
+          <div style="font-size:10px;color:var(--green);margin-top:3px;">Equipped</div>
+        </div>
+        <!-- TODO: Add more armor slots or remove as needed -->
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:var(--sec);border-radius:var(--r);padding:10px 14px;">
+        <div>
+          <div style="font-size:10px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;">Current AC</div>
+          <div style="font-size:32px;font-weight:700;" id="acDisplay">10</div>
+        </div>
+        <div style="flex:1;font-size:11px;color:var(--ink2);line-height:1.7;" id="acBreakdown">
+          Unarmored (10)
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:10px;color:var(--ink2);">Without shield</div>
+          <div style="font-size:16px;font-weight:700;" id="acNoShield">10</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Weapons &amp; Combat Gear</div>
+      <!-- TODO: Fill in weapons inventory -->
+      <table class="wtb">
+        <tr><th>Item</th><th>Hit</th><th>Damage</th><th>Notes</th></tr>
+        <tr><td><b>Weapon</b></td><td><span class="hbadge">+0</span></td><td>1d6+0</td><td style="color:var(--ink2);">Notes</td></tr>
+      </table>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Adventuring Gear</div>
+      <!-- TODO: List inventory items in pairs -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Backpack</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Gold: 0 GP</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<script>
+// ════════════════════════════════════════════════════════
+// TODO CHECKLIST — update these before anything else
+// ════════════════════════════════════════════════════════
+
+// 1. STORE_KEY — unique string for localStorage. Use: 'dnd-charactername-ddbid'
+const STORE_KEY='dnd-template-0000000';
+
+// 2. RESOURCES — one entry per limited-use resource that has pip dots.
+//    Key must match the data-res attribute on every dot for that resource.
+//    Value = max charges.
+//    Short-rest resources: add resRem['key'] = RES_MAX['key'] in shortRest() below.
+//    Long-rest resources: automatically reset in resetLR() — no extra code needed.
+const RES_MAX={
+  // 'cd': 3,            // Example: Channel Divinity, 3 uses
+  // 'ability-key': 1,   // Example: a 1/long-rest ability
+};
+const resRem={...RES_MAX};  // starts at full — do not edit this line
+const ALL_RES=Object.keys(RES_MAX);
+
+// 3. HP — set starting max HP here AND in the HTML hp-max div above
+let hp=0,maxHp=0,tmp=0;
+
+// 4. ARMOR — one entry per equippable armor piece.
+//    Key must match id="slot-KEY" in the Equipment tab HTML.
+//    equipped: true = starts equipped. ac = AC value of this piece.
+const armor={
+  armor1:{equipped:true,ac:10},
+  // shield:{equipped:false,ac:2},  // Example: add a shield
+};
+
+// ════════════════════════════════════════════════════════
+// ENGINE — do not edit below unless you know what you're doing
+// ════════════════════════════════════════════════════════
+
+function getState(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{};}catch(e){return {};}}
+
+function renderRes(res){
+  const rem=resRem[res];
+  const groups=new Map();
+  document.querySelectorAll(`.udot[data-res="${res}"]`).forEach(dot=>{
+    const c=dot.closest('.udots');
+    if(!groups.has(c))groups.set(c,[]);
+    groups.get(c).push(dot);
+  });
+  groups.forEach(dots=>dots.forEach((d,i)=>d.classList.toggle('used',i>=rem)));
+}
+function renderAllRes(){ALL_RES.forEach(r=>renderRes(r));}
+
+function saveState(){
+  const s=getState();
+  const res={};ALL_RES.forEach(r=>res[r]=resRem[r]);s.res=res;
+  const sdots={};
+  document.querySelectorAll('.sdot').forEach((d,i)=>sdots['s'+i]=d.classList.contains('used'));
+  s.sdots=sdots;
+  s.hp=hp;s.tmp=tmp;s.ds=dsState;
+  localStorage.setItem(STORE_KEY,JSON.stringify(s));
+}
+
+function loadState(){
+  const s=getState();
+  if(s.res)ALL_RES.forEach(r=>{if(s.res[r]!==undefined)resRem[r]=s.res[r];});
+  renderAllRes();
+  if(s.sdots)document.querySelectorAll('.sdot').forEach((d,i)=>{if(s.sdots['s'+i]!==undefined)d.classList.toggle('used',s.sdots['s'+i]);});
+  if(s.hp!==undefined)hp=s.hp;
+  if(s.tmp!==undefined)tmp=s.tmp;
+}
+
+window.addEventListener('storage',e=>{if(e.key===STORE_KEY){loadState();upd();}});
+
+function toggleDot(el){
+  const res=el.dataset.res;
+  if(res){
+    const rem=resRem[res];
+    const max=RES_MAX[res];
+    const dots=Array.from(el.closest('.udots').querySelectorAll(`.udot[data-res="${res}"]`));
+    const pipIdx=dots.indexOf(el);
+    resRem[res]=pipIdx<rem?Math.max(0,rem-1):Math.min(max,rem+1);
+    renderRes(res);
+  } else {
+    el.classList.toggle('used');
+  }
+  saveState();
+}
+
+function toggleDark(){
+  const dark=document.body.classList.toggle('dark');
+  document.getElementById('darkBtn').textContent=dark?'☀️':'🌙';
+  const s=getState();s.dark=dark;localStorage.setItem(STORE_KEY,JSON.stringify(s));
+}
+
+function toggleArmor(id){
+  armor[id].equipped=!armor[id].equipped;
+  const slot=document.getElementById('slot-'+id);
+  const eq=armor[id].equipped;
+  slot.style.borderColor=eq?'var(--gold)':'transparent';
+  slot.querySelector('div:last-child').textContent=eq?'Equipped':'Not equipped';
+  slot.querySelector('div:last-child').style.color=eq?'var(--green)':'var(--ink2)';
+  updateAC();
+}
+function updateAC(){
+  // TODO: Update this logic if your armor/shield setup differs from the default.
+  // The default: one base armor piece + optional shield.
+  // Add entries for each piece in the armor object above.
+  let base=10,parts=[];
+  const keys=Object.keys(armor);
+  // Find equipped base armor (non-shield pieces — assumes shield key contains 'shield')
+  const baseArmor=keys.filter(k=>k!=='shield'&&armor[k].equipped);
+  if(baseArmor.length){
+    const k=baseArmor[0];
+    base=armor[k].ac;
+    parts.push(k.charAt(0).toUpperCase()+k.slice(1)+' ('+base+')');
+  } else {
+    parts.push('Unarmored (10)');
+  }
+  let shieldAC=0;
+  if(armor.shield&&armor.shield.equipped){shieldAC=armor.shield.ac;parts.push('Shield (+'+shieldAC+')');}
+  const total=base+shieldAC;
+  document.getElementById('acDisplay').textContent=total;
+  document.getElementById('acHeader').textContent=total;
+  document.getElementById('acNoShield').textContent=base;
+  document.getElementById('acBreakdown').innerHTML=parts.join(' + ')+' = <b style="color:var(--ink);">'+total+'</b>';
+}
+
+function upd(){
+  const c=Math.max(0,Math.min(maxHp,hp));
+  document.getElementById('hpCur').textContent=c;
+  const pct=maxHp>0?Math.round((c/maxHp)*100):0;
+  document.getElementById('hpPct').textContent=pct+'%';
+  const bar=document.getElementById('hpBar');
+  bar.style.width=pct+'%';
+  bar.style.background=pct>50?'#1D9E75':pct>25?'#BA7517':'#D85A30';
+  const badge=document.getElementById('tmpBadge');
+  if(tmp>0){badge.classList.add('visible');document.getElementById('tmpVal').textContent=tmp;}
+  else badge.classList.remove('visible');
+  document.getElementById('deathSaves').style.display=c===0?'flex':'none';
+}
+function getAmt(){return Math.abs(parseInt(document.getElementById('hpAmt').value)||0);}
+function clearAmt(){document.getElementById('hpAmt').value='';}
+function applyDmg(){const a=getAmt();if(!a)return;let r=a;if(tmp>0){const ab=Math.min(tmp,r);tmp-=ab;r-=ab;}hp=Math.max(0,hp-r);clearAmt();upd();saveState();}
+function applyHeal(){const a=getAmt();if(!a)return;hp=Math.min(maxHp,hp+a);clearAmt();upd();saveState();}
+function setTmp(){const v=parseInt(prompt('Set Temp HP (current: '+tmp+'):','0'));if(!isNaN(v))tmp=Math.max(0,v);upd();saveState();}
+
+function resetLR(){
+  hp=maxHp;tmp=0;
+  ALL_RES.forEach(r=>{resRem[r]=RES_MAX[r];});
+  renderAllRes();
+  document.querySelectorAll('.sdot').forEach(d=>d.classList.remove('used'));
+  clearDS();clearConc();
+  upd();saveState();
+}
+function shortRest(){
+  // TODO: For each resource that recharges on a short rest, restore charges here.
+  // Examples:
+  //   resRem['cd']=Math.min(RES_MAX['cd'],resRem['cd']+1);  // partial recharge (HD-style)
+  //   resRem['ability-key']=RES_MAX['ability-key'];          // full recharge
+  // Resources not listed here are unchanged on short rest (reset fully on long rest only).
+  renderAllRes();
+  saveState();
+}
+
+function castConc(name){document.getElementById('concSpell').value=name;saveConc();}
+function saveConc(){const s=getState();s.conc=document.getElementById('concSpell').value;localStorage.setItem(STORE_KEY,JSON.stringify(s));}
+function clearConc(){document.getElementById('concSpell').value='';saveConc();}
+
+const dsState={s:[false,false,false],f:[false,false,false]};
+function toggleDS(type,idx){
+  dsState[type][idx]=!dsState[type][idx];
+  const el=document.getElementById('ds-'+type+idx);
+  el.classList.toggle(type==='s'?'suc':'fail',dsState[type][idx]);
+  saveState();
+}
+function clearDS(){
+  ['s','f'].forEach(t=>[0,1,2].forEach(i=>{dsState[t][i]=false;const el=document.getElementById('ds-'+t+i);if(el)el.classList.remove('suc','fail');}));
+  saveState();
+}
+
+let inspired=false;
+function toggleInspiration(){
+  inspired=!inspired;
+  document.getElementById('inspPip').classList.toggle('active',inspired);
+  const s=getState();s.inspired=inspired;localStorage.setItem(STORE_KEY,JSON.stringify(s));
+}
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+function ts(row){
+  const desc=row.nextElementSibling;
+  const was=row.classList.contains('open');
+  document.querySelectorAll('.sr.open').forEach(r=>{r.classList.remove('open');if(r.nextElementSibling)r.nextElementSibling.classList.remove('open');});
+  if(!was){row.classList.add('open');desc.classList.add('open');}
+}
+
+(function init(){
+  const s=getState();
+  if(s.dark){document.body.classList.add('dark');document.getElementById('darkBtn').textContent='☀️';}
+  loadState();
+  if(s.conc)document.getElementById('concSpell').value=s.conc;
+  if(s.inspired){inspired=true;document.getElementById('inspPip').classList.add('active');}
+  if(s.ds){['s','f'].forEach(t=>[0,1,2].forEach(i=>{if(s.ds[t]&&s.ds[t][i]){dsState[t][i]=true;const el=document.getElementById('ds-'+t+i);if(el)el.classList.add(t==='s'?'suc':'fail');}}));}
+  // Auto-mark concentration spells with purple border + Cast button
+  document.querySelectorAll('.sr').forEach(row=>{
+    const stag=row.querySelector('.stag');
+    if(!stag)return;
+    const txt=stag.textContent;
+    if(!/\bConc\b/.test(txt)||/\bno Conc\b/.test(txt))return;
+    row.classList.add('conc-spell');
+    stag.innerHTML=stag.innerHTML.replace(/Conc/g,'<span class="ci">Conc</span>');
+    const nameEl=row.querySelector('.sn');
+    if(!nameEl)return;
+    const spellName=nameEl.textContent.trim();
+    const btn=document.createElement('button');
+    btn.className='conc-cast';
+    btn.textContent='Cast';
+    btn.onclick=function(e){e.stopPropagation();castConc(spellName);};
+    nameEl.insertBefore(btn,nameEl.firstChild);
+  });
+  upd();
+  updateAC();
+})();
+</script>
+</body>
+</html>
