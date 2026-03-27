@@ -214,6 +214,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         </div>
       </div>
       <div class="sec">
+        <div class="sec-t">Saving Throws — ✦ proficient</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:5px;">
+          <div class="pbox"><div class="pv">+2</div><div class="pl">STR</div></div>
+          <div class="pbox"><div class="pv">+0</div><div class="pl">DEX</div></div>
+          <div class="pbox"><div class="pv">+3</div><div class="pl">CON</div></div>
+          <div class="pbox"><div class="pv neg">−1</div><div class="pl">INT</div></div>
+          <div class="pbox" style="border:1.5px solid var(--purple);"><div class="pv" style="color:var(--purple);">+6 ✦</div><div class="pl">WIS</div></div>
+          <div class="pbox" style="border:1.5px solid var(--purple);"><div class="pv" style="color:var(--purple);">+4 ✦</div><div class="pl">CHA</div></div>
+        </div>
+        <div style="font-size:10px;color:var(--ink2);">Adv on CON saves to maintain Concentration (War Caster)</div>
+      </div>
+      <div class="sec">
         <div class="sec-t">Passives</div>
         <div class="prow">
           <div class="pbox"><div class="pv">13</div><div class="pl">Percep.</div></div>
@@ -238,34 +250,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div class="sec-t">Skills by Ability — filled dot = proficient</div>
         <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;">
           <div>
-            <div class="sg"><div class="sg-h">STR +2 — Save +2</div>
+            <div class="sg"><div class="sg-h">STR +2</div>
               <div class="sk"><div class="dot p"></div><span class="skn">Athletics</span><span class="skv">+5</span></div>
             </div>
-            <div class="sg" style="margin-top:5px;"><div class="sg-h">DEX +0 — Save +0</div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">DEX +0</div>
               <div class="sk"><div class="dot"></div><span class="skn">Acrobatics</span><span class="skv">+0</span></div>
               <div class="sk"><div class="dot"></div><span class="skn">Sleight of Hand</span><span class="skv">+0</span></div>
               <div class="sk"><div class="dot"></div><span class="skn">Stealth</span><span class="skv">+0</span></div>
             </div>
-            <div class="sg" style="margin-top:5px;"><div class="sg-h">CON +3 — Save +3</div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">CON +3</div>
               <div class="sk"><span class="sk-note">Adv on Conc saves (War Caster)</span></div>
             </div>
           </div>
           <div>
-            <div class="sg"><div class="sg-h">INT -1 — Save -1</div>
-              <div class="sk"><div class="dot"></div><span class="skn">Arcana</span><span class="skv">+2</span><span class="sk-bonus">+3</span></div>
+            <div class="sg"><div class="sg-h">INT −1</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Arcana</span><span class="skv">+2</span></div>
               <div class="sk"><div class="dot"></div><span class="skn">History</span><span class="skv">-1</span></div>
               <div class="sk"><div class="dot"></div><span class="skn">Investigation</span><span class="skv">-1</span></div>
               <div class="sk"><div class="dot"></div><span class="skn">Nature</span><span class="skv">-1</span></div>
-              <div class="sk"><div class="dot"></div><span class="skn">Religion</span><span class="skv">+2</span><span class="sk-bonus">+3</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Religion</span><span class="skv">+2</span></div>
             </div>
-            <div class="sg" style="margin-top:5px;"><div class="sg-h">WIS +3 — Save +6 (prof ✦)</div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">WIS +3</div>
               <div class="sk"><div class="dot"></div><span class="skn">Animal Handling</span><span class="skv">+3</span></div>
               <div class="sk"><div class="dot p"></div><span class="skn">Insight</span><span class="skv">+6</span></div>
               <div class="sk"><div class="dot"></div><span class="skn">Medicine</span><span class="skv">+3</span></div>
               <div class="sk"><div class="dot"></div><span class="skn">Perception</span><span class="skv">+3</span></div>
               <div class="sk"><div class="dot"></div><span class="skn">Survival</span><span class="skv">+3</span></div>
             </div>
-            <div class="sg" style="margin-top:5px;"><div class="sg-h">CHA +1 — Save +4 (prof ✦)</div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">CHA +1</div>
               <div class="sk"><div class="dot"></div><span class="skn">Deception</span><span class="skv">+1</span></div>
               <div class="sk"><div class="dot p"></div><span class="skn">Intimidation</span><span class="skv">+4</span></div>
               <div class="sk"><div class="dot"></div><span class="skn">Performance</span><span class="skv">+1</span></div>
@@ -300,9 +312,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-size:12px;font-weight:700;flex:1;">Uses remaining</span>
           <div class="udots">
-            <button class="udot" onclick="this.classList.toggle('used')"></button>
-            <button class="udot" onclick="this.classList.toggle('used')"></button>
-            <button class="udot" onclick="this.classList.toggle('used')"></button>
+            <button class="udot" onclick="toggleDot(this)"></button>
+            <button class="udot" onclick="toggleDot(this)"></button>
+            <button class="udot" onclick="toggleDot(this)"></button>
           </div>
         </div>
       </div>
@@ -327,19 +339,19 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="sec-t">Limited Use Combat Abilities</div>
       <div class="ut">
         <div class="ut-top"><span class="ut-name">War Priest — bonus attack</span><span class="badge b-sr">Short/Long Rest</span>
-          <div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button><button class="udot" onclick="this.classList.toggle('used')"></button><button class="udot" onclick="this.classList.toggle('used')"></button></div>
+          <div class="udots"><button class="udot" onclick="toggleDot(this)"></button><button class="udot" onclick="toggleDot(this)"></button><button class="udot" onclick="toggleDot(this)"></button></div>
         </div>
         <div class="ut-desc">Bonus action: make one weapon or unarmed attack. 3 uses (= WIS mod). Still get a hit in on turns where you cast a spell.</div>
       </div>
       <div class="ut">
         <div class="ut-top"><span class="ut-name">Celestial Revelation</span><span class="badge b-lr">Long Rest</span>
-          <div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button></div>
+          <div class="udots"><button class="udot" onclick="toggleDot(this)"></button></div>
         </div>
         <div class="ut-desc">BA: transform 1 min. Pick each time — <b>Heavenly Wings</b> (fly 30ft) · <b>Inner Radiance</b> (10ft aura, +3 Radiant dmg on your attacks each turn) · <b>Necrotic Shroud</b> (CHA save DC 11 or Frightened til end of your next turn)</div>
       </div>
       <div class="ut">
         <div class="ut-top"><span class="ut-name">Healing Hands</span><span class="badge b-lr">Long Rest</span>
-          <div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button></div>
+          <div class="udots"><button class="udot" onclick="toggleDot(this)"></button></div>
         </div>
         <div class="ut-desc">Magic action: touch a creature, restore 3d4 HP. Free — no slot. Use it every long rest!</div>
       </div>
@@ -366,9 +378,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="sec">
       <div class="sec-t">Spell Slots — click dots to track</div>
       <div class="slot-grid">
-        <div class="slot-box"><div class="slot-lbl">1st Level</div><div class="slot-n">4 slots</div><div class="sdots"><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button></div></div>
-        <div class="slot-box"><div class="slot-lbl">2nd Level</div><div class="slot-n">3 slots</div><div class="sdots"><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button></div></div>
-        <div class="slot-box"><div class="slot-lbl">3rd Level</div><div class="slot-n">3 slots</div><div class="sdots"><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button></div></div>
+        <div class="slot-box"><div class="slot-lbl">1st Level</div><div class="slot-n">4 slots</div><div class="sdots"><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button></div></div>
+        <div class="slot-box"><div class="slot-lbl">2nd Level</div><div class="slot-n">3 slots</div><div class="sdots"><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button></div></div>
+        <div class="slot-box"><div class="slot-lbl">3rd Level</div><div class="slot-n">3 slots</div><div class="sdots"><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button></div></div>
       </div>
     </div>
     <div class="sec">
@@ -435,11 +447,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="sec">
         <div class="sec-t">Aasimar Traits</div>
         <div class="ut" style="border-left:2px solid var(--gold);">
-          <div class="ut-top"><span class="ut-name">Celestial Revelation</span><span class="badge b-lr">Long Rest</span><div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button></div></div>
+          <div class="ut-top"><span class="ut-name">Celestial Revelation</span><span class="badge b-lr">Long Rest</span><div class="udots"><button class="udot" onclick="toggleDot(this)"></button></div></div>
           <div class="ut-desc">BA: transform 1 min. Pick one each time:<br>• <b>Heavenly Wings</b> — fly 30ft<br>• <b>Inner Radiance</b> — 10ft aura, +3 Radiant dmg on your attacks each turn<br>• <b>Necrotic Shroud</b> — CHA save DC 11 or Frightened til end of your next turn</div>
         </div>
         <div class="ut">
-          <div class="ut-top"><span class="ut-name">Healing Hands</span><span class="badge b-lr">Long Rest</span><div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button></div></div>
+          <div class="ut-top"><span class="ut-name">Healing Hands</span><span class="badge b-lr">Long Rest</span><div class="udots"><button class="udot" onclick="toggleDot(this)"></button></div></div>
           <div class="ut-desc">Magic action: touch a creature, restore 3d4 HP. Free heal — no slot.</div>
         </div>
         <div class="ft"><div class="ftn">Celestial Resistance</div><div class="ftd">Resistance to Radiant and Necrotic damage.</div></div>
@@ -456,7 +468,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="sec">
         <div class="sec-t">War Domain Features</div>
         <div class="ut">
-          <div class="ut-top"><span class="ut-name">War Priest — bonus attack</span><span class="badge b-sr">Short/Long Rest</span><div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button><button class="udot" onclick="this.classList.toggle('used')"></button><button class="udot" onclick="this.classList.toggle('used')"></button></div></div>
+          <div class="ut-top"><span class="ut-name">War Priest — bonus attack</span><span class="badge b-sr">Short/Long Rest</span><div class="udots"><button class="udot" onclick="toggleDot(this)"></button><button class="udot" onclick="toggleDot(this)"></button><button class="udot" onclick="toggleDot(this)"></button></div></div>
           <div class="ut-desc">Bonus action: one weapon or unarmed attack. 3 uses (= WIS mod).</div>
         </div>
         <div class="ft"><div class="ftn">War God's Blessing (6th level)</div><div class="ftd">Expend Channel Divinity to cast Shield of Faith or Spiritual Weapon for free — no concentration, lasts 1 minute. The key to running both Spiritual Weapon + Spirit Guardians at the same time.</div></div>
@@ -465,7 +477,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="sec">
         <div class="sec-t">Core Cleric Features</div>
         <div class="ut">
-          <div class="ut-top"><span class="ut-name">Channel Divinity</span><span class="badge b-sr">Short/Long Rest</span><div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button><button class="udot" onclick="this.classList.toggle('used')"></button><button class="udot" onclick="this.classList.toggle('used')"></button></div></div>
+          <div class="ut-top"><span class="ut-name">Channel Divinity</span><span class="badge b-sr">Short/Long Rest</span><div class="udots"><button class="udot" onclick="toggleDot(this)"></button><button class="udot" onclick="toggleDot(this)"></button><button class="udot" onclick="toggleDot(this)"></button></div></div>
           <div class="ut-desc">3 uses total. Regain 1 after Short Rest. All 4 options: Divine Spark · Turn Undead · Guided Strike · War God's Blessing</div>
         </div>
         <div class="ft"><div class="ftn">Sear Undead (5th level)</div><div class="ftd">When Turn Undead is used, undead that fail their save also take 3d8 Radiant damage. Doesn't end the turn effect.</div></div>
@@ -610,6 +622,31 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 <script>
 let hp=51,maxHp=51,tmp=0;
 const armor={halfplate:{equipped:true,ac:15},shield:{equipped:true,ac:2},chainshirt:{equipped:false,ac:13}};
+
+// ── localStorage sync (survives refresh and syncs across tabs) ─
+const STORE_KEY='dnd-deb-150606134';
+function getState(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{};}catch(e){return {};}}
+function saveAllDots(){
+  const s=getState(),dots={};
+  document.querySelectorAll('.udot').forEach((d,i)=>dots['u'+i]=d.classList.contains('used'));
+  document.querySelectorAll('.sdot').forEach((d,i)=>dots['s'+i]=d.classList.contains('used'));
+  s.dots=dots;s.hp=hp;s.tmp=tmp;
+  localStorage.setItem(STORE_KEY,JSON.stringify(s));
+}
+function loadAllDots(){
+  const s=getState();
+  if(s.dots){
+    document.querySelectorAll('.udot').forEach((d,i)=>{if(s.dots['u'+i]!==undefined)d.classList.toggle('used',s.dots['u'+i]);});
+    document.querySelectorAll('.sdot').forEach((d,i)=>{if(s.dots['s'+i]!==undefined)d.classList.toggle('used',s.dots['s'+i]);});
+  }
+  if(s.hp!==undefined)hp=s.hp;
+  if(s.tmp!==undefined)tmp=s.tmp;
+}
+// Fires when another tab writes to localStorage
+window.addEventListener('storage',e=>{if(e.key===STORE_KEY){loadAllDots();upd();}});
+function toggleDot(el){el.classList.toggle('used');saveAllDots();}
+
+// ── Armor ──────────────────────────────────────────────────────
 function toggleArmor(id){
   armor[id].equipped=!armor[id].equipped;
   const slot=document.getElementById('slot-'+id);
@@ -631,6 +668,8 @@ function updateAC(){
   document.getElementById('acNoShield').textContent=base;
   document.getElementById('acBreakdown').innerHTML=parts.join(' + ')+' = <b style="color:var(--ink);">'+total+'</b>';
 }
+
+// ── HP ─────────────────────────────────────────────────────────
 function upd(){
   const c=Math.max(0,Math.min(maxHp,hp));
   document.getElementById('hpCur').textContent=c;
@@ -645,14 +684,10 @@ function upd(){
 }
 function getAmt(){return Math.abs(parseInt(document.getElementById('hpAmt').value)||0);}
 function clearAmt(){document.getElementById('hpAmt').value='';}
-function applyDmg(){
-  const a=getAmt();if(!a)return;
-  let r=a;if(tmp>0){const ab=Math.min(tmp,r);tmp-=ab;r-=ab;}
-  hp=Math.max(0,hp-r);clearAmt();upd();
-}
-function applyHeal(){const a=getAmt();if(!a)return;hp=Math.min(maxHp,hp+a);clearAmt();upd();}
-function setTmp(){const v=parseInt(prompt('Set Temp HP (current: '+tmp+'):','0'));if(!isNaN(v))tmp=Math.max(0,v);upd();}
-function resetLR(){hp=maxHp;tmp=0;document.querySelectorAll('.udot,.sdot').forEach(d=>d.classList.remove('used'));upd();}
+function applyDmg(){const a=getAmt();if(!a)return;let r=a;if(tmp>0){const ab=Math.min(tmp,r);tmp-=ab;r-=ab;}hp=Math.max(0,hp-r);clearAmt();upd();saveAllDots();}
+function applyHeal(){const a=getAmt();if(!a)return;hp=Math.min(maxHp,hp+a);clearAmt();upd();saveAllDots();}
+function setTmp(){const v=parseInt(prompt('Set Temp HP (current: '+tmp+'):','0'));if(!isNaN(v))tmp=Math.max(0,v);upd();saveAllDots();}
+function resetLR(){hp=maxHp;tmp=0;document.querySelectorAll('.udot,.sdot').forEach(d=>d.classList.remove('used'));upd();saveAllDots();}
 function shortRest(){
   const rows=document.querySelectorAll('.ut');
   rows.forEach(row=>{
@@ -667,6 +702,7 @@ function shortRest(){
       top.parentElement.querySelectorAll('.udot').forEach(d=>d.classList.remove('used'));
     }
   });
+  saveAllDots();
 }
 function showTab(id,btn){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
@@ -680,6 +716,9 @@ function ts(row){
   document.querySelectorAll('.sr.open').forEach(r=>{r.classList.remove('open');if(r.nextElementSibling)r.nextElementSibling.classList.remove('open');});
   if(!was){row.classList.add('open');desc.classList.add('open');}
 }
+
+// Init — restore persisted state on load
+loadAllDots();
 upd();
 updateAC();
 </script>
