@@ -175,6 +175,13 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
 /* INSPIRATION */
 .insp-pip{width:16px;height:16px;border-radius:50%;background:transparent;border:2px solid var(--gold-l);cursor:pointer;transition:background .15s;flex-shrink:0;}
 .insp-pip.active{background:var(--gold-l);}
+/* COVER */
+.cover-row{display:flex;gap:5px;flex-wrap:wrap;align-items:center;margin-bottom:4px;}
+.cover-btn{font-size:11px;padding:3px 11px;border-radius:20px;border:1px solid var(--bd);background:transparent;color:var(--ink2);cursor:pointer;font-family:inherit;transition:all .15s;}
+.cover-btn:hover{background:var(--sec);}
+.cover-btn.active{background:var(--green);border-color:var(--green);color:#fff;font-weight:700;}
+.cover-btn.active.full-cover{background:var(--purple);border-color:var(--purple);}
+.cover-note{font-size:10px;color:var(--ink2);margin-top:3px;}
 /* CONDITIONS + RESISTANCES */
 .cond-box{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:8px 12px;margin-bottom:10px;}
 .cond-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
@@ -488,6 +495,16 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
       </div>
     </div>
     <div class="sec">
+      <div class="sec-t">Cover — updates your AC above</div>
+      <div class="cover-row">
+        <button class="cover-btn active" onclick="setCover(0,this)">No Cover</button>
+        <button class="cover-btn" onclick="setCover(2,this)">Half Cover — +2 AC &amp; DEX saves</button>
+        <button class="cover-btn" onclick="setCover(5,this)">¾ Cover — +5 AC &amp; DEX saves</button>
+        <button class="cover-btn full-cover" onclick="setCover('full',this)">Full Cover — untargetable</button>
+      </div>
+      <div class="cover-note">Half: low wall, ally, corner. Three-quarters: portcullis, arrow slit, thick tree. Full: completely behind obstacle — attacks and most spells can't reach you.</div>
+    </div>
+    <div class="sec">
       <div class="sec-t">Key Advantages &amp; Notes</div>
       <div style="font-size:12px;color:var(--ink2);line-height:1.8;">
         <div><b style="color:var(--ink);">Concentration saves:</b> Advantage (War Caster) — very hard to lose Spirit Guardians</div>
@@ -735,6 +752,16 @@ function renderRes(res){
 }
 function renderAllRes(){ALL_RES.forEach(r=>renderRes(r));}
 
+// ── Cover ──────────────────────────────────────────────
+let coverBonus=0;
+function setCover(val,btn){
+  coverBonus=typeof val==='number'?val:0;
+  document.querySelectorAll('.cover-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  updateAC();
+  const s=getState();s.cover=val;localStorage.setItem(STORE_KEY,JSON.stringify(s));
+}
+
 // ── Conditions ─────────────────────────────────────────
 function toggleCond(el){el.classList.toggle('active');saveState();}
 
@@ -805,11 +832,12 @@ function updateAC(){
   else{base=10;parts.push('Unarmored (10)');}
   let shieldAC=0;
   if(armor.shield.equipped){shieldAC=2;parts.push('Shield (+2)');}
-  const total=base+shieldAC;
+  const total=base+shieldAC+coverBonus;
   document.getElementById('acDisplay').textContent=total;
   document.getElementById('acHeader').textContent=total;
-  document.getElementById('acNoShield').textContent=base;
-  document.getElementById('acBreakdown').innerHTML=parts.join(' + ')+' = <b style="color:var(--ink);">'+total+'</b>';
+  document.getElementById('acNoShield').textContent=base+shieldAC;
+  const coverStr=coverBonus>0?' + Cover (+'+coverBonus+')':'';
+  document.getElementById('acBreakdown').innerHTML=parts.join(' + ')+coverStr+' = <b style="color:var(--ink);">'+total+'</b>';
 }
 
 // ── HP ─────────────────────────────────────────────────────────
@@ -837,6 +865,10 @@ function resetLR(){
   renderAllRes();
   document.querySelectorAll('.sdot').forEach(d=>d.classList.remove('used'));
   clearDS();clearConc();
+  // Reset cover
+  coverBonus=0;
+  document.querySelectorAll('.cover-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelector('.cover-btn').classList.add('active');
   upd();saveState();
 }
 function shortRest(){
@@ -900,6 +932,16 @@ function ts(row){
   if(s.inspired){inspired=true;document.getElementById('inspPip').classList.add('active');}
   // Death saves
   if(s.ds){['s','f'].forEach(t=>[0,1,2].forEach(i=>{if(s.ds[t]&&s.ds[t][i]){dsState[t][i]=true;const el=document.getElementById('ds-'+t+i);if(el)el.classList.add(t==='s'?'suc':'fail');}}));}
+  // Restore cover
+  if(s.cover!==undefined&&s.cover!==0){
+    const val=s.cover;
+    coverBonus=typeof val==='number'?val:0;
+    document.querySelectorAll('.cover-btn').forEach(b=>b.classList.remove('active'));
+    const btns=document.querySelectorAll('.cover-btn');
+    if(val===2)btns[1].classList.add('active');
+    else if(val===5)btns[2].classList.add('active');
+    else if(val==='full')btns[3].classList.add('active');
+  }
   // Mark concentration spells and add cast buttons
   document.querySelectorAll('.sr').forEach(row=>{
     const stag=row.querySelector('.stag');
