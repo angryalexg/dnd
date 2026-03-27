@@ -140,6 +140,40 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .utool-desc{display:none;font-size:11px;color:var(--ink2);line-height:1.55;margin-top:5px;padding-top:5px;border-top:.5px solid var(--bd);}
 .utool.open .utool-desc{display:block;}
 @media(max-width:600px){.grid2,.grid2x{grid-template-columns:1fr;}.hdr{grid-template-columns:1fr;}.ab6{grid-template-columns:repeat(3,1fr);}.slot-grid{grid-template-columns:1fr 1fr 1fr;}}
+/* DARK MODE */
+body.dark{--bg:#1b1917;--card:#242220;--sec:#2d2b28;--ink:#e8e4da;--ink2:#9b9890;--bd:rgba(255,255,255,0.1);--gold:#c9a84c;--gold-l:#4a3808;--gold-p:#2a2008;--green:#18a06b;--purple:#7c73d4;--red:#d96040;--amber:#c98a20;}
+body.dark .hp-bar{background:#18a06b;}
+body.dark .hbadge{background:var(--sec);}
+body.dark .cd-opt:hover,body.dark .cd-opt.open,body.dark .utool:hover,body.dark .utool.open{background:var(--gold-p);}
+body.dark .sr:hover,body.dark .sr.open{background:var(--gold-p);}
+body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
+/* CONCENTRATION SPELL ROWS */
+.sr.conc-spell{border-left:2px solid var(--purple);}
+.conc-cast{font-size:10px;padding:2px 6px;border-radius:3px;border:1px solid var(--purple);color:var(--purple);background:transparent;cursor:pointer;margin-right:4px;white-space:nowrap;flex-shrink:0;}
+.conc-cast:hover{background:rgba(83,74,183,0.12);}
+.stag .ci{color:var(--purple);font-weight:700;}
+/* DARK TOGGLE BUTTON */
+.dark-btn{font-size:18px;background:none;border:none;cursor:pointer;padding:2px 4px;line-height:1;border-radius:4px;}
+.dark-btn:hover{background:var(--sec);}
+/* TEMP HP INLINE */
+.tmp-badge{display:none;font-size:13px;font-weight:700;color:var(--purple);background:rgba(83,74,183,0.12);border:1.5px solid var(--purple);border-radius:6px;padding:2px 8px;margin-left:6px;align-items:baseline;gap:3px;}
+.tmp-badge.visible{display:inline-flex;}
+/* CONCENTRATION TRACKER */
+.conc-box{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.conc-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--purple);flex-shrink:0;}
+.conc-input{flex:1;min-width:120px;font-size:13px;border:none;background:transparent;color:var(--ink);font-family:inherit;outline:none;}
+.conc-input::placeholder{color:var(--ink2);}
+.conc-clear{font-size:11px;color:var(--ink2);background:none;border:none;cursor:pointer;padding:2px 5px;}
+/* DEATH SAVES */
+.ds-box{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:.5px solid var(--bd);}
+.ds-label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);flex-shrink:0;}
+.ds-group{display:flex;gap:5px;align-items:center;}
+.ds-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--bd);background:transparent;cursor:pointer;flex-shrink:0;}
+.ds-dot.suc{background:var(--green);border-color:var(--green);}
+.ds-dot.fail{background:var(--red);border-color:var(--red);}
+/* INSPIRATION */
+.insp-pip{width:16px;height:16px;border-radius:50%;background:transparent;border:2px solid var(--gold-l);cursor:pointer;transition:background .15s;flex-shrink:0;}
+.insp-pip.active{background:var(--gold-l);}
 </style>
 </head>
 <body>
@@ -155,12 +189,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     </div>
   </div>
   <div class="hdr-r">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;justify-content:flex-end;">
+      <span style="font-size:10px;color:var(--ink2);">Inspiration</span>
+      <div class="insp-pip" id="inspPip" onclick="toggleInspiration()" title="Heroic Inspiration"></div>
+      <button class="dark-btn" onclick="toggleDark()" title="Toggle dark mode" id="darkBtn">🌙</button>
+    </div>
     <div class="srow">
-      <div class="sb"><div class="v">17</div><div class="l">AC</div></div>
+      <div class="sb"><div class="v" id="acHeader">17</div><div class="l">AC</div></div>
       <div class="sb"><div class="v">+0</div><div class="l">Init</div></div>
       <div class="sb"><div class="v">30ft</div><div class="l">Speed</div></div>
     </div>
   </div>
+</div>
+
+<!-- CONCENTRATION TRACKER -->
+<div class="conc-box">
+  <span class="conc-label">Concentrating on</span>
+  <input class="conc-input" id="concSpell" placeholder="— nothing —" oninput="saveConc()">
+  <button class="conc-clear" onclick="clearConc()">✕ drop</button>
 </div>
 
 <!-- HP TRACKER -->
@@ -168,23 +214,42 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
   <div class="hp-top">
     <div>
       <div class="hp-lbl">Hit Points</div>
-      <div class="hp-nums">
-        <div class="hp-cur" id="hpCur">51</div>
-        <div class="hp-sep">/</div>
-        <div class="hp-max">51</div>
+      <div style="display:flex;align-items:baseline;gap:4px;flex-wrap:wrap;">
+        <div class="hp-nums">
+          <div class="hp-cur" id="hpCur">51</div>
+          <div class="hp-sep">/</div>
+          <div class="hp-max">51</div>
+        </div>
+        <span class="tmp-badge" id="tmpBadge">+<span id="tmpVal">0</span>&nbsp;tmp</span>
       </div>
     </div>
     <div class="hp-bar-wrap"><div class="hp-bar" id="hpBar" style="width:100%"></div></div>
     <div class="hp-pct" id="hpPct">100%</div>
-    <div class="tmp-info" id="tmpInfo" style="display:none">+<span id="tmpVal">0</span> tmp</div>
   </div>
   <div class="hp-controls">
     <input type="number" id="hpAmt" placeholder="Amount" min="0">
     <button class="btn btn-dmg" onclick="applyDmg()">Take Damage</button>
     <button class="btn btn-heal" onclick="applyHeal()">Heal</button>
     <button class="btn btn-sm" onclick="setTmp()">Set Temp HP</button>
-    <button class="btn btn-sm" onclick="resetLR()">Long Rest Reset</button>
+    <button class="btn btn-sm" onclick="resetLR()">Long Rest</button>
     <button class="btn btn-sr" onclick="shortRest()">Short Rest</button>
+  </div>
+  <!-- Death saves — only shown when needed -->
+  <div class="ds-box" id="deathSaves" style="display:none;">
+    <span class="ds-label">Death Saves</span>
+    <div class="ds-group">
+      <span style="font-size:10px;color:var(--green);margin-right:3px;">Success</span>
+      <div class="ds-dot" id="ds-s0" onclick="toggleDS('s',0)"></div>
+      <div class="ds-dot" id="ds-s1" onclick="toggleDS('s',1)"></div>
+      <div class="ds-dot" id="ds-s2" onclick="toggleDS('s',2)"></div>
+    </div>
+    <div class="ds-group">
+      <span style="font-size:10px;color:var(--red);margin-right:3px;">Failure</span>
+      <div class="ds-dot" id="ds-f0" onclick="toggleDS('f',0)"></div>
+      <div class="ds-dot" id="ds-f1" onclick="toggleDS('f',1)"></div>
+      <div class="ds-dot" id="ds-f2" onclick="toggleDS('f',2)"></div>
+    </div>
+    <button class="btn btn-sm" onclick="clearDS()">Clear</button>
   </div>
 </div>
 
@@ -312,9 +377,9 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-size:12px;font-weight:700;flex:1;">Uses remaining</span>
           <div class="udots">
-            <button class="udot" onclick="toggleDot(this)"></button>
-            <button class="udot" onclick="toggleDot(this)"></button>
-            <button class="udot" onclick="toggleDot(this)"></button>
+            <button class="udot" data-res="cd" onclick="toggleDot(this)"></button>
+            <button class="udot" data-res="cd" onclick="toggleDot(this)"></button>
+            <button class="udot" data-res="cd" onclick="toggleDot(this)"></button>
           </div>
         </div>
       </div>
@@ -447,11 +512,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="sec">
         <div class="sec-t">Aasimar Traits</div>
         <div class="ut" style="border-left:2px solid var(--gold);">
-          <div class="ut-top"><span class="ut-name">Celestial Revelation</span><span class="badge b-lr">Long Rest</span><div class="udots"><button class="udot" onclick="toggleDot(this)"></button></div></div>
+          <div class="ut-top"><span class="ut-name">Celestial Revelation</span><span class="badge b-lr">Long Rest</span><div class="udots"><button class="udot" data-res="celestial" onclick="toggleDot(this)"></button></div></div>
           <div class="ut-desc">BA: transform 1 min. Pick one each time:<br>• <b>Heavenly Wings</b> — fly 30ft<br>• <b>Inner Radiance</b> — 10ft aura, +3 Radiant dmg on your attacks each turn<br>• <b>Necrotic Shroud</b> — CHA save DC 11 or Frightened til end of your next turn</div>
         </div>
         <div class="ut">
-          <div class="ut-top"><span class="ut-name">Healing Hands</span><span class="badge b-lr">Long Rest</span><div class="udots"><button class="udot" onclick="toggleDot(this)"></button></div></div>
+          <div class="ut-top"><span class="ut-name">Healing Hands</span><span class="badge b-lr">Long Rest</span><div class="udots"><button class="udot" data-res="healing-hands" onclick="toggleDot(this)"></button></div></div>
           <div class="ut-desc">Magic action: touch a creature, restore 3d4 HP. Free heal — no slot.</div>
         </div>
         <div class="ft"><div class="ftn">Celestial Resistance</div><div class="ftd">Resistance to Radiant and Necrotic damage.</div></div>
@@ -468,7 +533,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="sec">
         <div class="sec-t">War Domain Features</div>
         <div class="ut">
-          <div class="ut-top"><span class="ut-name">War Priest — bonus attack</span><span class="badge b-sr">Short/Long Rest</span><div class="udots"><button class="udot" onclick="toggleDot(this)"></button><button class="udot" onclick="toggleDot(this)"></button><button class="udot" onclick="toggleDot(this)"></button></div></div>
+          <div class="ut-top"><span class="ut-name">War Priest — bonus attack</span><span class="badge b-sr">Short/Long Rest</span><div class="udots"><button class="udot" data-res="war-priest" onclick="toggleDot(this)"></button><button class="udot" data-res="war-priest" onclick="toggleDot(this)"></button><button class="udot" data-res="war-priest" onclick="toggleDot(this)"></button></div></div>
           <div class="ut-desc">Bonus action: one weapon or unarmed attack. 3 uses (= WIS mod).</div>
         </div>
         <div class="ft"><div class="ftn">War God's Blessing (6th level)</div><div class="ftd">Expend Channel Divinity to cast Shield of Faith or Spiritual Weapon for free — no concentration, lasts 1 minute. The key to running both Spiritual Weapon + Spirit Guardians at the same time.</div></div>
@@ -477,7 +542,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
       <div class="sec">
         <div class="sec-t">Core Cleric Features</div>
         <div class="ut">
-          <div class="ut-top"><span class="ut-name">Channel Divinity</span><span class="badge b-sr">Short/Long Rest</span><div class="udots"><button class="udot" onclick="toggleDot(this)"></button><button class="udot" onclick="toggleDot(this)"></button><button class="udot" onclick="toggleDot(this)"></button></div></div>
+          <div class="ut-top"><span class="ut-name">Channel Divinity</span><span class="badge b-sr">Short/Long Rest</span><div class="udots"><button class="udot" data-res="cd" onclick="toggleDot(this)"></button><button class="udot" data-res="cd" onclick="toggleDot(this)"></button><button class="udot" data-res="cd" onclick="toggleDot(this)"></button></div></div>
           <div class="ut-desc">3 uses total. Regain 1 after Short Rest. All 4 options: Divine Spark · Turn Undead · Guided Strike · War God's Blessing</div>
         </div>
         <div class="ft"><div class="ftn">Sear Undead (5th level)</div><div class="ftd">When Turn Undead is used, undead that fail their save also take 3d8 Radiant damage. Doesn't end the turn effect.</div></div>
@@ -620,31 +685,76 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 </div>
 
 <script>
+// ── Resource state (source of truth: remaining charges) ────────
+const STORE_KEY='dnd-deb-150606134';
+const RES_MAX={cd:3,'war-priest':3,celestial:1,'healing-hands':1};
+const resRem={cd:3,'war-priest':3,celestial:1,'healing-hands':1};
+const ALL_RES=Object.keys(RES_MAX);
+
 let hp=51,maxHp=51,tmp=0;
 const armor={halfplate:{equipped:true,ac:15},shield:{equipped:true,ac:2},chainshirt:{equipped:false,ac:13}};
 
-// ── localStorage sync (survives refresh and syncs across tabs) ─
-const STORE_KEY='dnd-deb-150606134';
 function getState(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{};}catch(e){return {};}}
-function saveAllDots(){
-  const s=getState(),dots={};
-  document.querySelectorAll('.udot').forEach((d,i)=>dots['u'+i]=d.classList.contains('used'));
-  document.querySelectorAll('.sdot').forEach((d,i)=>dots['s'+i]=d.classList.contains('used'));
-  s.dots=dots;s.hp=hp;s.tmp=tmp;
+
+// renderRes: derive DOM state from resRem[res]
+// pip index i < rem → lit (available); i >= rem → dim (spent)
+function renderRes(res){
+  const rem=resRem[res];
+  const groups=new Map();
+  document.querySelectorAll(`.udot[data-res="${res}"]`).forEach(dot=>{
+    const c=dot.closest('.udots');
+    if(!groups.has(c))groups.set(c,[]);
+    groups.get(c).push(dot);
+  });
+  groups.forEach(dots=>dots.forEach((d,i)=>d.classList.toggle('used',i>=rem)));
+}
+function renderAllRes(){ALL_RES.forEach(r=>renderRes(r));}
+
+function saveState(){
+  const s=getState();
+  const res={};ALL_RES.forEach(r=>res[r]=resRem[r]);s.res=res;
+  const sdots={};
+  document.querySelectorAll('.sdot').forEach((d,i)=>sdots['s'+i]=d.classList.contains('used'));
+  s.sdots=sdots;
+  s.hp=hp;s.tmp=tmp;s.ds=dsState;
   localStorage.setItem(STORE_KEY,JSON.stringify(s));
 }
-function loadAllDots(){
+
+function loadState(){
   const s=getState();
-  if(s.dots){
-    document.querySelectorAll('.udot').forEach((d,i)=>{if(s.dots['u'+i]!==undefined)d.classList.toggle('used',s.dots['u'+i]);});
-    document.querySelectorAll('.sdot').forEach((d,i)=>{if(s.dots['s'+i]!==undefined)d.classList.toggle('used',s.dots['s'+i]);});
-  }
+  if(s.res)ALL_RES.forEach(r=>{if(s.res[r]!==undefined)resRem[r]=s.res[r];});
+  renderAllRes();
+  if(s.sdots)document.querySelectorAll('.sdot').forEach((d,i)=>{if(s.sdots['s'+i]!==undefined)d.classList.toggle('used',s.sdots['s'+i]);});
   if(s.hp!==undefined)hp=s.hp;
   if(s.tmp!==undefined)tmp=s.tmp;
 }
-// Fires when another tab writes to localStorage
-window.addEventListener('storage',e=>{if(e.key===STORE_KEY){loadAllDots();upd();}});
-function toggleDot(el){el.classList.toggle('used');saveAllDots();}
+
+// Cross-tab sync
+window.addEventListener('storage',e=>{if(e.key===STORE_KEY){loadState();upd();}});
+
+// toggleDot: named resources use resRem; anonymous dots toggle directly
+function toggleDot(el){
+  const res=el.dataset.res;
+  if(res){
+    const rem=resRem[res];
+    const max=RES_MAX[res];
+    const dots=Array.from(el.closest('.udots').querySelectorAll(`.udot[data-res="${res}"]`));
+    const pipIdx=dots.indexOf(el);
+    // lit pip (i < rem) → spend; dim pip (i >= rem) → restore
+    resRem[res]=pipIdx<rem?Math.max(0,rem-1):Math.min(max,rem+1);
+    renderRes(res);
+  } else {
+    el.classList.toggle('used');
+  }
+  saveState();
+}
+
+// ── Dark mode ──────────────────────────────────────────────────
+function toggleDark(){
+  const dark=document.body.classList.toggle('dark');
+  document.getElementById('darkBtn').textContent=dark?'☀️':'🌙';
+  const s=getState();s.dark=dark;localStorage.setItem(STORE_KEY,JSON.stringify(s));
+}
 
 // ── Armor ──────────────────────────────────────────────────────
 function toggleArmor(id){
@@ -665,6 +775,7 @@ function updateAC(){
   if(armor.shield.equipped){shieldAC=2;parts.push('Shield (+2)');}
   const total=base+shieldAC;
   document.getElementById('acDisplay').textContent=total;
+  document.getElementById('acHeader').textContent=total;
   document.getElementById('acNoShield').textContent=base;
   document.getElementById('acBreakdown').innerHTML=parts.join(' + ')+' = <b style="color:var(--ink);">'+total+'</b>';
 }
@@ -678,32 +789,59 @@ function upd(){
   const bar=document.getElementById('hpBar');
   bar.style.width=pct+'%';
   bar.style.background=pct>50?'#1D9E75':pct>25?'#BA7517':'#D85A30';
-  const ti=document.getElementById('tmpInfo');
-  if(tmp>0){ti.style.display='block';document.getElementById('tmpVal').textContent=tmp;}
-  else ti.style.display='none';
+  const badge=document.getElementById('tmpBadge');
+  if(tmp>0){badge.classList.add('visible');document.getElementById('tmpVal').textContent=tmp;}
+  else badge.classList.remove('visible');
+  document.getElementById('deathSaves').style.display=c===0?'flex':'none';
 }
 function getAmt(){return Math.abs(parseInt(document.getElementById('hpAmt').value)||0);}
 function clearAmt(){document.getElementById('hpAmt').value='';}
-function applyDmg(){const a=getAmt();if(!a)return;let r=a;if(tmp>0){const ab=Math.min(tmp,r);tmp-=ab;r-=ab;}hp=Math.max(0,hp-r);clearAmt();upd();saveAllDots();}
-function applyHeal(){const a=getAmt();if(!a)return;hp=Math.min(maxHp,hp+a);clearAmt();upd();saveAllDots();}
-function setTmp(){const v=parseInt(prompt('Set Temp HP (current: '+tmp+'):','0'));if(!isNaN(v))tmp=Math.max(0,v);upd();saveAllDots();}
-function resetLR(){hp=maxHp;tmp=0;document.querySelectorAll('.udot,.sdot').forEach(d=>d.classList.remove('used'));upd();saveAllDots();}
-function shortRest(){
-  const rows=document.querySelectorAll('.ut');
-  rows.forEach(row=>{
-    if(row.querySelector('.ut-name')&&row.querySelector('.ut-name').textContent.includes('Channel Divinity')){
-      const dots=row.querySelectorAll('.udot');
-      for(let i=dots.length-1;i>=0;i--){if(dots[i].classList.contains('used')){dots[i].classList.remove('used');break;}}
-    }
-  });
-  const wp=document.querySelectorAll('.ut-top');
-  wp.forEach(top=>{
-    if(top.querySelector('.badge')&&top.querySelector('.badge').classList.contains('b-sr')){
-      top.parentElement.querySelectorAll('.udot').forEach(d=>d.classList.remove('used'));
-    }
-  });
-  saveAllDots();
+function applyDmg(){const a=getAmt();if(!a)return;let r=a;if(tmp>0){const ab=Math.min(tmp,r);tmp-=ab;r-=ab;}hp=Math.max(0,hp-r);clearAmt();upd();saveState();}
+function applyHeal(){const a=getAmt();if(!a)return;hp=Math.min(maxHp,hp+a);clearAmt();upd();saveState();}
+function setTmp(){const v=parseInt(prompt('Set Temp HP (current: '+tmp+'):','0'));if(!isNaN(v))tmp=Math.max(0,v);upd();saveState();}
+function resetLR(){
+  hp=maxHp;tmp=0;
+  ALL_RES.forEach(r=>{resRem[r]=RES_MAX[r];});
+  renderAllRes();
+  document.querySelectorAll('.sdot').forEach(d=>d.classList.remove('used'));
+  clearDS();clearConc();
+  upd();saveState();
 }
+function shortRest(){
+  // CD: regain 1 charge; War Priest: fully recharges on short rest
+  resRem['cd']=Math.min(RES_MAX['cd'],resRem['cd']+1);
+  resRem['war-priest']=RES_MAX['war-priest'];
+  renderRes('cd');renderRes('war-priest');
+  saveState();
+}
+
+// ── Concentration ──────────────────────────────────────────────
+function castConc(name){document.getElementById('concSpell').value=name;saveConc();}
+function saveConc(){const s=getState();s.conc=document.getElementById('concSpell').value;localStorage.setItem(STORE_KEY,JSON.stringify(s));}
+function clearConc(){document.getElementById('concSpell').value='';saveConc();}
+
+// ── Death saves ────────────────────────────────────────────────
+const dsState={s:[false,false,false],f:[false,false,false]};
+function toggleDS(type,idx){
+  dsState[type][idx]=!dsState[type][idx];
+  const el=document.getElementById('ds-'+type+idx);
+  el.classList.toggle(type==='s'?'suc':'fail',dsState[type][idx]);
+  saveState();
+}
+function clearDS(){
+  ['s','f'].forEach(t=>[0,1,2].forEach(i=>{dsState[t][i]=false;const el=document.getElementById('ds-'+t+i);if(el)el.classList.remove('suc','fail');}));
+  saveState();
+}
+
+// ── Inspiration ────────────────────────────────────────────────
+let inspired=false;
+function toggleInspiration(){
+  inspired=!inspired;
+  document.getElementById('inspPip').classList.toggle('active',inspired);
+  const s=getState();s.inspired=inspired;localStorage.setItem(STORE_KEY,JSON.stringify(s));
+}
+
+// ── Tabs / spells ──────────────────────────────────────────────
 function showTab(id,btn){
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
@@ -717,10 +855,41 @@ function ts(row){
   if(!was){row.classList.add('open');desc.classList.add('open');}
 }
 
-// Init — restore persisted state on load
-loadAllDots();
-upd();
-updateAC();
+// ── Init ───────────────────────────────────────────────────────
+(function init(){
+  const s=getState();
+  // Dark mode
+  if(s.dark){document.body.classList.add('dark');document.getElementById('darkBtn').textContent='☀️';}
+  // Resources + spells
+  loadState();
+  // Concentration
+  if(s.conc)document.getElementById('concSpell').value=s.conc;
+  // Inspiration
+  if(s.inspired){inspired=true;document.getElementById('inspPip').classList.add('active');}
+  // Death saves
+  if(s.ds){['s','f'].forEach(t=>[0,1,2].forEach(i=>{if(s.ds[t]&&s.ds[t][i]){dsState[t][i]=true;const el=document.getElementById('ds-'+t+i);if(el)el.classList.add(t==='s'?'suc':'fail');}}));}
+  // Mark concentration spells and add cast buttons
+  document.querySelectorAll('.sr').forEach(row=>{
+    const stag=row.querySelector('.stag');
+    if(!stag)return;
+    const txt=stag.textContent;
+    if(!/\bConc\b/.test(txt)||/\bno Conc\b/.test(txt))return;
+    row.classList.add('conc-spell');
+    // Highlight "Conc" within the stag text
+    stag.innerHTML=stag.innerHTML.replace(/Conc/g,'<span class="ci">Conc</span>');
+    // Add cast button — get spell name from first cell
+    const nameEl=row.querySelector('.sn');
+    if(!nameEl)return;
+    const spellName=nameEl.textContent.trim();
+    const btn=document.createElement('button');
+    btn.className='conc-cast';
+    btn.textContent='Cast';
+    btn.onclick=function(e){e.stopPropagation();castConc(spellName);};
+    nameEl.insertBefore(btn,nameEl.firstChild);
+  });
+  upd();
+  updateAC();
+})();
 </script>
 </body>
 </html>
