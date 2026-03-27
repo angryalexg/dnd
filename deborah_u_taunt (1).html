@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Deborah U. Taunt — Cleric 6</title>
+<style>
+:root{--gold:#8B6914;--gold-l:#c9a84c;--gold-p:#f5e9c8;--bg:#faf8f3;--card:#fff;--sec:#f5f2ea;--ink:#1a1a18;--ink2:#6b6860;--bd:rgba(0,0,0,0.12);--r:8px;--green:#1D9E75;--purple:#534AB7;--red:#D85A30;--amber:#BA7517;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;}
+.sheet{max-width:960px;margin:0 auto;padding:16px;}
+/* HEADER */
+.hdr{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;margin-bottom:12px;padding-bottom:12px;border-bottom:2px solid var(--gold-l);}
+.cname{font-size:22px;font-weight:700;}
+.meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.pill{font-size:11px;background:var(--sec);border:0.5px solid var(--bd);border-radius:20px;padding:2px 9px;color:var(--ink2);}
+.pill b{font-weight:700;color:var(--ink);}
+.hdr-r{display:flex;flex-direction:column;gap:7px;align-items:flex-end;}
+.srow{display:flex;gap:7px;}
+.sb{text-align:center;background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:6px 12px;min-width:58px;}
+.sb .v{font-size:18px;font-weight:700;}.sb .l{font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px;margin-top:1px;}
+/* HP TRACKER */
+.hp-box{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:10px 14px;margin-bottom:12px;}
+.hp-top{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.hp-nums{display:flex;align-items:baseline;gap:3px;}
+.hp-cur{font-size:30px;font-weight:700;min-width:38px;text-align:center;}
+.hp-sep{font-size:20px;color:var(--ink2);}
+.hp-max{font-size:20px;color:var(--ink2);}
+.hp-lbl{font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;}
+.hp-bar-wrap{flex:1;background:var(--sec);border-radius:4px;height:7px;overflow:hidden;}
+.hp-bar{height:7px;border-radius:4px;background:var(--green);transition:width .25s,background .25s;}
+.hp-pct{font-size:11px;color:var(--ink2);min-width:34px;text-align:right;}
+.tmp-info{font-size:11px;color:var(--purple);font-weight:600;min-width:50px;}
+.hp-controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.hp-controls input{width:70px;padding:5px 7px;font-size:13px;border:0.5px solid var(--bd);border-radius:var(--r);background:var(--card);color:var(--ink);font-family:inherit;}
+.btn{font-size:12px;padding:5px 11px;border:0.5px solid var(--bd);border-radius:var(--r);cursor:pointer;background:transparent;color:var(--ink);font-family:inherit;}
+.btn:hover{background:var(--sec);}
+.btn-dmg{border-color:var(--red);color:var(--red);}
+.btn-heal{border-color:var(--green);color:var(--green);}
+.btn-sr{border-color:var(--amber);color:var(--amber);}
+.btn-sm{font-size:11px;padding:4px 8px;color:var(--ink2);}
+/* TABS */
+.tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;}
+.tab{font-size:12px;padding:5px 13px;border:0.5px solid var(--bd);border-radius:20px;cursor:pointer;background:transparent;color:var(--ink2);font-family:inherit;}
+.tab.active,.tab:hover{background:var(--gold);color:#fff;border-color:var(--gold);}
+.panel{display:none;}.panel.active{display:block;}
+/* LAYOUT */
+.grid2{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:10px;}
+.grid2x{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;}
+.col{display:flex;flex-direction:column;gap:8px;}
+.sec{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:9px;}
+.sec-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--gold);margin-bottom:7px;border-bottom:.5px solid var(--bd);padding-bottom:4px;}
+/* ABILITY SCORES */
+.ab6{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
+.ab{background:var(--sec);border-radius:6px;padding:5px 3px;text-align:center;}
+.abm{font-size:15px;font-weight:700;}.abs{font-size:11px;color:var(--ink2);margin-top:1px;}.abn{font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.3px;margin-top:1px;}
+.pos{color:var(--green);}.neg{color:var(--red);}
+/* SKILLS GROUPED */
+.sg{background:var(--sec);border-radius:6px;padding:6px 7px;margin-bottom:4px;}
+.sg-h{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;}
+.sk{display:flex;align-items:center;gap:5px;font-size:12px;padding:1px 0;}
+.dot{width:7px;height:7px;border-radius:50%;border:1.5px solid var(--bd);flex-shrink:0;}
+.dot.p{background:var(--gold);border-color:var(--gold);}
+.skn{flex:1;color:var(--ink2);}
+.skv{font-weight:700;color:var(--ink);}
+.sk-note{font-size:10px;color:var(--purple);font-style:italic;}
+.sk-bonus{font-size:10px;color:var(--gold);margin-left:3px;}
+/* PASSIVES */
+.prow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
+.pbox{background:var(--sec);border-radius:6px;padding:5px;text-align:center;}
+.pv{font-size:16px;font-weight:700;}.pl{font-size:9px;color:var(--ink2);text-transform:uppercase;}
+/* USE TRACKERS */
+.ut{background:var(--sec);border-radius:6px;padding:7px 9px;margin-bottom:5px;}
+.ut-top{display:flex;align-items:center;gap:7px;margin-bottom:4px;}
+.ut-name{font-size:12px;font-weight:700;flex:1;}
+.badge{font-size:10px;padding:1px 7px;border-radius:3px;font-weight:600;}
+.b-lr{background:#EEEDFE;color:var(--purple);}
+.b-sr{background:#E1F5EE;color:#0F6E56;}
+.b-free{background:#EAF3DE;color:#3B6D11;}
+.udots{display:flex;gap:5px;flex-wrap:wrap;}
+.udot{width:13px;height:13px;border-radius:50%;background:var(--gold-l);cursor:pointer;border:none;transition:opacity .15s;flex-shrink:0;}
+.udot.used{opacity:.18;background:var(--ink2);}
+.ut-desc{font-size:11px;color:var(--ink2);line-height:1.5;}
+/* WEAPONS */
+.wtb{width:100%;border-collapse:collapse;font-size:12px;}
+.wtb th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);padding:4px 6px;border-bottom:.5px solid var(--bd);font-weight:700;}
+.wtb td{padding:5px 6px;border-bottom:.5px solid rgba(0,0,0,.05);}
+.hbadge{background:var(--sec);border:.5px solid var(--bd);border-radius:4px;padding:2px 6px;font-weight:700;}
+.cpill{font-size:11px;background:var(--sec);border:.5px solid var(--bd);border-radius:20px;padding:3px 9px;display:inline-block;margin:2px;}
+/* SPELLS */
+.slot-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px;}
+.slot-box{text-align:center;background:var(--sec);border-radius:6px;padding:7px;}
+.slot-lbl{font-size:10px;color:var(--ink2);text-transform:uppercase;}
+.slot-n{font-size:14px;font-weight:700;}
+.sdots{display:flex;justify-content:center;gap:4px;margin-top:5px;}
+.sdot{width:11px;height:11px;border-radius:50%;background:var(--gold-l);cursor:pointer;border:none;transition:opacity .15s;}
+.sdot.used{opacity:.18;background:var(--ink2);}
+.sl-lbl{font-size:11px;font-weight:700;color:var(--ink2);padding:5px 0 3px;}
+/* SPELL ROWS */
+.sr{display:flex;align-items:center;gap:7px;font-size:12px;padding:5px 7px;border-radius:5px;background:var(--sec);margin-bottom:3px;cursor:pointer;transition:background .1s;user-select:none;}
+.sr:hover,.sr.open{background:var(--gold-p);}
+.sr.open{border-radius:5px 5px 0 0;margin-bottom:0;}
+.sr.aw{border-left:2px solid var(--gold);}
+.slvl{font-size:10px;background:var(--card);border:.5px solid var(--bd);border-radius:3px;padding:1px 5px;min-width:20px;text-align:center;color:var(--ink2);}
+.sn{flex:1;font-weight:600;}
+.stag{font-size:10px;color:var(--ink2);}
+.sarr{font-size:10px;color:var(--ink2);margin-left:3px;transition:transform .15s;}
+.sr.open .sarr{transform:rotate(90deg);}
+.sd{display:none;font-size:11px;color:var(--ink2);line-height:1.6;padding:7px 9px;background:var(--gold-p);border-radius:0 0 5px 5px;margin-bottom:3px;border-left:2px solid var(--gold-l);}
+.sd.open{display:block;}
+.sdm{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:5px;}
+.sdm span{font-size:10px;background:rgba(139,105,20,.12);border-radius:3px;padding:2px 6px;color:var(--gold);font-weight:700;}
+/* FEATURES */
+.ft{padding:7px 9px;background:var(--sec);border-radius:6px;margin-bottom:5px;}
+.ftn{font-size:12px;font-weight:700;}
+.ftd{font-size:11px;color:var(--ink2);margin-top:3px;line-height:1.55;}
+/* CD OPTIONS */
+.cd-opt{background:var(--sec);border-radius:6px;padding:7px 9px;margin-bottom:4px;cursor:pointer;border:.5px solid transparent;}
+.cd-opt:hover,.cd-opt.open{border-color:var(--bd);}
+.cd-hdr{display:flex;align-items:center;gap:6px;}
+.cd-name{font-size:12px;font-weight:700;flex:1;}
+.cd-tag{font-size:10px;padding:1px 6px;border-radius:3px;font-weight:600;}
+.t-act{background:#FAEEDA;color:#854F0B;}
+.t-ba{background:#E1F5EE;color:#0F6E56;}
+.t-react{background:#FAECE7;color:#993C1D;}
+.t-spec{background:#EEEDFE;color:var(--purple);}
+.cd-arr{font-size:10px;color:var(--ink2);transition:transform .15s;}
+.cd-opt.open .cd-arr{transform:rotate(90deg);}
+.cd-desc{display:none;font-size:11px;color:var(--ink2);line-height:1.55;margin-top:5px;padding-top:5px;border-top:.5px solid var(--bd);}
+.cd-opt.open .cd-desc{display:block;}
+/* UTILITY */
+.util-card{background:var(--card);border:.5px solid var(--bd);border-radius:var(--r);padding:9px;margin-bottom:8px;}
+.util-hdr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);margin-bottom:7px;padding-bottom:4px;border-bottom:.5px solid var(--bd);}
+.utool{padding:5px 7px;border-radius:5px;margin-bottom:3px;cursor:pointer;border:.5px solid transparent;}
+.utool:hover,.utool.open{background:var(--sec);border-color:var(--bd);}
+.utool-hdr{display:flex;align-items:center;gap:6px;}
+.utool-name{font-size:12px;font-weight:700;flex:1;}
+.utool-arr{font-size:10px;color:var(--ink2);transition:transform .15s;}
+.utool.open .utool-arr{transform:rotate(90deg);}
+.utool-desc{display:none;font-size:11px;color:var(--ink2);line-height:1.55;margin-top:5px;padding-top:5px;border-top:.5px solid var(--bd);}
+.utool.open .utool-desc{display:block;}
+@media(max-width:600px){.grid2,.grid2x{grid-template-columns:1fr;}.hdr{grid-template-columns:1fr;}.ab6{grid-template-columns:repeat(3,1fr);}.slot-grid{grid-template-columns:1fr 1fr 1fr;}}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <div class="cname">Deborah U. Taunt</div>
+    <div class="meta">
+      <span class="pill">Cleric <b>6</b></span><span class="pill">War Domain</span><span class="pill">Aasimar</span><span class="pill">Soldier</span><span class="pill">Chaotic Neutral</span>
+      <span class="pill">Prof <b>+3</b></span><span class="pill">Save DC <b>14</b></span><span class="pill">Spell Atk <b>+6</b></span>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div class="srow">
+      <div class="sb"><div class="v">17</div><div class="l">AC</div></div>
+      <div class="sb"><div class="v">+0</div><div class="l">Init</div></div>
+      <div class="sb"><div class="v">30ft</div><div class="l">Speed</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- HP TRACKER -->
+<div class="hp-box">
+  <div class="hp-top">
+    <div>
+      <div class="hp-lbl">Hit Points</div>
+      <div class="hp-nums">
+        <div class="hp-cur" id="hpCur">51</div>
+        <div class="hp-sep">/</div>
+        <div class="hp-max">51</div>
+      </div>
+    </div>
+    <div class="hp-bar-wrap"><div class="hp-bar" id="hpBar" style="width:100%"></div></div>
+    <div class="hp-pct" id="hpPct">100%</div>
+    <div class="tmp-info" id="tmpInfo" style="display:none">+<span id="tmpVal">0</span> tmp</div>
+  </div>
+  <div class="hp-controls">
+    <input type="number" id="hpAmt" placeholder="Amount" min="0">
+    <button class="btn btn-dmg" onclick="applyDmg()">Take Damage</button>
+    <button class="btn btn-heal" onclick="applyHeal()">Heal</button>
+    <button class="btn btn-sm" onclick="setTmp()">Set Temp HP</button>
+    <button class="btn btn-sm" onclick="resetLR()">Long Rest Reset</button>
+    <button class="btn btn-sr" onclick="shortRest()">Short Rest</button>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('stats',this)">Stats &amp; Skills</button>
+  <button class="tab" onclick="showTab('combat',this)">Combat</button>
+  <button class="tab" onclick="showTab('spells',this)">Spells</button>
+  <button class="tab" onclick="showTab('features',this)">Features &amp; Traits</button>
+  <button class="tab" onclick="showTab('utility',this)">Utility Cheat Sheet</button>
+  <button class="tab" onclick="showTab('equipment',this)">Equipment</button>
+</div>
+
+<!-- ═══ STATS & SKILLS ═══ -->
+<div id="stats" class="panel active">
+  <div class="grid2">
+    <div class="col">
+      <div class="sec">
+        <div class="sec-t">Ability Scores</div>
+        <div class="ab6">
+          <div class="ab"><div class="abm pos">+2</div><div class="abs">14</div><div class="abn">STR</div></div>
+          <div class="ab"><div class="abm">+0</div><div class="abs">10</div><div class="abn">DEX</div></div>
+          <div class="ab"><div class="abm pos">+3</div><div class="abs">16</div><div class="abn">CON</div></div>
+          <div class="ab"><div class="abm neg">-1</div><div class="abs">8</div><div class="abn">INT</div></div>
+          <div class="ab"><div class="abm pos">+3</div><div class="abs">16</div><div class="abn">WIS</div></div>
+          <div class="ab"><div class="abm pos">+1</div><div class="abs">12</div><div class="abn">CHA</div></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Passives</div>
+        <div class="prow">
+          <div class="pbox"><div class="pv">13</div><div class="pl">Percep.</div></div>
+          <div class="pbox"><div class="pv">16</div><div class="pl">Insight</div></div>
+          <div class="pbox"><div class="pv">9</div><div class="pl">Investig.</div></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Proficiencies</div>
+        <div style="font-size:11px;color:var(--ink2);line-height:1.8;">
+          <div><b style="color:var(--ink);">Armor:</b> Light, Medium, Shields</div>
+          <div><b style="color:var(--ink);">Weapons:</b> Simple Weapons</div>
+          <div><b style="color:var(--ink);">Tools:</b> Playing Card Set</div>
+          <div><b style="color:var(--ink);">Languages:</b> Common, Elvish, Orc</div>
+          <div><b style="color:var(--ink);">Darkvision:</b> 60ft</div>
+          <div><b style="color:var(--ink);">Resistances:</b> Radiant, Necrotic</div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="sec">
+        <div class="sec-t">Skills by Ability — filled dot = proficient</div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;">
+          <div>
+            <div class="sg"><div class="sg-h">STR +2 — Save +2</div>
+              <div class="sk"><div class="dot p"></div><span class="skn">Athletics</span><span class="skv">+5</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">DEX +0 — Save +0</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Acrobatics</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Sleight of Hand</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Stealth</span><span class="skv">+0</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">CON +3 — Save +3</div>
+              <div class="sk"><span class="sk-note">Adv on Conc saves (War Caster)</span></div>
+            </div>
+          </div>
+          <div>
+            <div class="sg"><div class="sg-h">INT -1 — Save -1</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Arcana</span><span class="skv">+2</span><span class="sk-bonus">+3</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">History</span><span class="skv">-1</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Investigation</span><span class="skv">-1</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Nature</span><span class="skv">-1</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Religion</span><span class="skv">+2</span><span class="sk-bonus">+3</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">WIS +3 — Save +6 (prof ✦)</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Animal Handling</span><span class="skv">+3</span></div>
+              <div class="sk"><div class="dot p"></div><span class="skn">Insight</span><span class="skv">+6</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Medicine</span><span class="skv">+3</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Perception</span><span class="skv">+3</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Survival</span><span class="skv">+3</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">CHA +1 — Save +4 (prof ✦)</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Deception</span><span class="skv">+1</span></div>
+              <div class="sk"><div class="dot p"></div><span class="skn">Intimidation</span><span class="skv">+4</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Performance</span><span class="skv">+1</span></div>
+              <div class="sk"><div class="dot p"></div><span class="skn">Persuasion</span><span class="skv">+4</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMBAT ═══ -->
+<div id="combat" class="panel">
+  <div style="display:flex;flex-direction:column;gap:9px;">
+    <div class="sec">
+      <div class="sec-t">Weapons</div>
+      <table class="wtb">
+        <tr><th>Weapon</th><th>Hit</th><th>Damage</th><th>Type</th><th>Notes</th></tr>
+        <tr><td><b>Mace ★</b></td><td><span class="hbadge">+5</span></td><td>1d6+2</td><td>Bludgeoning</td><td style="color:var(--ink2);">Simple · Sap mastery</td></tr>
+        <tr><td>Unarmed Strike</td><td><span class="hbadge">+5</span></td><td>3</td><td>Bludgeoning</td><td style="color:var(--ink2);">—</td></tr>
+        <tr><td>Light Crossbow</td><td><span class="hbadge">+3</span></td><td>1d8</td><td>Piercing</td><td style="color:var(--ink2);">Range 80/320 · Loading</td></tr>
+      </table>
+    </div>
+    <div class="sec">
+      <div class="sec-t">Cantrips (at will)</div>
+      <div><span class="cpill">Sacred Flame — DEX save 14 · 1d8 Fire</span><span class="cpill">Toll the Dead — WIS save 14 · 1d8/1d12 Necrotic</span><span class="cpill">Word of Radiance — CON save 14 · 1d6 Radiant · 5ft all</span><span class="cpill">Guidance — +d4 to ability check (Conc)</span><span class="cpill">Spare the Dying — stabilize at 15ft</span><span class="cpill">Light — 20ft bright light</span></div>
+    </div>
+    <div class="sec">
+      <div class="sec-t">Channel Divinity — 3 uses · regain 1 on Short Rest</div>
+      <div class="ut" style="margin-bottom:8px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:12px;font-weight:700;flex:1;">Uses remaining</span>
+          <div class="udots">
+            <button class="udot" onclick="this.classList.toggle('used')"></button>
+            <button class="udot" onclick="this.classList.toggle('used')"></button>
+            <button class="udot" onclick="this.classList.toggle('used')"></button>
+          </div>
+        </div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Divine Spark</span><span class="cd-tag t-act">Action · 30ft</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">Point Holy Symbol at a creature within 30ft. Roll 1d8+3. Either restore that many HP to the creature, OR force CON save DC 14 — fail takes Necrotic or Radiant damage equal to roll, success takes half.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Turn Undead + Sear Undead</span><span class="cd-tag t-act">Action · 30ft</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">Each Undead of your choice within 30ft makes WIS save DC 14. Fail: Frightened + Incapacitated for 1 minute, tries to flee. Bonus from Sear Undead: failing undead also take 3d8 Radiant damage immediately!</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Guided Strike</span><span class="cd-tag t-react">Reaction for ally · 30ft</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">When you or a creature within 30ft misses an attack, give that roll +10. Reaction required only to benefit an ally. Can turn a near-miss into a guaranteed hit — save for high-stakes attacks like a paladin's smite.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">War God's Blessing ★ Best opener</span><span class="cd-tag t-ba">Bonus Action</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">Cast Shield of Faith (+2 AC, 60ft) or Spiritual Weapon (floating +6 atk, 1d8+3 Force, moves each BA) using CD instead of a spell slot. KEY: no Concentration! Lasts 1 min. Use this to run Spiritual Weapon + Spirit Guardians simultaneously — they no longer compete. Optimal turn: BA War God's Blessing (Spiritual Weapon) → Action Spirit Guardians.</div>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sec-t">Limited Use Combat Abilities</div>
+      <div class="ut">
+        <div class="ut-top"><span class="ut-name">War Priest — bonus attack</span><span class="badge b-sr">Short/Long Rest</span>
+          <div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button><button class="udot" onclick="this.classList.toggle('used')"></button><button class="udot" onclick="this.classList.toggle('used')"></button></div>
+        </div>
+        <div class="ut-desc">Bonus action: make one weapon or unarmed attack. 3 uses (= WIS mod). Still get a hit in on turns where you cast a spell.</div>
+      </div>
+      <div class="ut">
+        <div class="ut-top"><span class="ut-name">Celestial Revelation</span><span class="badge b-lr">Long Rest</span>
+          <div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button></div>
+        </div>
+        <div class="ut-desc">BA: transform 1 min. Pick each time — <b>Heavenly Wings</b> (fly 30ft) · <b>Inner Radiance</b> (10ft aura, +3 Radiant dmg on your attacks each turn) · <b>Necrotic Shroud</b> (CHA save DC 11 or Frightened til end of your next turn)</div>
+      </div>
+      <div class="ut">
+        <div class="ut-top"><span class="ut-name">Healing Hands</span><span class="badge b-lr">Long Rest</span>
+          <div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button></div>
+        </div>
+        <div class="ut-desc">Magic action: touch a creature, restore 3d4 HP. Free — no slot. Use it every long rest!</div>
+      </div>
+      <div class="ut">
+        <div class="ut-top"><span class="ut-name">Savage Attacker</span><span class="badge b-free">1/turn · Free</span></div>
+        <div class="ut-desc">When you hit with a weapon, roll damage dice twice and use either result. Best on a Mace hit with Savage Attacker when you have Spirit Guardians and Spiritual Weapon already up.</div>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sec-t">Key Advantages &amp; Notes</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.8;">
+        <div><b style="color:var(--ink);">Concentration saves:</b> Advantage (War Caster) — very hard to lose Spirit Guardians</div>
+        <div><b style="color:var(--ink);">Opportunity attacks:</b> Can cast a spell instead of a weapon attack (War Caster)</div>
+        <div><b style="color:var(--ink);">Resistances:</b> Radiant &amp; Necrotic damage</div>
+        <div><b style="color:var(--ink);">Somatic components:</b> Work even with weapons/shield in both hands (War Caster)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SPELLS ═══ -->
+<div id="spells" class="panel">
+  <div style="display:flex;flex-direction:column;gap:9px;">
+    <div class="sec">
+      <div class="sec-t">Spell Slots — click dots to track</div>
+      <div class="slot-grid">
+        <div class="slot-box"><div class="slot-lbl">1st Level</div><div class="slot-n">4 slots</div><div class="sdots"><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button></div></div>
+        <div class="slot-box"><div class="slot-lbl">2nd Level</div><div class="slot-n">3 slots</div><div class="sdots"><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button></div></div>
+        <div class="slot-box"><div class="slot-lbl">3rd Level</div><div class="slot-n">3 slots</div><div class="sdots"><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button><button class="sdot" onclick="this.classList.toggle('used')"></button></div></div>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sec-t">Prepared Spells — click to expand · ★ = always prepared (War Domain)</div>
+      <div class="sl-lbl">Cantrips</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">C</span><span class="sn">Sacred Flame</span><span class="stag">DEX save 14 · 60ft · 1d8 Fire</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>Cantrip · Evocation</span><span>Action</span><span>60ft</span><span>V, S</span></div>Target makes DEX save DC 14 or takes 1d8 Fire damage. No benefit from cover. Good against high-AC enemies where attack rolls would miss. Damage scales by 1d8 at levels 5/11/17.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">C</span><span class="sn">Guidance</span><span class="stag">Conc · Touch · +d4 to any ability check</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>Cantrip · Divination</span><span>Action</span><span>Touch</span><span>Conc 1 min</span></div>Touch a willing creature. Before the spell ends, they can add 1d4 to one ability check. Drop if combat starts. Use constantly out of combat — lockpicking, persuasion, climbing, anything.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">C</span><span class="sn">Word of Radiance</span><span class="stag">CON save 14 · Self 5ft · 1d6 Radiant all enemies</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>Cantrip · Evocation</span><span>Action</span><span>Self 5ft</span><span>V, M</span></div>Each enemy of your choice within 5ft makes CON save DC 14 or takes 1d6 Radiant damage. Hits multiple targets simultaneously — excellent when wading into melee groups alongside Spirit Guardians.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">C</span><span class="sn">Toll the Dead</span><span class="stag">WIS save 14 · 60ft · 1d8 or 1d12 Necrotic</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>Cantrip · Necromancy</span><span>Action</span><span>60ft</span><span>V, S</span></div>Target makes WIS save DC 14. Fail: 1d8 Necrotic, or 1d12 if missing any HP. The upgrade to 1d12 makes this excellent for finishing wounded enemies from range. Scales by one die at levels 5/11/17.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">C</span><span class="sn">Spare the Dying</span><span class="stag">15ft · Stabilize downed ally</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>Cantrip · Necromancy</span><span>Action</span><span>15ft</span><span>V, S</span></div>Stabilize a creature at 0 HP within 15ft instantly. No spell slot needed. Use this instead of burning Healing Word when someone just needs to not die right this second — save the BA heal for when they need to get up and fight.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">C</span><span class="sn">Light</span><span class="stag">Touch · 20ft bright light · 1 hour</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>Cantrip · Evocation</span><span>Action</span><span>Touch</span><span>1 hour</span></div>Object sheds Bright Light 20ft, Dim Light 20ft more. Hostile creatures must make a DEX save to avoid it if the object is theirs.</div>
+
+      <div class="sl-lbl">1st Level (4 slots)</div>
+      <div class="sr aw" onclick="ts(this)"><span class="slvl">★1</span><span class="sn">Shield of Faith</span><span class="stag">BA · Conc · +2 AC to any ally · 60ft</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>1st Abjuration</span><span>Bonus Action</span><span>60ft</span><span>Conc 10 min</span></div>Target gains +2 AC. Stacks with everything. Always prepared (War Domain). Can cast for free via War God's Blessing with no Concentration — great for protecting a squishy ally at no cost to your concentration slot.</div>
+      <div class="sr aw" onclick="ts(this)"><span class="slvl">★1</span><span class="sn">Guiding Bolt</span><span class="stag">Spell Atk +6 · 4d6 Radiant · Grants Adv to next attacker</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>1st Evocation</span><span>Action</span><span>120ft</span><span>V, S · 1 round</span></div>Ranged spell attack +6. Hit: 4d6 Radiant damage. Next attack against the target before end of your next turn has Advantage. Great opening move — deals damage AND sets up your party's next hit. Higher slots: +1d6 per level.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">1</span><span class="sn">Bless</span><span class="stag">Conc · +d4 to attack rolls AND saves for 3 allies</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>1st Enchantment</span><span>Action</span><span>30ft</span><span>Conc 1 min · V,S,M</span></div>Up to 3 creatures add 1d4 to every attack roll and saving throw. Arguably the best spell in the game. Cast at the start of every significant combat. Higher slots: +1 target per level. Note: conflicts with Spirit Guardians for concentration — use War God's Blessing for Spirit Guardians first.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">1</span><span class="sn">Healing Word</span><span class="stag">Bonus Action · 1d4+3 HP · 60ft</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>1st Abjuration</span><span>Bonus Action</span><span>60ft</span><span>V only · Instant</span></div>Creature regains 1d4+3 HP. Bonus action — you can still attack or cast another spell on the same turn. Use to revive downed allies without wasting your action. Higher slots: +1d4 per level.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">1</span><span class="sn">Inflict Wounds</span><span class="stag">Touch · CON save 14 · 3d10 Necrotic</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>1st Necromancy</span><span>Action</span><span>Touch</span><span>V, S · Instant</span></div>Touch attack. CON save DC 14: fail 3d10 Necrotic, success half. Best 1st-level burst damage — average 16.5 on fail. Use when you need to delete something fast. Higher slots: +1d10 per level.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">1</span><span class="sn">Cure Wounds</span><span class="stag">Touch · 1d8+3 HP</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>1st Abjuration</span><span>Action</span><span>Touch</span><span>V, S · Instant</span></div>Touch: restore 1d8+3 HP. Uses your Action unlike Healing Word — better for bigger out-of-combat heals. Higher slots: +1d8 per level.</div>
+
+      <div class="sl-lbl">2nd Level (3 slots)</div>
+      <div class="sr aw" onclick="ts(this)"><span class="slvl">★2</span><span class="sn">Spiritual Weapon</span><span class="stag">BA · Conc · +6 atk · 1d8+3 Force · moves each BA</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>2nd Evocation</span><span>Bonus Action</span><span>60ft</span><span>Conc 1 min · V, S</span></div>Floating spectral weapon. Each BA: move it 20ft and make melee spell attack +6. Hit: 1d8+3 Force. In 2024 rules this requires Concentration — BUT War God's Blessing lets you cast it for free with NO concentration. Use that instead. Higher slots: +1d8 per 2 levels.</div>
+      <div class="sr aw" onclick="ts(this)"><span class="slvl">★2</span><span class="sn">Magic Weapon</span><span class="stag">BA · 1 hour · +1 to atk &amp; dmg</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>2nd Transmutation</span><span>Bonus Action</span><span>Touch</span><span>1 hour · V, S</span></div>Touch a nonmagical weapon — becomes +1 magic weapon. Your Mace becomes a +1 Mace! Higher slots: +2 at 3rd-5th, +3 at 6th+.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">2</span><span class="sn">Aid</span><span class="stag">8 hours · +5 max HP for 3 allies · no Conc</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>2nd Abjuration</span><span>Action</span><span>30ft</span><span>8 hours · V,S,M</span></div>3 targets get +5 max AND current HP for 8 hours. No concentration. Cast before entering a dungeon for free buffer HP all day. Higher slots: +5 HP per level.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">2</span><span class="sn">Lesser Restoration</span><span class="stag">Bonus Action · Touch · Remove one condition</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>2nd Abjuration</span><span>Bonus Action</span><span>Touch</span><span>Instant · V, S</span></div>Remove Blinded, Deafened, Paralyzed, or Poisoned. Only a Bonus Action in 2024! When an ally gets debilitated, this is often better than dealing more damage.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">2</span><span class="sn">Prayer of Healing</span><span class="stag">10 min cast · 2d8+3 HP for up to 5 allies</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>2nd Abjuration</span><span>10 minutes</span><span>30ft</span><span>Instant · V</span></div>Up to 5 creatures within range gain Short Rest benefits + 2d8+3 HP. Best used between encounters. A creature can't benefit again until after a Long Rest. Higher slots: +1d8 per level.</div>
+
+      <div class="sl-lbl">3rd Level (3 slots)</div>
+      <div class="sr aw" onclick="ts(this)"><span class="slvl">★3</span><span class="sn">Spirit Guardians</span><span class="stag">Conc · Self 15ft · 3d8 Radiant · halves enemy speed</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>3rd Conjuration</span><span>Action</span><span>Self 15ft emanation</span><span>Conc 10 min · V,S,M</span></div>Spirits surround you in 15ft. Enemies: speed halved inside. When enemy enters/ends turn in aura: WIS save DC 14 — fail 3d8 Radiant, success half. Your #1 combat spell. Wade into groups and deal damage every turn. Higher slots: +1d8 per level. Always prepared (War Domain).</div>
+      <div class="sr aw" onclick="ts(this)"><span class="slvl">★3</span><span class="sn">Crusader's Mantle</span><span class="stag">Conc · 30ft aura · +1d4 Radiant dmg to all ally attacks</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>3rd Evocation</span><span>Action</span><span>Self 30ft emanation</span><span>Conc 1 min · V</span></div>Allies in 30ft aura deal +1d4 Radiant on weapon/unarmed hits. Competes with Spirit Guardians for concentration — Spirit Guardians is almost always better in melee. Save this for ranged-heavy scenarios. Always prepared.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">3</span><span class="sn">Revivify</span><span class="stag">Action · Touch · Return from death with 1 HP</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>3rd Necromancy</span><span>Action</span><span>Touch</span><span>Instant · V,S,M (diamond 300+ GP!)</span></div>Creature dead &lt;1 minute returns with 1 HP. REQUIRES a diamond worth 300+ GP — confirm with DM before session. Save one 3rd slot specifically for this.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">3</span><span class="sn">Dispel Magic</span><span class="stag">Action · 120ft · Ends spells 3rd level and lower</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>3rd Abjuration</span><span>Action</span><span>120ft</span><span>Instant · V, S</span></div>Spells of 3rd level or lower on target end automatically. 4th level+: spellcasting check DC (10 + spell level). Removes enemy buffs, saves allies from nasty spells, shuts down magical hazards.</div>
+      <div class="sr" onclick="ts(this)"><span class="slvl">3</span><span class="sn">Beacon of Hope</span><span class="stag">Conc · Max healing rolls · Adv on WIS &amp; death saves</span><span class="sarr">▶</span></div>
+      <div class="sd"><div class="sdm"><span>3rd Abjuration</span><span>Action</span><span>30ft</span><span>Conc 1 min · V, S</span></div>Targets get Advantage on WIS saves and Death saves, and receive maximum HP from any healing. Combine with Healing Word for guaranteed max heals. Note: competes with Spirit Guardians for concentration.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ FEATURES & TRAITS ═══ -->
+<div id="features" class="panel">
+  <div class="grid2x">
+    <div class="col">
+      <div class="sec">
+        <div class="sec-t">Aasimar Traits</div>
+        <div class="ut" style="border-left:2px solid var(--gold);">
+          <div class="ut-top"><span class="ut-name">Celestial Revelation</span><span class="badge b-lr">Long Rest</span><div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button></div></div>
+          <div class="ut-desc">BA: transform 1 min. Pick one each time:<br>• <b>Heavenly Wings</b> — fly 30ft<br>• <b>Inner Radiance</b> — 10ft aura, +3 Radiant dmg on your attacks each turn<br>• <b>Necrotic Shroud</b> — CHA save DC 11 or Frightened til end of your next turn</div>
+        </div>
+        <div class="ut">
+          <div class="ut-top"><span class="ut-name">Healing Hands</span><span class="badge b-lr">Long Rest</span><div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button></div></div>
+          <div class="ut-desc">Magic action: touch a creature, restore 3d4 HP. Free heal — no slot.</div>
+        </div>
+        <div class="ft"><div class="ftn">Celestial Resistance</div><div class="ftd">Resistance to Radiant and Necrotic damage.</div></div>
+        <div class="ft"><div class="ftn">Darkvision 60ft</div><div class="ftd">See in dim light as bright, darkness as dim light.</div></div>
+        <div class="ft"><div class="ftn">Light Bearer</div><div class="ftd">Know the Light cantrip. CHA is its spellcasting ability.</div></div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Feats</div>
+        <div class="ft"><div class="ftn">War Caster</div><div class="ftd">+1 WIS (applied) · Advantage on CON saves for Concentration · Cast spells as Opportunity Attacks · Somatic components work with weapons/shield in hand</div></div>
+        <div class="ft"><div class="ftn">Savage Attacker</div><div class="ftd">Once per turn when you hit with a weapon, roll the damage dice twice and use either result.</div></div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="sec">
+        <div class="sec-t">War Domain Features</div>
+        <div class="ut">
+          <div class="ut-top"><span class="ut-name">War Priest — bonus attack</span><span class="badge b-sr">Short/Long Rest</span><div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button><button class="udot" onclick="this.classList.toggle('used')"></button><button class="udot" onclick="this.classList.toggle('used')"></button></div></div>
+          <div class="ut-desc">Bonus action: one weapon or unarmed attack. 3 uses (= WIS mod).</div>
+        </div>
+        <div class="ft"><div class="ftn">War God's Blessing (6th level)</div><div class="ftd">Expend Channel Divinity to cast Shield of Faith or Spiritual Weapon for free — no concentration, lasts 1 minute. The key to running both Spiritual Weapon + Spirit Guardians at the same time.</div></div>
+        <div class="ft"><div class="ftn">Guided Strike</div><div class="ftd">Expend Channel Divinity to give +10 to a missed attack roll (yours or ally within 30ft). Reaction if benefiting an ally.</div></div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Core Cleric Features</div>
+        <div class="ut">
+          <div class="ut-top"><span class="ut-name">Channel Divinity</span><span class="badge b-sr">Short/Long Rest</span><div class="udots"><button class="udot" onclick="this.classList.toggle('used')"></button><button class="udot" onclick="this.classList.toggle('used')"></button><button class="udot" onclick="this.classList.toggle('used')"></button></div></div>
+          <div class="ut-desc">3 uses total. Regain 1 after Short Rest. All 4 options: Divine Spark · Turn Undead · Guided Strike · War God's Blessing</div>
+        </div>
+        <div class="ft"><div class="ftn">Sear Undead (5th level)</div><div class="ftd">When Turn Undead is used, undead that fail their save also take 3d8 Radiant damage. Doesn't end the turn effect.</div></div>
+        <div class="ft"><div class="ftn">Thaumaturge (Divine Order)</div><div class="ftd">One extra cantrip from Cleric list. +3 bonus to Arcana and Religion checks (applied in skills).</div></div>
+        <div class="ft"><div class="ftn">Heroic Inspiration</div><div class="ftd">Once per turn, reroll any d20 test and use either result. Granted by DM or certain features.</div></div>
+        <div class="ft"><div class="ftn">Spellcasting notes</div><div class="ftd">10 spells prepared (not counting always-prepared War Domain spells) · Long Rest restores all slots · Holy Symbol as spellcasting focus</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ UTILITY CHEAT SHEET ═══ -->
+<div id="utility" class="panel">
+  <div style="font-size:12px;color:var(--ink2);margin-bottom:10px;">The things you're most likely to forget. Click any item to expand.</div>
+  <div class="grid2x">
+    <div>
+      <div class="util-card">
+        <div class="util-hdr">Always free — no slot needed</div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Guidance (cantrip)</span><span class="badge b-free">At will · Conc</span><span class="utool-arr">▶</span></div><div class="utool-desc">Before any ability check: touch an ally, they add 1d4. Lockpicking, persuasion, climbing, investigation, performance — anything. Drop if combat starts. Use this ALL THE TIME out of combat. Highest value cantrip in the game.</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Spare the Dying (cantrip)</span><span class="badge b-free">At will · 15ft</span><span class="utool-arr">▶</span></div><div class="utool-desc">Stabilize any downed ally at 15ft instantly — no slot. Use this instead of Healing Word when someone just needs to not die. Save the BA heal for when they need to get back up and fight.</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Healing Hands (Aasimar)</span><span class="badge b-lr">1/Long Rest</span><span class="utool-arr">▶</span></div><div class="utool-desc">Magic action: touch a creature, restore 3d4 HP. Completely free — no spell slot. Use every long rest without thinking. Great for topping someone off between fights.</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Detect Magic (ritual)</span><span class="badge b-free">No slot if ritual</span><span class="utool-arr">▶</span></div><div class="utool-desc">You have this prepared! Cast as a 10-minute ritual (no slot) to sense magical auras within 30ft. Use when exploring a new room, checking a suspicious object, or wondering if an NPC is enchanted. Never burn a slot — always ritual it.</div></div>
+      </div>
+      <div class="util-card">
+        <div class="util-hdr">Pre-combat buffs (cast BEFORE initiative)</div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Aid (2nd slot)</span><span class="badge b-lr">8 hours · No Conc</span><span class="utool-arr">▶</span></div><div class="utool-desc">Cast before entering a dungeon — +5 max HP for 3 allies lasts 8 hours with no concentration. Free buffer HP for the whole adventuring day. Easy to forget because it has no flashy effect.</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Magic Weapon (2nd slot)</span><span class="badge b-lr">1 hour · No Conc</span><span class="utool-arr">▶</span></div><div class="utool-desc">Your Mace becomes a +1 magic weapon for an hour. Cast before combat — free +1 to all attack and damage rolls. No concentration needed.</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Bless (1st slot)</span><span class="badge" style="background:#FAEEDA;color:#854F0B;">Round 1 priority</span><span class="utool-arr">▶</span></div><div class="utool-desc">Cast FIRST THING every significant combat. +d4 to attack rolls AND saving throws for 3 allies for 1 min. Also helps resist charm, frighten, and paralysis. Conflicts with Spirit Guardians for concentration — but if you use War God's Blessing for Spiritual Weapon (no Conc), you can still run Bless as your concentration spell!</div></div>
+      </div>
+    </div>
+    <div>
+      <div class="util-card">
+        <div class="util-hdr">Channel Divinity smart plays</div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Optimal combat opener</span><span class="badge" style="background:#E1F5EE;color:#0F6E56;">Best combo</span><span class="utool-arr">▶</span></div><div class="utool-desc"><b>Option A (max damage):</b> BA War God's Blessing → Spiritual Weapon (no Conc, free) · Action → Spirit Guardians (Conc) · now both are running!<br><br><b>Option B (buff team):</b> BA War God's Blessing → Shield of Faith on squishy ally (no Conc) · Action → Bless (Conc, +d4 for 3 allies)</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Guided Strike timing</span><span class="utool-arr">▶</span></div><div class="utool-desc">+10 to a missed roll sounds good but save it for genuinely high-stakes moments — a paladin's smite, a rogue's sneak attack, your own Inflict Wounds on a boss. Don't blow it on a regular sword swing.</div></div>
+      </div>
+      <div class="util-card">
+        <div class="util-hdr">Social &amp; exploration skills to remember</div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Insight +6 (passive 16)</span><span class="utool-arr">▶</span></div><div class="utool-desc">Your passive Insight is 16 — the DM may tell you when someone is lying without you asking. Actively roll Insight during negotiations, interrogations, or when a story seems off. Your +6 is excellent.</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Intimidation +4</span><span class="utool-arr">▶</span></div><div class="utool-desc">Divine warrior with celestial powers — leaning on Intimidation is very on-brand. Ask your DM if activating Celestial Revelation (glowing eyes, wings) gives Advantage on Intimidation checks. Might just end a fight before it starts.</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Medicine +3</span><span class="utool-arr">▶</span></div><div class="utool-desc">Diagnose illness or poison (DC 10-15), stabilize dying creatures, determine cause of death. Check Medicine before burning a Lesser Restoration slot — you might not need the spell.</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Lesser Restoration timing</span><span class="utool-arr">▶</span></div><div class="utool-desc">Only a Bonus Action in 2024! When an ally is Blinded, Paralyzed, or Poisoned, removing that condition is often worth more than any damage you could deal. You can remove the condition AND still attack on the same turn.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ EQUIPMENT ═══ -->
+<div id="equipment" class="panel">
+  <div style="display:flex;flex-direction:column;gap:9px;">
+
+    <div class="sec">
+      <div class="sec-t">Armor &amp; AC Tracker — click to equip/unequip</div>
+      <div style="font-size:11px;color:var(--ink2);margin-bottom:8px;">Toggle items on/off to see your current AC. Half Plate + Shield = 17 is your standard loadout.</div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px;">
+        <div class="armor-slot" id="slot-halfplate" onclick="toggleArmor('halfplate')" style="cursor:pointer;background:var(--sec);border:2px solid var(--gold);border-radius:var(--r);padding:9px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;">Half Plate</div>
+          <div style="font-size:10px;color:var(--ink2);">Medium Armor</div>
+          <div style="font-size:18px;font-weight:700;margin-top:3px;">AC 15</div>
+          <div style="font-size:10px;color:var(--green);margin-top:3px;">Equipped</div>
+        </div>
+        <div class="armor-slot" id="slot-shield" onclick="toggleArmor('shield')" style="cursor:pointer;background:var(--sec);border:2px solid var(--gold);border-radius:var(--r);padding:9px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;">Shield</div>
+          <div style="font-size:10px;color:var(--ink2);">+2 AC bonus</div>
+          <div style="font-size:18px;font-weight:700;margin-top:3px;">+2</div>
+          <div style="font-size:10px;color:var(--green);margin-top:3px;">Equipped</div>
+        </div>
+        <div class="armor-slot" id="slot-chainshirt" onclick="toggleArmor('chainshirt')" style="cursor:pointer;background:var(--sec);border:2px solid transparent;border-radius:var(--r);padding:9px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;">Chain Shirt</div>
+          <div style="font-size:10px;color:var(--ink2);">Light Armor</div>
+          <div style="font-size:18px;font-weight:700;margin-top:3px;">AC 13</div>
+          <div style="font-size:10px;color:var(--ink2);margin-top:3px;">Not equipped</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:var(--sec);border-radius:var(--r);padding:10px 14px;">
+        <div>
+          <div style="font-size:10px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;">Current AC</div>
+          <div style="font-size:32px;font-weight:700;" id="acDisplay">17</div>
+        </div>
+        <div style="flex:1;font-size:11px;color:var(--ink2);line-height:1.7;" id="acBreakdown">
+          Half Plate (15) + Shield (+2) = <b style="color:var(--ink);">17</b>
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:10px;color:var(--ink2);">Without shield</div>
+          <div style="font-size:16px;font-weight:700;" id="acNoShield">15</div>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:var(--ink2);padding:6px 8px;background:rgba(139,105,20,.07);border-radius:6px;">
+        Note: Studded Leather (AC 12) and Leather (AC 11) also in inventory as backup. DEX modifier does not apply to Half Plate. No stealth disadvantage with Breastplate but Half Plate does impose disadvantage on Stealth.
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Weapons &amp; Combat Gear</div>
+      <table class="wtb">
+        <tr><th>Item</th><th>Hit</th><th>Damage</th><th>Notes</th></tr>
+        <tr><td><b>Mace</b> (primary)</td><td><span class="hbadge">+5</span></td><td>1d6+2</td><td style="color:var(--ink2);">Simple · Sap · 4 lb</td></tr>
+        <tr><td>Spear</td><td><span class="hbadge">+5</span></td><td>1d6+2</td><td style="color:var(--ink2);">Thrown 20/60 · Versatile 1d8 · 3 lb</td></tr>
+        <tr><td>Javelin ×8</td><td><span class="hbadge">+5</span></td><td>1d6+2</td><td style="color:var(--ink2);">Thrown 30/120 · 16 lb total</td></tr>
+        <tr><td>Shortbow</td><td><span class="hbadge">+3</span></td><td>1d6</td><td style="color:var(--ink2);">Range 80/320 · no prof bonus · 2 lb</td></tr>
+        <tr><td>Arrows ×20</td><td>—</td><td>—</td><td style="color:var(--ink2);">1 lb</td></tr>
+      </table>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Adventuring Gear</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Backpack</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Holy Symbol</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Healer's Kit</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Playing Cards</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Tinderbox</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Lamp</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Holy Water</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Rations ×7</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Rope</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Traveler's Clothes</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Quiver</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Blanket</span></div>
+        <div style="font-size:12px;padding:3px 0;"><span style="color:var(--ink2);">Manacles</span></div>
+        <div style="font-size:12px;padding:3px 0;"><span style="color:var(--ink2);">Gold: 37 GP</span></div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Backup Armor (in inventory)</div>
+      <table class="wtb">
+        <tr><th>Armor</th><th>Type</th><th>AC</th><th>Notes</th></tr>
+        <tr><td>Studded Leather</td><td>Light</td><td>12 + DEX</td><td style="color:var(--ink2);">13 lb · no stealth penalty</td></tr>
+        <tr><td>Leather</td><td>Light</td><td>11 + DEX</td><td style="color:var(--ink2);">10 lb · lightest option</td></tr>
+        <tr><td>Breastplate</td><td>Medium</td><td>14</td><td style="color:var(--ink2);">20 lb · no stealth penalty</td></tr>
+        <tr><td>Chain Mail</td><td>Heavy</td><td>16</td><td style="color:var(--ink2);">55 lb · NOT proficient · Stealth disadv</td></tr>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<script>
+let hp=51,maxHp=51,tmp=0;
+const armor={halfplate:{equipped:true,ac:15},shield:{equipped:true,ac:2},chainshirt:{equipped:false,ac:13}};
+function toggleArmor(id){
+  armor[id].equipped=!armor[id].equipped;
+  const slot=document.getElementById('slot-'+id);
+  const eq=armor[id].equipped;
+  slot.style.borderColor=eq?'var(--gold)':'transparent';
+  slot.querySelector('div:last-child').textContent=eq?'Equipped':'Not equipped';
+  slot.querySelector('div:last-child').style.color=eq?'var(--green)':'var(--ink2)';
+  updateAC();
+}
+function updateAC(){
+  let base=10,parts=[];
+  if(armor.halfplate.equipped){base=15;parts.push('Half Plate (15)');}
+  else if(armor.chainshirt.equipped){base=13;parts.push('Chain Shirt (13)');}
+  else{base=10;parts.push('Unarmored (10)');}
+  let shieldAC=0;
+  if(armor.shield.equipped){shieldAC=2;parts.push('Shield (+2)');}
+  const total=base+shieldAC;
+  document.getElementById('acDisplay').textContent=total;
+  document.getElementById('acNoShield').textContent=base;
+  document.getElementById('acBreakdown').innerHTML=parts.join(' + ')+' = <b style="color:var(--ink);">'+total+'</b>';
+}
+function upd(){
+  const c=Math.max(0,Math.min(maxHp,hp));
+  document.getElementById('hpCur').textContent=c;
+  const pct=Math.round((c/maxHp)*100);
+  document.getElementById('hpPct').textContent=pct+'%';
+  const bar=document.getElementById('hpBar');
+  bar.style.width=pct+'%';
+  bar.style.background=pct>50?'#1D9E75':pct>25?'#BA7517':'#D85A30';
+  const ti=document.getElementById('tmpInfo');
+  if(tmp>0){ti.style.display='block';document.getElementById('tmpVal').textContent=tmp;}
+  else ti.style.display='none';
+}
+function getAmt(){return Math.abs(parseInt(document.getElementById('hpAmt').value)||0);}
+function clearAmt(){document.getElementById('hpAmt').value='';}
+function applyDmg(){
+  const a=getAmt();if(!a)return;
+  let r=a;if(tmp>0){const ab=Math.min(tmp,r);tmp-=ab;r-=ab;}
+  hp=Math.max(0,hp-r);clearAmt();upd();
+}
+function applyHeal(){const a=getAmt();if(!a)return;hp=Math.min(maxHp,hp+a);clearAmt();upd();}
+function setTmp(){const v=parseInt(prompt('Set Temp HP (current: '+tmp+'):','0'));if(!isNaN(v))tmp=Math.max(0,v);upd();}
+function resetLR(){hp=maxHp;tmp=0;document.querySelectorAll('.udot,.sdot').forEach(d=>d.classList.remove('used'));upd();}
+function shortRest(){
+  const rows=document.querySelectorAll('.ut');
+  rows.forEach(row=>{
+    if(row.querySelector('.ut-name')&&row.querySelector('.ut-name').textContent.includes('Channel Divinity')){
+      const dots=row.querySelectorAll('.udot');
+      for(let i=dots.length-1;i>=0;i--){if(dots[i].classList.contains('used')){dots[i].classList.remove('used');break;}}
+    }
+  });
+  const wp=document.querySelectorAll('.ut-top');
+  wp.forEach(top=>{
+    if(top.querySelector('.badge')&&top.querySelector('.badge').classList.contains('b-sr')){
+      top.parentElement.querySelectorAll('.udot').forEach(d=>d.classList.remove('used'));
+    }
+  });
+}
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+function ts(row){
+  const desc=row.nextElementSibling;
+  const was=row.classList.contains('open');
+  document.querySelectorAll('.sr.open').forEach(r=>{r.classList.remove('open');if(r.nextElementSibling)r.nextElementSibling.classList.remove('open');});
+  if(!was){row.classList.add('open');desc.classList.add('open');}
+}
+upd();
+updateAC();
+</script>
+</body>
+</html>
