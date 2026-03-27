@@ -175,6 +175,14 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
 /* INSPIRATION */
 .insp-pip{width:16px;height:16px;border-radius:50%;background:transparent;border:2px solid var(--gold-l);cursor:pointer;transition:background .15s;flex-shrink:0;}
 .insp-pip.active{background:var(--gold-l);}
+/* CONDITIONS + RESISTANCES */
+.cond-box{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:8px 12px;margin-bottom:10px;}
+.cond-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.cond-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--ink2);flex-shrink:0;margin-right:3px;}
+.cond{font-size:10px;padding:2px 9px;border-radius:20px;border:1px solid var(--bd);color:var(--ink2);cursor:pointer;user-select:none;transition:all .15s;background:transparent;}
+.cond.active{background:var(--red);border-color:var(--red);color:#fff;font-weight:700;}
+.res-pill{font-size:10px;padding:2px 9px;border-radius:20px;background:rgba(29,158,117,0.12);border:1px solid var(--green);color:var(--green);}
+.imm-pill{font-size:10px;padding:2px 9px;border-radius:20px;background:rgba(83,74,183,0.12);border:1px solid var(--purple);color:var(--purple);}
 </style>
 </head>
 <body>
@@ -251,6 +259,32 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
       <div class="ds-dot" id="ds-f2" onclick="toggleDS('f',2)"></div>
     </div>
     <button class="btn btn-sm" onclick="clearDS()">Clear</button>
+  </div>
+</div>
+
+<!-- CONDITIONS + RESISTANCES -->
+<div class="cond-box">
+  <div class="cond-row">
+    <span class="cond-lbl">Conditions</span>
+    <span class="cond" onclick="toggleCond(this)">Blinded</span>
+    <span class="cond" onclick="toggleCond(this)">Charmed</span>
+    <span class="cond" onclick="toggleCond(this)">Deafened</span>
+    <span class="cond" onclick="toggleCond(this)">Exhausted</span>
+    <span class="cond" onclick="toggleCond(this)">Frightened</span>
+    <span class="cond" onclick="toggleCond(this)">Grappled</span>
+    <span class="cond" onclick="toggleCond(this)">Incapacitated</span>
+    <span class="cond" onclick="toggleCond(this)">Paralyzed</span>
+    <span class="cond" onclick="toggleCond(this)">Poisoned</span>
+    <span class="cond" onclick="toggleCond(this)">Prone</span>
+    <span class="cond" onclick="toggleCond(this)">Restrained</span>
+    <span class="cond" onclick="toggleCond(this)">Stunned</span>
+  </div>
+  <div class="cond-row" style="margin-top:6px;padding-top:6px;border-top:0.5px solid var(--bd);">
+    <span class="cond-lbl">Resist</span>
+    <span class="res-pill">Radiant</span>
+    <span class="res-pill">Necrotic</span>
+    <span class="cond-lbl" style="margin-left:6px;">Immune</span>
+    <span class="imm-pill">Disease</span>
   </div>
 </div>
 
@@ -354,7 +388,7 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
       <div style="margin-top:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--gold);padding-bottom:4px;border-bottom:.5px solid var(--bd);">Roleplay &amp; Exploration Cheat Sheet</div>
       <div class="util-card" style="margin-top:6px;">
         <div class="util-hdr">Always free — no slot needed</div>
-        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Guidance (cantrip)</span><span class="badge b-free">At will · Conc</span><span class="utool-arr">▶</span></div><div class="utool-desc">Before any ability check: touch an ally, they add 1d4. Lockpicking, persuasion, climbing, investigation, performance — anything. Drop if combat starts. Use this ALL THE TIME out of combat. Highest value cantrip in the game.</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><button class="conc-cast" onclick="event.stopPropagation();castConc('Guidance')">Cast</button><span class="utool-name">Guidance (cantrip)</span><span class="badge b-free">At will · Conc</span><span class="utool-arr">▶</span></div><div class="utool-desc">Before any ability check: touch an ally, they add 1d4. Lockpicking, persuasion, climbing, investigation, performance — anything. Drop if combat starts. Use this ALL THE TIME out of combat. Highest value cantrip in the game.</div></div>
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Spare the Dying (cantrip)</span><span class="badge b-free">At will · 15ft</span><span class="utool-arr">▶</span></div><div class="utool-desc">Stabilize any downed ally at 15ft instantly — no slot. Use this instead of Healing Word when someone just needs to not die. Save the BA heal for when they need to get back up and fight.</div></div>
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Healing Hands (Aasimar)</span><span class="badge b-lr">1/Long Rest</span><span class="utool-arr">▶</span></div><div class="utool-desc">Magic action: touch a creature, restore 3d4 HP. Completely free — no spell slot. Use every long rest without thinking. Great for topping someone off between fights.</div></div>
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Detect Magic (ritual)</span><span class="badge b-free">No slot if ritual</span><span class="utool-arr">▶</span></div><div class="utool-desc">You have this prepared! Cast as a 10-minute ritual (no slot) to sense magical auras within 30ft. Use when exploring a new room, checking a suspicious object, or wondering if an NPC is enchanted. Never burn a slot — always ritual it.</div></div>
@@ -368,7 +402,7 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
         <div class="util-hdr">Pre-combat buffs (cast BEFORE initiative)</div>
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Aid (2nd slot)</span><span class="badge b-lr">8 hours · No Conc</span><span class="utool-arr">▶</span></div><div class="utool-desc">Cast before entering a dungeon — +5 max HP for 3 allies lasts 8 hours with no concentration. Free buffer HP for the whole adventuring day. Easy to forget because it has no flashy effect.</div></div>
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Magic Weapon (2nd slot)</span><span class="badge b-lr">1 hour · No Conc</span><span class="utool-arr">▶</span></div><div class="utool-desc">Your Mace becomes a +1 magic weapon for an hour. Cast before combat — free +1 to all attack and damage rolls. No concentration needed.</div></div>
-        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Bless (1st slot)</span><span class="badge" style="background:#FAEEDA;color:#854F0B;">Round 1 priority</span><span class="utool-arr">▶</span></div><div class="utool-desc">Cast FIRST THING every significant combat. +d4 to attack rolls AND saving throws for 3 allies for 1 min. Also helps resist charm, frighten, and paralysis. Conflicts with Spirit Guardians for concentration — but if you use War God's Blessing for Spiritual Weapon (no Conc), you can still run Bless as your concentration spell!</div></div>
+        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><button class="conc-cast" onclick="event.stopPropagation();castConc('Bless')">Cast</button><span class="utool-name">Bless (1st slot)</span><span class="badge" style="background:#FAEEDA;color:#854F0B;">Round 1 priority</span><span class="utool-arr">▶</span></div><div class="utool-desc">Cast FIRST THING every significant combat. +d4 to attack rolls AND saving throws for 3 allies for 1 min. Also helps resist charm, frighten, and paralysis. Conflicts with Spirit Guardians for concentration — but if you use War God's Blessing for Spiritual Weapon (no Conc), you can still run Bless as your concentration spell!</div></div>
       </div>
       <div class="util-card">
         <div class="util-hdr">Social &amp; exploration skills to remember</div>
@@ -701,12 +735,18 @@ function renderRes(res){
 }
 function renderAllRes(){ALL_RES.forEach(r=>renderRes(r));}
 
+// ── Conditions ─────────────────────────────────────────
+function toggleCond(el){el.classList.toggle('active');saveState();}
+
 function saveState(){
   const s=getState();
   const res={};ALL_RES.forEach(r=>res[r]=resRem[r]);s.res=res;
   const sdots={};
   document.querySelectorAll('.sdot').forEach((d,i)=>sdots['s'+i]=d.classList.contains('used'));
   s.sdots=sdots;
+  const conds={};
+  document.querySelectorAll('.cond').forEach((c,i)=>conds['c'+i]=c.classList.contains('active'));
+  s.conds=conds;
   s.hp=hp;s.tmp=tmp;s.ds=dsState;
   localStorage.setItem(STORE_KEY,JSON.stringify(s));
 }
@@ -716,6 +756,7 @@ function loadState(){
   if(s.res)ALL_RES.forEach(r=>{if(s.res[r]!==undefined)resRem[r]=s.res[r];});
   renderAllRes();
   if(s.sdots)document.querySelectorAll('.sdot').forEach((d,i)=>{if(s.sdots['s'+i]!==undefined)d.classList.toggle('used',s.sdots['s'+i]);});
+  if(s.conds)document.querySelectorAll('.cond').forEach((c,i)=>{if(s.conds['c'+i])c.classList.add('active');});
   if(s.hp!==undefined)hp=s.hp;
   if(s.tmp!==undefined)tmp=s.tmp;
 }

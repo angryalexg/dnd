@@ -176,6 +176,14 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
 /* INSPIRATION */
 .insp-pip{width:16px;height:16px;border-radius:50%;background:transparent;border:2px solid var(--gold-l);cursor:pointer;transition:background .15s;flex-shrink:0;}
 .insp-pip.active{background:var(--gold-l);}
+/* CONDITIONS + RESISTANCES */
+.cond-box{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:8px 12px;margin-bottom:10px;}
+.cond-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.cond-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--ink2);flex-shrink:0;margin-right:3px;}
+.cond{font-size:10px;padding:2px 9px;border-radius:20px;border:1px solid var(--bd);color:var(--ink2);cursor:pointer;user-select:none;transition:all .15s;background:transparent;}
+.cond.active{background:var(--red);border-color:var(--red);color:#fff;font-weight:700;}
+.res-pill{font-size:10px;padding:2px 9px;border-radius:20px;background:rgba(29,158,117,0.12);border:1px solid var(--green);color:var(--green);}
+.imm-pill{font-size:10px;padding:2px 9px;border-radius:20px;background:rgba(83,74,183,0.12);border:1px solid var(--purple);color:var(--purple);}
 </style>
 </head>
 <body>
@@ -263,6 +271,32 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
       <div class="ds-dot" id="ds-f2" onclick="toggleDS('f',2)"></div>
     </div>
     <button class="btn btn-sm" onclick="clearDS()">Clear</button>
+  </div>
+</div>
+
+<!-- CONDITIONS + RESISTANCES -->
+<div class="cond-box">
+  <div class="cond-row">
+    <span class="cond-lbl">Conditions</span>
+    <span class="cond" onclick="toggleCond(this)">Blinded</span>
+    <span class="cond" onclick="toggleCond(this)">Charmed</span>
+    <span class="cond" onclick="toggleCond(this)">Deafened</span>
+    <span class="cond" onclick="toggleCond(this)">Exhausted</span>
+    <span class="cond" onclick="toggleCond(this)">Frightened</span>
+    <span class="cond" onclick="toggleCond(this)">Grappled</span>
+    <span class="cond" onclick="toggleCond(this)">Incapacitated</span>
+    <span class="cond" onclick="toggleCond(this)">Paralyzed</span>
+    <span class="cond" onclick="toggleCond(this)">Poisoned</span>
+    <span class="cond" onclick="toggleCond(this)">Prone</span>
+    <span class="cond" onclick="toggleCond(this)">Restrained</span>
+    <span class="cond" onclick="toggleCond(this)">Stunned</span>
+  </div>
+  <!-- TODO: Replace with this character's actual resistances and immunities. Remove rows that don't apply. -->
+  <div class="cond-row" style="margin-top:6px;padding-top:6px;border-top:0.5px solid var(--bd);">
+    <span class="cond-lbl">Resist</span>
+    <!-- <span class="res-pill">Damage Type</span> -->
+    <span class="cond-lbl" style="margin-left:6px;">Immune</span>
+    <!-- <span class="imm-pill">Condition or Type</span> -->
   </div>
 </div>
 
@@ -640,12 +674,17 @@ function renderRes(res){
 }
 function renderAllRes(){ALL_RES.forEach(r=>renderRes(r));}
 
+function toggleCond(el){el.classList.toggle('active');saveState();}
+
 function saveState(){
   const s=getState();
   const res={};ALL_RES.forEach(r=>res[r]=resRem[r]);s.res=res;
   const sdots={};
   document.querySelectorAll('.sdot').forEach((d,i)=>sdots['s'+i]=d.classList.contains('used'));
   s.sdots=sdots;
+  const conds={};
+  document.querySelectorAll('.cond').forEach((c,i)=>conds['c'+i]=c.classList.contains('active'));
+  s.conds=conds;
   s.hp=hp;s.tmp=tmp;s.ds=dsState;
   localStorage.setItem(STORE_KEY,JSON.stringify(s));
 }
@@ -655,6 +694,7 @@ function loadState(){
   if(s.res)ALL_RES.forEach(r=>{if(s.res[r]!==undefined)resRem[r]=s.res[r];});
   renderAllRes();
   if(s.sdots)document.querySelectorAll('.sdot').forEach((d,i)=>{if(s.sdots['s'+i]!==undefined)d.classList.toggle('used',s.sdots['s'+i]);});
+  if(s.conds)document.querySelectorAll('.cond').forEach((c,i)=>{if(s.conds['c'+i])c.classList.add('active');});
   if(s.hp!==undefined)hp=s.hp;
   if(s.tmp!==undefined)tmp=s.tmp;
 }
