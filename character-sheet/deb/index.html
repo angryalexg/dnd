@@ -406,8 +406,6 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><button class="conc-cast" onclick="event.stopPropagation();castConc('Guidance')">Cast</button><span class="utool-name">Guidance (cantrip)</span><span class="badge b-free">At will · Conc</span><span class="utool-arr">▶</span></div><div class="utool-desc">Before any ability check: touch an ally, they add 1d4. Lockpicking, persuasion, climbing, investigation, performance — anything. Drop if combat starts. Use this ALL THE TIME out of combat. Highest value cantrip in the game.</div></div>
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Spare the Dying (cantrip)</span><span class="badge b-free">At will · 15ft</span><span class="utool-arr">▶</span></div><div class="utool-desc">Stabilize any downed ally at 15ft instantly — no slot. Use this instead of Healing Word when someone just needs to not die. Save the BA heal for when they need to get back up and fight.</div></div>
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Healing Hands (Aasimar)</span><span class="badge b-lr">1/Long Rest</span><span class="utool-arr">▶</span></div><div class="utool-desc">Magic action: touch a creature, restore 3d4 HP. Completely free — no spell slot. Use every long rest without thinking. Great for topping someone off between fights.</div></div>
-        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Detect Magic (ritual)</span><span class="badge b-free">No slot if ritual</span><span class="utool-arr">▶</span></div><div class="utool-desc">You have this prepared! Cast as a 10-minute ritual (no slot) to sense magical auras within 30ft. Use when exploring a new room, checking a suspicious object, or wondering if an NPC is enchanted. Never burn a slot — always ritual it.</div></div>
-        <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Thaumaturgy (cantrip)</span><span class="badge b-free">At will · Flavor</span><span class="utool-arr">▶</span></div><div class="utool-desc">From your Thaumaturge Divine Order. Minor magical effects lasting up to 1 minute — boom your voice to fill a room, cause harmless tremors underfoot, flicker or change the color of flames, make your eyes glow, cause a door or window to slam open, create an unsettling echo. Completely at will, no action economy cost beyond your action. Great for establishing Deb's divine authority before a tough conversation.</div></div>
         <div class="utool" onclick="this.classList.toggle('open')"><div class="utool-hdr"><span class="utool-name">Prayer of Healing (rest time)</span><span class="badge b-sr">10-min cast · 2nd slot</span><span class="utool-arr">▶</span></div><div class="utool-desc">10-minute cast means it can ONLY be used outside combat — but that makes it perfect for short rests. Up to 5 creatures each gain 2d8+3 HP. Suggest this whenever the party takes a breather between fights. Easy to forget because it has no in-combat use.</div></div>
       </div>
       <div class="util-card">
@@ -440,17 +438,49 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
 <div id="combat" class="panel">
   <div style="display:flex;flex-direction:column;gap:9px;">
     <div class="sec">
+      <div class="sec-t">Spell Slots — click to spend · synced with Spells tab</div>
+      <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;">
+        <div style="text-align:center;">
+          <div style="font-size:10px;color:var(--ink2);margin-bottom:5px;">1st Level (4)</div>
+          <div class="udots" style="justify-content:center;"><button class="udot" data-res="slot1" onclick="toggleDot(this)"></button><button class="udot" data-res="slot1" onclick="toggleDot(this)"></button><button class="udot" data-res="slot1" onclick="toggleDot(this)"></button><button class="udot" data-res="slot1" onclick="toggleDot(this)"></button></div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:10px;color:var(--ink2);margin-bottom:5px;">2nd Level (3)</div>
+          <div class="udots" style="justify-content:center;"><button class="udot" data-res="slot2" onclick="toggleDot(this)"></button><button class="udot" data-res="slot2" onclick="toggleDot(this)"></button><button class="udot" data-res="slot2" onclick="toggleDot(this)"></button></div>
+        </div>
+        <div style="text-align:center;">
+          <div style="font-size:10px;color:var(--ink2);margin-bottom:5px;">3rd Level (3)</div>
+          <div class="udots" style="justify-content:center;"><button class="udot" data-res="slot3" onclick="toggleDot(this)"></button><button class="udot" data-res="slot3" onclick="toggleDot(this)"></button><button class="udot" data-res="slot3" onclick="toggleDot(this)"></button></div>
+        </div>
+      </div>
+    </div>
+    <div class="sec">
       <div class="sec-t">Weapons</div>
       <table class="wtb">
-        <tr><th>Weapon</th><th>Hit</th><th>Damage</th><th>Type</th><th>Notes</th></tr>
-        <tr><td><b>Mace ★</b></td><td><span class="hbadge">+5</span></td><td>1d6+2</td><td>Bludgeoning</td><td style="color:var(--ink2);">Simple · Sap mastery</td></tr>
-        <tr><td>Unarmed Strike</td><td><span class="hbadge">+5</span></td><td>3</td><td>Bludgeoning</td><td style="color:var(--ink2);">—</td></tr>
-        <tr><td>Light Crossbow</td><td><span class="hbadge">+3</span></td><td>1d8</td><td>Piercing</td><td style="color:var(--ink2);">Range 80/320 · Loading</td></tr>
+        <tr><th>Weapon</th><th>Economy</th><th>Hit</th><th>Damage</th><th>Notes</th></tr>
+        <tr><td><b>Mace ★</b></td><td><span class="cd-tag t-act">Action</span></td><td><span class="hbadge">+5</span></td><td>1d6+2 Bludg.</td><td style="color:var(--ink2);">Sap mastery · War Priest = +BA attack</td></tr>
+        <tr><td>Unarmed Strike</td><td><span class="cd-tag t-act">Action</span></td><td><span class="hbadge">+5</span></td><td>3 Bludg.</td><td style="color:var(--ink2);">War Priest = +BA attack</td></tr>
+        <tr><td>Light Crossbow</td><td><span class="cd-tag t-act">Action</span></td><td><span class="hbadge">+3</span></td><td>1d8 Piercing</td><td style="color:var(--ink2);">Range 80/320 · Loading</td></tr>
       </table>
     </div>
     <div class="sec">
-      <div class="sec-t">Cantrips (at will)</div>
-      <div><span class="cpill">Sacred Flame — DEX save 14 · 1d8 Fire</span><span class="cpill">Toll the Dead — WIS save 14 · 1d8/1d12 Necrotic</span><span class="cpill">Word of Radiance — CON save 14 · 1d6 Radiant · 5ft all</span><span class="cpill">Guidance — +d4 to ability check (Conc)</span><span class="cpill">Spare the Dying — stabilize at 15ft</span><span class="cpill">Light — 20ft bright light</span></div>
+      <div class="sec-t">Cantrips — at will, no slot</div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Sacred Flame</span><span class="cd-tag t-act">Action · 60ft</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">DEX save DC 14 → 1d8 Fire. Ignores cover. Good vs high-AC enemies where attack rolls would miss.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Toll the Dead</span><span class="cd-tag t-act">Action · 60ft</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">WIS save DC 14 → 1d8 Necrotic, or 1d12 if target is missing any HP. Best cantrip against wounded enemies.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Word of Radiance</span><span class="cd-tag t-act">Action · Self 5ft</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">All enemies of your choice within 5ft: CON save DC 14 → 1d6 Radiant. Hits multiple targets simultaneously — great when wading into groups with Spirit Guardians active.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Spare the Dying</span><span class="cd-tag t-act">Action · 15ft</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">Stabilize a downed ally at 0 HP. No slot. Use this instead of Healing Word when they just need to not die — save the BA heal for reviving to fight.</div>
+      </div>
     </div>
     <div class="sec">
       <div class="sec-t">Channel Divinity — 3 uses · regain 1 on Short Rest</div>
@@ -484,19 +514,19 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
     <div class="sec">
       <div class="sec-t">Limited Use Combat Abilities</div>
       <div class="ut">
-        <div class="ut-top"><span class="ut-name">War Priest — bonus attack</span><span class="badge b-sr">Short/Long Rest</span>
+        <div class="ut-top"><span class="ut-name">War Priest — bonus attack</span><span class="badge b-sr">Short/Long Rest</span><span class="cd-tag t-ba">Bonus Action</span>
           <div class="udots"><button class="udot" data-res="war-priest" onclick="toggleDot(this)"></button><button class="udot" data-res="war-priest" onclick="toggleDot(this)"></button><button class="udot" data-res="war-priest" onclick="toggleDot(this)"></button></div>
         </div>
         <div class="ut-desc">Bonus action: make one weapon or unarmed attack. 3 uses (= WIS mod). Still get a hit in on turns where you cast a spell.</div>
       </div>
       <div class="ut">
-        <div class="ut-top"><span class="ut-name">Celestial Revelation</span><span class="badge b-lr">Long Rest</span>
+        <div class="ut-top"><span class="ut-name">Celestial Revelation</span><span class="badge b-lr">Long Rest</span><span class="cd-tag t-ba">Bonus Action</span>
           <div class="udots"><button class="udot" data-res="celestial" onclick="toggleDot(this)"></button></div>
         </div>
         <div class="ut-desc">BA: transform 1 min. Pick each time — <b>Heavenly Wings</b> (fly 30ft) · <b>Inner Radiance</b> (10ft aura, +3 Radiant dmg on your attacks each turn) · <b>Necrotic Shroud</b> (CHA save DC 11 or Frightened til end of your next turn)</div>
       </div>
       <div class="ut">
-        <div class="ut-top"><span class="ut-name">Healing Hands</span><span class="badge b-lr">Long Rest</span>
+        <div class="ut-top"><span class="ut-name">Healing Hands</span><span class="badge b-lr">Long Rest</span><span class="cd-tag t-act">Magic Action</span>
           <div class="udots"><button class="udot" data-res="healing-hands" onclick="toggleDot(this)"></button></div>
         </div>
         <div class="ut-desc">Magic action: touch a creature, restore 3d4 HP. Free — no slot. Use it every long rest!</div>
@@ -504,6 +534,48 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
       <div class="ut">
         <div class="ut-top"><span class="ut-name">Savage Attacker</span><span class="badge b-free">1/turn · Free</span></div>
         <div class="ut-desc">When you hit with a weapon, roll damage dice twice and use either result. Best on a Mace hit with Savage Attacker when you have Spirit Guardians and Spiritual Weapon already up.</div>
+      </div>
+    </div>
+    <div class="sec">
+      <div class="sec-t">Combat Spells — slots tracked above · click to expand</div>
+      <div style="font-size:10px;color:var(--purple);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Concentration</div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><button class="conc-cast" onclick="event.stopPropagation();castConc('Spirit Guardians')">Cast</button><span class="cd-name">Spirit Guardians ★</span><span class="cd-tag t-act">Action · 3rd slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">Self 15ft · 10 min · Enemies entering/ending turn: WIS save DC 14 → 3d8 Radiant, half on success. Speed halved inside aura. Your best combat spell — wade into groups.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><button class="conc-cast" onclick="event.stopPropagation();castConc('Bless')">Cast</button><span class="cd-name">Bless</span><span class="cd-tag t-act">Action · 1st slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">30ft · 1 min · Up to 3 allies add +1d4 to every attack roll and saving throw. Cast first thing every significant combat.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><button class="conc-cast" onclick="event.stopPropagation();castConc('Shield of Faith')">Cast</button><span class="cd-name">Shield of Faith ★</span><span class="cd-tag t-ba">Bonus Action · 1st slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">60ft · +2 AC to any ally · Conc 10 min. Or cast FREE via War God's Blessing — no Concentration, 1 min.</div>
+      </div>
+      <div style="font-size:10px;color:#854F0B;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin:7px 0 4px;">Action</div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Guiding Bolt ★</span><span class="cd-tag t-act">Action · 1st slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">120ft · Spell atk +6 · 4d6 Radiant on hit. Next attack vs target (before your next turn) has Advantage. Good opener. +1d6 per higher slot.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Inflict Wounds</span><span class="cd-tag t-act">Action · 1st slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">Touch · CON save DC 14 → 3d10 Necrotic (half on success). Best 1st-level burst — avg 16.5 on fail. +1d10 per higher slot.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Dispel Magic</span><span class="cd-tag t-act">Action · 3rd slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">120ft · Ends spells 3rd level and lower automatically. 4th+: spellcasting check DC (10 + spell level). Removes enemy buffs, frees allies from nasty spells.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Revivify</span><span class="cd-tag t-act">Action · 3rd slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">Touch · Return from death with 1 HP. Requires 300+ GP diamond — confirm you have one before session!</div>
+      </div>
+      <div style="font-size:10px;color:#0F6E56;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin:7px 0 4px;">Bonus Action</div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Healing Word</span><span class="cd-tag t-ba">Bonus Action · 1st slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">60ft · 1d4+3 HP. Use to revive downed allies while still acting on your turn. +1d4 per higher slot.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Lesser Restoration</span><span class="cd-tag t-ba">Bonus Action · 2nd slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">Touch · Remove Blinded, Deafened, Paralyzed, or Poisoned. BA in 2024 — you still get your full Action on the same turn.</div>
       </div>
     </div>
     <div class="sec">
@@ -534,9 +606,9 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
     <div class="sec">
       <div class="sec-t">Spell Slots — click dots to track</div>
       <div class="slot-grid">
-        <div class="slot-box"><div class="slot-lbl">1st Level</div><div class="slot-n">4 slots</div><div class="sdots"><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button></div></div>
-        <div class="slot-box"><div class="slot-lbl">2nd Level</div><div class="slot-n">3 slots</div><div class="sdots"><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button></div></div>
-        <div class="slot-box"><div class="slot-lbl">3rd Level</div><div class="slot-n">3 slots</div><div class="sdots"><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button><button class="sdot" onclick="toggleDot(this)"></button></div></div>
+        <div class="slot-box"><div class="slot-lbl">1st Level</div><div class="slot-n">4 slots</div><div class="sdots"><button class="udot" data-res="slot1" onclick="toggleDot(this)"></button><button class="udot" data-res="slot1" onclick="toggleDot(this)"></button><button class="udot" data-res="slot1" onclick="toggleDot(this)"></button><button class="udot" data-res="slot1" onclick="toggleDot(this)"></button></div></div>
+        <div class="slot-box"><div class="slot-lbl">2nd Level</div><div class="slot-n">3 slots</div><div class="sdots"><button class="udot" data-res="slot2" onclick="toggleDot(this)"></button><button class="udot" data-res="slot2" onclick="toggleDot(this)"></button><button class="udot" data-res="slot2" onclick="toggleDot(this)"></button></div></div>
+        <div class="slot-box"><div class="slot-lbl">3rd Level</div><div class="slot-n">3 slots</div><div class="sdots"><button class="udot" data-res="slot3" onclick="toggleDot(this)"></button><button class="udot" data-res="slot3" onclick="toggleDot(this)"></button><button class="udot" data-res="slot3" onclick="toggleDot(this)"></button></div></div>
       </div>
     </div>
     <div class="sec">
@@ -741,8 +813,8 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
 <script>
 // ── Resource state (source of truth: remaining charges) ────────
 const STORE_KEY='dnd-deb-150606134';
-const RES_MAX={cd:3,'war-priest':3,celestial:1,'healing-hands':1};
-const resRem={cd:3,'war-priest':3,celestial:1,'healing-hands':1};
+const RES_MAX={cd:3,'war-priest':3,celestial:1,'healing-hands':1,'slot1':4,'slot2':3,'slot3':3};
+const resRem={cd:3,'war-priest':3,celestial:1,'healing-hands':1,'slot1':4,'slot2':3,'slot3':3};
 const ALL_RES=Object.keys(RES_MAX);
 
 let hp=51,maxHp=51,tmp=0;
@@ -783,9 +855,6 @@ function toggleCond(el){el.classList.toggle('active');saveState();}
 function saveState(){
   const s=getState();
   const res={};ALL_RES.forEach(r=>res[r]=resRem[r]);s.res=res;
-  const sdots={};
-  document.querySelectorAll('.sdot').forEach((d,i)=>sdots['s'+i]=d.classList.contains('used'));
-  s.sdots=sdots;
   const conds={};
   document.querySelectorAll('.cond').forEach((c,i)=>conds['c'+i]=c.classList.contains('active'));
   s.conds=conds;
@@ -797,7 +866,6 @@ function loadState(){
   const s=getState();
   if(s.res)ALL_RES.forEach(r=>{if(s.res[r]!==undefined)resRem[r]=s.res[r];});
   renderAllRes();
-  if(s.sdots)document.querySelectorAll('.sdot').forEach((d,i)=>{if(s.sdots['s'+i]!==undefined)d.classList.toggle('used',s.sdots['s'+i]);});
   if(s.conds)document.querySelectorAll('.cond').forEach((c,i)=>{if(s.conds['c'+i])c.classList.add('active');});
   if(s.hp!==undefined)hp=s.hp;
   if(s.tmp!==undefined)tmp=s.tmp;
@@ -878,7 +946,6 @@ function resetLR(){
   hp=maxHp;tmp=0;
   ALL_RES.forEach(r=>{resRem[r]=RES_MAX[r];});
   renderAllRes();
-  document.querySelectorAll('.sdot').forEach(d=>d.classList.remove('used'));
   clearDS();clearConc();
   // Reset cover
   coverBonus=0;
