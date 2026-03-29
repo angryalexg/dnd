@@ -200,6 +200,12 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
 .full-desc-toggle.open::after{content:' ▲';}
 .full-desc{display:none;margin-top:8px;padding:9px 10px;background:rgba(0,0,0,.18);border-radius:5px;font-size:11.5px;line-height:1.8;color:var(--ink2);}
 .full-desc.open{display:block;}
+/* Non-conc cast button + slot picker */
+.spell-cast{font-size:10px;padding:2px 6px;border-radius:3px;border:1px solid var(--amber);color:var(--amber);background:transparent;cursor:pointer;margin-right:4px;white-space:nowrap;flex-shrink:0;font-family:inherit;}
+.spell-cast:hover{background:rgba(186,117,23,0.12);}
+.slot-picker{display:inline-flex;gap:3px;align-items:center;margin-right:4px;flex-shrink:0;}
+.slot-pick-btn{font-size:10px;padding:2px 6px;border-radius:3px;border:1px solid var(--amber);color:var(--amber);background:var(--card);cursor:pointer;font-family:inherit;}
+.slot-pick-btn:hover{background:rgba(186,117,23,0.12);}
 </style>
 </head>
 <body>
@@ -444,6 +450,25 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
 <div id="combat" class="panel">
   <div style="display:flex;flex-direction:column;gap:9px;">
     <div class="sec">
+      <div class="sec-t">Cover — updates your AC above</div>
+      <div class="cover-row">
+        <button class="cover-btn active" onclick="setCover(0,this)">No Cover</button>
+        <button class="cover-btn" onclick="setCover(2,this)">Half Cover — +2 AC &amp; DEX saves</button>
+        <button class="cover-btn" onclick="setCover(5,this)">¾ Cover — +5 AC &amp; DEX saves</button>
+        <button class="cover-btn full-cover" onclick="setCover('full',this)">Full Cover — untargetable</button>
+      </div>
+      <div class="cover-note">Half: low wall, ally, corner. Three-quarters: portcullis, arrow slit, thick tree. Full: completely behind obstacle — attacks and most spells can't reach you.</div>
+    </div>
+    <div class="sec">
+      <div class="sec-t">Key Advantages &amp; Notes</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.8;">
+        <div><b style="color:var(--ink);">Concentration saves:</b> Advantage (War Caster) — very hard to lose Spirit Guardians</div>
+        <div><b style="color:var(--ink);">Opportunity attacks:</b> Can cast a spell instead of a weapon attack (War Caster)</div>
+        <div><b style="color:var(--ink);">Resistances:</b> Radiant &amp; Necrotic damage</div>
+        <div><b style="color:var(--ink);">Somatic components:</b> Work even with weapons/shield in both hands (War Caster)</div>
+      </div>
+    </div>
+    <div class="sec">
       <div class="sec-t">Spell Slots — click to spend · synced with Spells tab</div>
       <div style="display:flex;gap:18px;flex-wrap:wrap;align-items:flex-start;">
         <div style="text-align:center;">
@@ -559,48 +584,29 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
       </div>
       <div style="font-size:10px;color:#854F0B;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin:7px 0 4px;">Action</div>
       <div class="cd-opt" onclick="this.classList.toggle('open')">
-        <div class="cd-hdr"><span class="cd-name">Guiding Bolt ★</span><span class="cd-tag t-act">Action · 1st slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-hdr"><button class="spell-cast" onclick="event.stopPropagation();castNonConc(event,this,1)">Cast</button><span class="cd-name">Guiding Bolt ★</span><span class="cd-tag t-act">Action · 1st slot</span><span class="cd-arr">▶</span></div>
         <div class="cd-desc">120ft · Spell atk +6 · 4d6 Radiant on hit. Next attack vs target (before your next turn) has Advantage. Good opener. +1d6 per higher slot.</div>
       </div>
       <div class="cd-opt" onclick="this.classList.toggle('open')">
-        <div class="cd-hdr"><span class="cd-name">Inflict Wounds</span><span class="cd-tag t-act">Action · 1st slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-hdr"><button class="spell-cast" onclick="event.stopPropagation();castNonConc(event,this,1)">Cast</button><span class="cd-name">Inflict Wounds</span><span class="cd-tag t-act">Action · 1st slot</span><span class="cd-arr">▶</span></div>
         <div class="cd-desc">Touch · CON save DC 14 → 3d10 Necrotic (half on success). Best 1st-level burst — avg 16.5 on fail. +1d10 per higher slot.</div>
       </div>
       <div class="cd-opt" onclick="this.classList.toggle('open')">
-        <div class="cd-hdr"><span class="cd-name">Dispel Magic</span><span class="cd-tag t-act">Action · 3rd slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-hdr"><button class="spell-cast" onclick="event.stopPropagation();castNonConc(event,this,3)">Cast</button><span class="cd-name">Dispel Magic</span><span class="cd-tag t-act">Action · 3rd slot</span><span class="cd-arr">▶</span></div>
         <div class="cd-desc">120ft · Ends spells 3rd level and lower automatically. 4th+: spellcasting check DC (10 + spell level). Removes enemy buffs, frees allies from nasty spells.</div>
       </div>
       <div class="cd-opt" onclick="this.classList.toggle('open')">
-        <div class="cd-hdr"><span class="cd-name">Revivify</span><span class="cd-tag t-act">Action · 3rd slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-hdr"><button class="spell-cast" onclick="event.stopPropagation();castNonConc(event,this,3)">Cast</button><span class="cd-name">Revivify</span><span class="cd-tag t-act">Action · 3rd slot</span><span class="cd-arr">▶</span></div>
         <div class="cd-desc">Touch · Return from death with 1 HP. Requires 300+ GP diamond — confirm you have one before session!</div>
       </div>
       <div style="font-size:10px;color:#0F6E56;font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin:7px 0 4px;">Bonus Action</div>
       <div class="cd-opt" onclick="this.classList.toggle('open')">
-        <div class="cd-hdr"><span class="cd-name">Healing Word</span><span class="cd-tag t-ba">Bonus Action · 1st slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-hdr"><button class="spell-cast" onclick="event.stopPropagation();castNonConc(event,this,1)">Cast</button><span class="cd-name">Healing Word</span><span class="cd-tag t-ba">Bonus Action · 1st slot</span><span class="cd-arr">▶</span></div>
         <div class="cd-desc">60ft · 1d4+3 HP. Use to revive downed allies while still acting on your turn. +1d4 per higher slot.</div>
       </div>
       <div class="cd-opt" onclick="this.classList.toggle('open')">
-        <div class="cd-hdr"><span class="cd-name">Lesser Restoration</span><span class="cd-tag t-ba">Bonus Action · 2nd slot</span><span class="cd-arr">▶</span></div>
+        <div class="cd-hdr"><button class="spell-cast" onclick="event.stopPropagation();castNonConc(event,this,2)">Cast</button><span class="cd-name">Lesser Restoration</span><span class="cd-tag t-ba">Bonus Action · 2nd slot</span><span class="cd-arr">▶</span></div>
         <div class="cd-desc">Touch · Remove Blinded, Deafened, Paralyzed, or Poisoned. BA in 2024 — you still get your full Action on the same turn.</div>
-      </div>
-    </div>
-    <div class="sec">
-      <div class="sec-t">Cover — updates your AC above</div>
-      <div class="cover-row">
-        <button class="cover-btn active" onclick="setCover(0,this)">No Cover</button>
-        <button class="cover-btn" onclick="setCover(2,this)">Half Cover — +2 AC &amp; DEX saves</button>
-        <button class="cover-btn" onclick="setCover(5,this)">¾ Cover — +5 AC &amp; DEX saves</button>
-        <button class="cover-btn full-cover" onclick="setCover('full',this)">Full Cover — untargetable</button>
-      </div>
-      <div class="cover-note">Half: low wall, ally, corner. Three-quarters: portcullis, arrow slit, thick tree. Full: completely behind obstacle — attacks and most spells can't reach you.</div>
-    </div>
-    <div class="sec">
-      <div class="sec-t">Key Advantages &amp; Notes</div>
-      <div style="font-size:12px;color:var(--ink2);line-height:1.8;">
-        <div><b style="color:var(--ink);">Concentration saves:</b> Advantage (War Caster) — very hard to lose Spirit Guardians</div>
-        <div><b style="color:var(--ink);">Opportunity attacks:</b> Can cast a spell instead of a weapon attack (War Caster)</div>
-        <div><b style="color:var(--ink);">Resistances:</b> Radiant &amp; Necrotic damage</div>
-        <div><b style="color:var(--ink);">Somatic components:</b> Work even with weapons/shield in both hands (War Caster)</div>
       </div>
     </div>
   </div>
@@ -1118,10 +1124,42 @@ function injectFullDesc(descEl,spellName){
   descEl.appendChild(box);
 }
 
-// Inject full desc for Combat tab cd-opt rows on open
+// Spend a slot at minLvl or next available higher level
+function spendSlot(lvl){
+  const key='slot'+lvl;
+  resRem[key]=Math.max(0,resRem[key]-1);
+  renderRes(key);
+  saveState();
+}
+
+function castNonConc(e,btn,minLvl){
+  e.stopPropagation();
+  // Toggle picker off if already open
+  const existing=btn.parentNode.querySelector('.slot-picker');
+  if(existing){existing.remove();return;}
+  // Find available levels
+  const avail=[];
+  for(let l=minLvl;l<=3;l++){if(resRem['slot'+l]>0)avail.push(l);}
+  if(avail.length===0){btn.style.opacity='0.3';setTimeout(()=>btn.style.opacity='',500);return;}
+  if(avail.length===1){spendSlot(avail[0]);return;}
+  // Show inline slot picker
+  const ord=['','1st','2nd','3rd'];
+  const picker=document.createElement('span');
+  picker.className='slot-picker';
+  avail.forEach(l=>{
+    const pb=document.createElement('button');
+    pb.className='slot-pick-btn';
+    pb.textContent=ord[l];
+    pb.onclick=ev=>{ev.stopPropagation();spendSlot(l);picker.remove();};
+    picker.appendChild(pb);
+  });
+  btn.insertAdjacentElement('afterend',picker);
+}
+
+// Inject full desc + full desc for Combat tab cd-opt rows on open
 document.addEventListener('click',e=>{
   const opt=e.target.closest('.cd-opt');
-  if(!opt||e.target.closest('.conc-cast,.full-desc-toggle,.full-desc'))return;
+  if(!opt||e.target.closest('.conc-cast,.spell-cast,.slot-picker,.full-desc-toggle,.full-desc'))return;
   if(opt.classList.contains('open')){
     const nm=opt.querySelector('.cd-name')?.textContent;
     const desc=opt.querySelector('.cd-desc');
@@ -1189,6 +1227,23 @@ document.addEventListener('click',e=>{
     btn.className='conc-cast';
     btn.textContent='Cast';
     btn.onclick=function(e){e.stopPropagation();castConc(spellName);};
+    nameEl.insertBefore(btn,nameEl.firstChild);
+  });
+  // Add Cast (amber) buttons to non-conc, non-cantrip spells in Spells tab
+  document.querySelectorAll('.sr').forEach(row=>{
+    const slvlEl=row.querySelector('.slvl');
+    const stag=row.querySelector('.stag');
+    if(!slvlEl||!stag)return;
+    if(slvlEl.textContent.trim()==='C')return; // cantrip
+    const isConc=/\bConc\b/.test(stag.textContent)&&!/\bno Conc\b/.test(stag.textContent);
+    if(isConc)return; // already has conc-cast
+    const nameEl=row.querySelector('.sn');
+    if(!nameEl||nameEl.querySelector('.spell-cast'))return;
+    const minLvl=parseInt(slvlEl.textContent.replace(/[^\d]/g,''))||1;
+    const btn=document.createElement('button');
+    btn.className='spell-cast';
+    btn.textContent='Cast';
+    btn.onclick=function(e){castNonConc(e,this,minLvl);};
     nameEl.insertBefore(btn,nameEl.firstChild);
   });
   upd();
