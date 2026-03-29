@@ -43,7 +43,8 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
 .tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;}
 .tab{font-size:12px;padding:5px 13px;border:0.5px solid var(--bd);border-radius:20px;cursor:pointer;background:transparent;color:var(--ink2);font-family:inherit;}
 .tab.active,.tab:hover{background:var(--gold);color:#fff;border-color:var(--gold);}
-.panel{display:none;}.panel.active{display:block;}
+.panel{display:none;}.panel.active{display:block;animation:panelIn .18s ease;}
+@keyframes panelIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
 /* LAYOUT */
 .grid2{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:10px;}
 .grid2x{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;}
@@ -194,6 +195,11 @@ body.dark .sd,body.dark .sr.open{border-color:var(--gold-l);}
 .cond.active{background:var(--red);border-color:var(--red);color:#fff;font-weight:700;}
 .res-pill{font-size:10px;padding:2px 9px;border-radius:20px;background:rgba(29,158,117,0.12);border:1px solid var(--green);color:var(--green);}
 .imm-pill{font-size:10px;padding:2px 9px;border-radius:20px;background:rgba(83,74,183,0.12);border:1px solid var(--purple);color:var(--purple);}
+.full-desc-toggle{margin-top:9px;font-size:11px;color:var(--gold);cursor:pointer;user-select:none;display:inline-block;padding:2px 0;border-bottom:1px dotted var(--gold-l);}
+.full-desc-toggle::after{content:' ▼';}
+.full-desc-toggle.open::after{content:' ▲';}
+.full-desc{display:none;margin-top:8px;padding:9px 10px;background:rgba(0,0,0,.18);border-radius:5px;font-size:11.5px;line-height:1.8;color:var(--ink2);}
+.full-desc.open{display:block;}
 </style>
 </head>
 <body>
@@ -998,8 +1004,149 @@ function ts(row){
   const desc=row.nextElementSibling;
   const was=row.classList.contains('open');
   document.querySelectorAll('.sr.open').forEach(r=>{r.classList.remove('open');if(r.nextElementSibling)r.nextElementSibling.classList.remove('open');});
-  if(!was){row.classList.add('open');desc.classList.add('open');}
+  if(!was){
+    row.classList.add('open');desc.classList.add('open');
+    const nm=row.querySelector('.sn')?.textContent;
+    if(nm)injectFullDesc(desc,nm);
+  }
 }
+
+// ── Full Spell Descriptions ───────────────────────────────────
+const SPELL_FULL_DESC={
+  'Sacred Flame':`<b>Cantrip · Evocation</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: 60 ft &nbsp;|&nbsp; V, S &nbsp;|&nbsp; Instantaneous<br><br>
+Flame-like radiance descends on a creature you can see within range. The creature must succeed on a Dexterity saving throw or take 1d8 Radiant damage. The creature gains no benefit from cover for this saving throw.<br><br>
+<b>Cantrip Upgrade:</b> Damage increases to 2d8 at level 5, 3d8 at level 11, 4d8 at level 17.`,
+
+  'Guidance':`<b>Cantrip · Divination</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: Touch &nbsp;|&nbsp; V, S &nbsp;|&nbsp; Concentration, up to 1 minute<br><br>
+You touch one willing creature and choose a skill. Until the spell ends, the creature can add 1d4 to any ability check using the chosen skill. The creature can benefit from this spell only once per turn.<br><br>
+<b>Cantrip Upgrade:</b> At level 5 you can target two creatures; three at level 11; four at level 17.`,
+
+  'Word of Radiance':`<b>Cantrip · Evocation</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: Self (5-foot radius) &nbsp;|&nbsp; V, M (holy symbol) &nbsp;|&nbsp; Instantaneous<br><br>
+Burning radiance erupts from you. Each creature of your choice that you can see within range must succeed on a Constitution saving throw or take 1d6 Radiant damage.<br><br>
+<b>Cantrip Upgrade:</b> Damage increases to 2d6 at level 5, 3d6 at level 11, 4d6 at level 17.`,
+
+  'Toll the Dead':`<b>Cantrip · Necromancy</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: 60 ft &nbsp;|&nbsp; V, S &nbsp;|&nbsp; Instantaneous<br><br>
+You point at one creature you can see within range, and the sound of a dolorous bell fills the air around it for a moment. The creature must succeed on a Wisdom saving throw or take 1d8 Necrotic damage. If the target is missing any of its Hit Points, it instead takes 1d12 Necrotic damage.<br><br>
+<b>Cantrip Upgrade:</b> Damage increases by one die at levels 5 (2d8/2d12), 11 (3d8/3d12), and 17 (4d8/4d12).`,
+
+  'Spare the Dying':`<b>Cantrip · Necromancy</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: 15 ft &nbsp;|&nbsp; V, S &nbsp;|&nbsp; Instantaneous<br><br>
+Choose a creature within range that has 0 Hit Points and isn't dead. The creature becomes Stable.<br><br>
+<b>Cantrip Upgrade:</b> Range doubles at levels 5 (30 ft), 11 (60 ft), and 17 (120 ft).`,
+
+  'Light':`<b>Cantrip · Evocation</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: Touch &nbsp;|&nbsp; V, M (firefly or phosphorescent moss) &nbsp;|&nbsp; 1 hour<br><br>
+You touch one Large or smaller object that isn't being worn or carried by a hostile creature. Until the spell ends, the object sheds Bright Light in a 20-foot radius and Dim Light for an additional 20 feet. The light can be colored as you like. Covering the object with something opaque blocks the light.<br><br>
+If you target an object held or worn by a hostile creature, that creature must succeed on a Dexterity saving throw to avoid the spell.`,
+
+  'Shield of Faith':`<b>1st-level Abjuration</b> &nbsp;|&nbsp; Bonus Action &nbsp;|&nbsp; Range: 60 ft &nbsp;|&nbsp; V, S, M (parchment with holy text) &nbsp;|&nbsp; Concentration, up to 10 minutes<br><br>
+A shimmering field appears and surrounds a creature of your choice within range, granting it a +2 bonus to AC for the duration.`,
+
+  'Guiding Bolt':`<b>1st-level Evocation</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: 120 ft &nbsp;|&nbsp; V, S &nbsp;|&nbsp; 1 round<br><br>
+A flash of light streaks toward a creature of your choice within range. Make a ranged spell attack against the target. On a hit, the target takes 4d6 Radiant damage, and the next attack roll made against this target before the end of your next turn has Advantage, as the mystical dim light glittering on the target makes it easier to hit.<br><br>
+<b>Using a Higher-Level Slot:</b> Damage increases by 1d6 for each slot level above 1st.`,
+
+  'Bless':`<b>1st-level Enchantment</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: 30 ft &nbsp;|&nbsp; V, S, M (sprinkling of holy water) &nbsp;|&nbsp; Concentration, up to 1 minute<br><br>
+You bless up to three creatures of your choice within range. Whenever a target makes an attack roll or a saving throw before the spell ends, the target can roll a d4 and add the number rolled to the attack roll or saving throw.<br><br>
+<b>Using a Higher-Level Slot:</b> You can target one additional creature for each slot level above 1st.`,
+
+  'Healing Word':`<b>1st-level Abjuration</b> &nbsp;|&nbsp; Bonus Action &nbsp;|&nbsp; Range: 60 ft &nbsp;|&nbsp; V only &nbsp;|&nbsp; Instantaneous<br><br>
+A creature of your choice that you can see within range regains Hit Points equal to 1d4 + your spellcasting ability modifier (WIS +3 = 1d4+3).<br><br>
+This spell has no effect on Undead or Constructs.<br><br>
+<b>Using a Higher-Level Slot:</b> Healing increases by 1d4 for each slot level above 1st.`,
+
+  'Inflict Wounds':`<b>1st-level Necromancy</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: Touch &nbsp;|&nbsp; V, S &nbsp;|&nbsp; Instantaneous<br><br>
+A touch of your hand channels necrotic energy to devastate the target. The target must make a Constitution saving throw. On a failed save, the target takes 3d10 Necrotic damage. On a successful save, the target takes half as much damage.<br><br>
+<b>Using a Higher-Level Slot:</b> Damage increases by 1d10 for each slot level above 1st.`,
+
+  'Cure Wounds':`<b>1st-level Abjuration</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: Touch &nbsp;|&nbsp; V, S &nbsp;|&nbsp; Instantaneous<br><br>
+A creature you touch regains Hit Points equal to 1d8 + your spellcasting ability modifier (WIS +3 = 1d8+3). This spell has no effect on Undead or Constructs.<br><br>
+<b>Using a Higher-Level Slot:</b> Healing increases by 1d8 for each slot level above 1st.`,
+
+  'Spiritual Weapon':`<b>2nd-level Evocation</b> &nbsp;|&nbsp; Bonus Action &nbsp;|&nbsp; Range: 60 ft &nbsp;|&nbsp; V, S &nbsp;|&nbsp; Concentration, up to 1 minute<br><br>
+You create a floating, spectral force that resembles a weapon of your choice and lasts for the duration. The force appears in an unoccupied space of your choice within range.<br><br>
+When you create the force and as a Bonus Action on later turns, you can make a melee spell attack (+6) against a creature within 5 feet of it. On a hit, the target takes Force damage equal to 1d8+3. You can also move the force up to 20 feet as part of the same Bonus Action.<br><br>
+<b>Using a Higher-Level Slot:</b> Damage increases by 1d8 at 3rd–4th level, 2d8 at 5th–6th, 3d8 at 7th+.`,
+
+  'Magic Weapon':`<b>2nd-level Transmutation</b> &nbsp;|&nbsp; Bonus Action &nbsp;|&nbsp; Range: Touch &nbsp;|&nbsp; V, S &nbsp;|&nbsp; 1 hour<br><br>
+You touch a nonmagical weapon. Until the spell ends, that weapon becomes a magic weapon with a +1 bonus to attack rolls and damage rolls.<br><br>
+<b>Using a Higher-Level Slot:</b> Bonus increases to +2 at 3rd–4th level, +3 at 5th+ level.`,
+
+  'Aid':`<b>2nd-level Abjuration</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: 30 ft &nbsp;|&nbsp; V, S, M (tiny strip of white cloth) &nbsp;|&nbsp; 8 hours<br><br>
+Your spell bolsters your allies with toughness and resolve. Choose up to three creatures within range. Each target's Hit Point maximum and current Hit Points increase by 5 for the duration.<br><br>
+<b>Using a Higher-Level Slot:</b> Hit Points increase by 5 for each slot level above 2nd (e.g., 3rd slot = +10 HP).`,
+
+  'Lesser Restoration':`<b>2nd-level Abjuration</b> &nbsp;|&nbsp; Bonus Action &nbsp;|&nbsp; Range: Touch &nbsp;|&nbsp; V, S &nbsp;|&nbsp; Instantaneous<br><br>
+You touch a creature and can end either one disease or one of the following conditions afflicting it: Blinded, Deafened, Paralyzed, or Poisoned.`,
+
+  'Prayer of Healing':`<b>2nd-level Abjuration</b> &nbsp;|&nbsp; 10 minutes &nbsp;|&nbsp; Range: 30 ft &nbsp;|&nbsp; V &nbsp;|&nbsp; Instantaneous<br><br>
+Up to five creatures of your choice that you can see within range each regain Hit Points equal to 2d8 + your spellcasting ability modifier (WIS +3 = 2d8+3). This spell has no effect on Undead or Constructs.<br><br>
+A creature that gains Hit Points from this spell can't do so again until it finishes a Long Rest.<br><br>
+<b>Using a Higher-Level Slot:</b> Healing increases by 1d8 for each slot level above 2nd.`,
+
+  'Spirit Guardians':`<b>3rd-level Conjuration</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: Self (15-foot emanation) &nbsp;|&nbsp; V, S, M (a prayer) &nbsp;|&nbsp; Concentration, up to 10 minutes<br><br>
+You call forth spirits to protect you. They flit around you in a 15-foot emanation for the duration.<br><br>
+When you cast this spell, you can designate any number of creatures you can see to be unaffected by it. An affected creature's Speed is halved in the area. When the creature enters the area for the first time on a turn or starts its turn there, it must make a Wisdom saving throw. On a failed save, the creature takes 3d8 Radiant damage (if you are Good or Neutral) or 3d8 Necrotic damage (if you are Evil). On a successful save, the creature takes half as much damage.<br><br>
+<b>Using a Higher-Level Slot:</b> Damage increases by 1d8 for each slot level above 3rd.`,
+
+  "Crusader's Mantle":`<b>3rd-level Evocation</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: Self (30-foot emanation) &nbsp;|&nbsp; V &nbsp;|&nbsp; Concentration, up to 1 minute<br><br>
+Holy power radiates from you in an aura with a 30-foot radius, awakening boldness in friendly creatures. Until the spell ends, the aura moves with you, centered on you. While in the aura, each nonhostile creature (including you) deals an extra 1d4 Radiant damage when it hits with a weapon or an Unarmed Strike.`,
+
+  'Revivify':`<b>3rd-level Necromancy</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: Touch &nbsp;|&nbsp; V, S, M (diamond worth 300+ GP — consumed!) &nbsp;|&nbsp; Instantaneous<br><br>
+You touch a creature that has died within the last minute. That creature returns to life with 1 Hit Point. This spell can't return to life a creature that has died of old age, nor can it restore any missing body parts.<br><br>
+<b>Note:</b> The material component is consumed — you need a fresh 300 GP diamond for each use.`,
+
+  'Dispel Magic':`<b>3rd-level Abjuration</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: 120 ft &nbsp;|&nbsp; V, S &nbsp;|&nbsp; Instantaneous<br><br>
+Choose one creature, object, or magical effect within range. Any spell of 3rd level or lower on the target ends automatically. For each spell of 4th level or higher on the target, make an ability check using your spellcasting ability (WIS). The DC equals 10 + the spell's level. On a successful check, the spell ends.<br><br>
+<b>Using a Higher-Level Slot:</b> When you use a slot of 4th level or higher, you automatically end effects of spells whose level is equal to or less than the slot used.`,
+
+  'Beacon of Hope':`<b>3rd-level Abjuration</b> &nbsp;|&nbsp; Action &nbsp;|&nbsp; Range: 30 ft &nbsp;|&nbsp; V, S &nbsp;|&nbsp; Concentration, up to 1 minute<br><br>
+This spell bestows hope and vitality. Choose any number of creatures within range. For the duration, each target has Advantage on Wisdom saving throws and Death Saving Throws, and regains the maximum number of Hit Points possible from any healing.`
+};
+
+function injectFullDesc(descEl,spellName){
+  if(descEl.querySelector('.full-desc'))return;
+  const clean=spellName.replace(/★/g,'').trim();
+  const text=SPELL_FULL_DESC[clean];
+  if(!text)return;
+  const tog=document.createElement('div');
+  tog.className='full-desc-toggle';
+  tog.textContent='Full rules text';
+  const box=document.createElement('div');
+  box.className='full-desc';
+  box.innerHTML=text;
+  tog.addEventListener('click',e=>{e.stopPropagation();box.classList.toggle('open');tog.classList.toggle('open');});
+  descEl.appendChild(tog);
+  descEl.appendChild(box);
+}
+
+// Inject full desc for Combat tab cd-opt rows on open
+document.addEventListener('click',e=>{
+  const opt=e.target.closest('.cd-opt');
+  if(!opt||e.target.closest('.conc-cast,.full-desc-toggle,.full-desc'))return;
+  if(opt.classList.contains('open')){
+    const nm=opt.querySelector('.cd-name')?.textContent;
+    const desc=opt.querySelector('.cd-desc');
+    if(nm&&desc)injectFullDesc(desc,nm);
+  }
+});
+
+// ── Swipe Navigation ─────────────────────────────────────────
+(function(){
+  const TAB_ORDER=['stats','combat','spells','features','equipment'];
+  let sx=0,sy=0;
+  document.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
+  document.addEventListener('touchend',e=>{
+    const dx=e.changedTouches[0].clientX-sx;
+    const dy=e.changedTouches[0].clientY-sy;
+    if(Math.abs(dx)<50||Math.abs(dy)>Math.abs(dx))return; // too small or mostly vertical
+    const cur=document.querySelector('.tab.active');
+    if(!cur)return;
+    const tabs=Array.from(document.querySelectorAll('.tab'));
+    const ni=(dx<0?tabs.indexOf(cur)+1:tabs.indexOf(cur)-1);
+    if(ni<0||ni>=TAB_ORDER.length)return;
+    showTab(TAB_ORDER[ni],tabs[ni]);
+    tabs[ni].scrollIntoView({behavior:'smooth',block:'nearest',inline:'center'});
+  },{passive:true});
+})();
 
 // ── Init ───────────────────────────────────────────────────────
 (function init(){
