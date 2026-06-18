@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jimbly Hasselflower — Rogue 5</title>
+<style>
+:root{--gold:#8B6914;--gold-l:#c9a84c;--gold-p:#f5e9c8;--bg:#faf8f3;--card:#fff;--sec:#f5f2ea;--ink:#1a1a18;--ink2:#6b6860;--bd:rgba(0,0,0,0.12);--r:8px;--green:#1D9E75;--purple:#534AB7;--red:#D85A30;--amber:#BA7517;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;}
+.sheet{max-width:960px;margin:0 auto;padding:16px;}
+.hdr{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;margin-bottom:12px;padding-bottom:12px;border-bottom:2px solid var(--gold-l);}
+.cname{font-size:22px;font-weight:700;}
+.meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.pill{font-size:11px;background:var(--sec);border:0.5px solid var(--bd);border-radius:20px;padding:2px 9px;color:var(--ink2);}
+.pill b{font-weight:700;color:var(--ink);}
+.hdr-r{display:flex;flex-direction:column;gap:7px;align-items:flex-end;}
+.srow{display:flex;gap:7px;}
+.sb{text-align:center;background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:6px 12px;min-width:58px;}
+.sb .v{font-size:18px;font-weight:700;}.sb .l{font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px;margin-top:1px;}
+.hp-box{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:10px 14px;margin-bottom:12px;}
+.hp-top{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.hp-nums{display:flex;align-items:baseline;gap:3px;}
+.hp-cur{font-size:30px;font-weight:700;min-width:38px;text-align:center;}
+.hp-sep{font-size:20px;color:var(--ink2);}
+.hp-max{font-size:20px;color:var(--ink2);}
+.hp-lbl{font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;}
+.hp-bar-wrap{flex:1;background:var(--sec);border-radius:4px;height:7px;overflow:hidden;}
+.hp-bar{height:7px;border-radius:4px;background:var(--green);transition:width .25s,background .25s;}
+.hp-pct{font-size:11px;color:var(--ink2);min-width:34px;text-align:right;}
+.tmp-info{font-size:11px;color:var(--purple);font-weight:600;min-width:50px;}
+.hp-controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.hp-controls input{width:70px;padding:5px 7px;font-size:13px;border:0.5px solid var(--bd);border-radius:var(--r);background:var(--card);color:var(--ink);font-family:inherit;}
+.btn{font-size:12px;padding:5px 11px;border:0.5px solid var(--bd);border-radius:var(--r);cursor:pointer;background:transparent;color:var(--ink);font-family:inherit;}
+.btn:hover{background:var(--sec);}
+.btn-dmg{border-color:var(--red);color:var(--red);}
+.btn-heal{border-color:var(--green);color:var(--green);}
+.btn-sr{border-color:var(--amber);color:var(--amber);}
+.btn-sm{font-size:11px;padding:4px 8px;color:var(--ink2);}
+.tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;}
+.tab{font-size:12px;padding:5px 13px;border:0.5px solid var(--bd);border-radius:20px;cursor:pointer;background:transparent;color:var(--ink2);font-family:inherit;}
+.tab.active,.tab:hover{background:var(--gold);color:#fff;border-color:var(--gold);}
+.panel{display:none;}.panel.active{display:block;}
+.grid2{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:10px;}
+.grid2x{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;}
+.col{display:flex;flex-direction:column;gap:8px;}
+.sec{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:9px;}
+.sec-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--gold);margin-bottom:7px;border-bottom:.5px solid var(--bd);padding-bottom:4px;}
+.ab6{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
+.ab{background:var(--sec);border-radius:6px;padding:5px 3px;text-align:center;}
+.abm{font-size:15px;font-weight:700;}.abs{font-size:11px;color:var(--ink2);margin-top:1px;}.abn{font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.3px;margin-top:1px;}
+.pos{color:var(--green);}.neg{color:var(--red);}
+.sg{background:var(--sec);border-radius:6px;padding:6px 7px;margin-bottom:4px;}
+.sg-h{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;}
+.sk{display:flex;align-items:center;gap:5px;font-size:12px;padding:1px 0;}
+.dot{width:7px;height:7px;border-radius:50%;border:1.5px solid var(--bd);flex-shrink:0;}
+.dot.p{background:var(--gold);border-color:var(--gold);}
+.dot.e{background:var(--gold);border-color:var(--gold);outline:2px solid var(--gold-l);outline-offset:1px;}
+.skn{flex:1;color:var(--ink2);}
+.skv{font-weight:700;color:var(--ink);}
+.sk-note{font-size:10px;color:var(--purple);font-style:italic;}
+.sk-bonus{font-size:10px;color:var(--gold);margin-left:3px;}
+.sk.hi .skn{color:var(--green);font-weight:700;}.sk.hi .skv{color:var(--green);}
+.prow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
+.pbox{background:var(--sec);border-radius:6px;padding:5px;text-align:center;}
+.pv{font-size:16px;font-weight:700;}.pl{font-size:9px;color:var(--ink2);text-transform:uppercase;}
+.ut{background:var(--sec);border-radius:6px;padding:7px 9px;margin-bottom:5px;}
+.ut-top{display:flex;align-items:center;gap:7px;margin-bottom:4px;}
+.ut-name{font-size:12px;font-weight:700;flex:1;}
+.badge{font-size:10px;padding:1px 7px;border-radius:3px;font-weight:600;}
+.b-lr{background:#EEEDFE;color:var(--purple);}
+.b-sr{background:#E1F5EE;color:#0F6E56;}
+.b-free{background:#EAF3DE;color:#3B6D11;}
+.udots{display:flex;gap:5px;flex-wrap:wrap;}
+.udot{width:13px;height:13px;border-radius:50%;background:var(--gold-l);cursor:pointer;border:none;transition:opacity .15s;flex-shrink:0;}
+.udot.used{opacity:.18;background:var(--ink2);}
+.ut-desc{font-size:11px;color:var(--ink2);line-height:1.5;}
+.wtb{width:100%;border-collapse:collapse;font-size:12px;}
+.wtb th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);padding:4px 6px;border-bottom:.5px solid var(--bd);font-weight:700;}
+.wtb td{padding:5px 6px;border-bottom:.5px solid rgba(0,0,0,.05);}
+.hbadge{background:var(--sec);border:.5px solid var(--bd);border-radius:4px;padding:2px 6px;font-weight:700;}
+.cpill{font-size:11px;background:var(--sec);border:.5px solid var(--bd);border-radius:20px;padding:3px 9px;display:inline-block;margin:2px;}
+.ft{padding:7px 9px;background:var(--sec);border-radius:6px;margin-bottom:5px;}
+.ftn{font-size:12px;font-weight:700;}
+.ftd{font-size:11px;color:var(--ink2);margin-top:3px;line-height:1.55;}
+.cd-opt{background:var(--sec);border-radius:6px;padding:7px 9px;margin-bottom:4px;cursor:pointer;border:.5px solid transparent;}
+.cd-opt:hover,.cd-opt.open{border-color:var(--bd);}
+.cd-hdr{display:flex;align-items:center;gap:6px;}
+.cd-name{font-size:12px;font-weight:700;flex:1;}
+.cd-tag{font-size:10px;padding:1px 6px;border-radius:3px;font-weight:600;}
+.t-act{background:#FAEEDA;color:#854F0B;}
+.t-ba{background:#E1F5EE;color:#0F6E56;}
+.t-react{background:#FAECE7;color:#993C1D;}
+.t-spec{background:#EEEDFE;color:var(--purple);}
+.cd-arr{font-size:10px;color:var(--ink2);transition:transform .15s;}
+.cd-opt.open .cd-arr{transform:rotate(90deg);}
+.cd-desc{display:none;font-size:11px;color:var(--ink2);line-height:1.55;margin-top:5px;padding-top:5px;border-top:.5px solid var(--bd);}
+.cd-opt.open .cd-desc{display:block;}
+.util-card{background:var(--card);border:.5px solid var(--bd);border-radius:var(--r);padding:9px;margin-bottom:8px;}
+.util-hdr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);margin-bottom:7px;padding-bottom:4px;border-bottom:.5px solid var(--bd);}
+.utool{padding:5px 7px;border-radius:5px;margin-bottom:3px;cursor:pointer;border:.5px solid transparent;}
+.utool:hover,.utool.open{background:var(--sec);border-color:var(--bd);}
+.utool-hdr{display:flex;align-items:center;gap:6px;}
+.utool-name{font-size:12px;font-weight:700;flex:1;}
+.utool-arr{font-size:10px;color:var(--ink2);transition:transform .15s;}
+.utool.open .utool-arr{transform:rotate(90deg);}
+.utool-desc{display:none;font-size:11px;color:var(--ink2);line-height:1.55;margin-top:5px;padding-top:5px;border-top:.5px solid var(--bd);}
+.utool.open .utool-desc{display:block;}
+@media(max-width:600px){.grid2,.grid2x{grid-template-columns:1fr;}.hdr{grid-template-columns:1fr;}.ab6{grid-template-columns:repeat(3,1fr);}}
+body.dark{--bg:#1b1917;--card:#242220;--sec:#2d2b28;--ink:#e8e4da;--ink2:#9b9890;--bd:rgba(255,255,255,0.1);--gold:#c9a84c;--gold-l:#4a3808;--gold-p:#2a2008;--green:#18a06b;--purple:#7c73d4;--red:#d96040;--amber:#c98a20;}
+body.dark .hp-bar{background:#18a06b;}
+body.dark .hbadge{background:var(--sec);}
+body.dark .cd-opt:hover,body.dark .cd-opt.open,body.dark .utool:hover,body.dark .utool.open{background:var(--gold-p);}
+.dark-btn{font-size:18px;background:none;border:none;cursor:pointer;padding:2px 4px;line-height:1;border-radius:4px;}
+.dark-btn:hover{background:var(--sec);}
+.tmp-badge{display:none;font-size:13px;font-weight:700;color:var(--purple);background:rgba(83,74,183,0.12);border:1.5px solid var(--purple);border-radius:6px;padding:2px 8px;margin-left:6px;align-items:baseline;gap:3px;}
+.tmp-badge.visible{display:inline-flex;}
+.cond-box{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:8px 12px;margin-bottom:10px;}
+.cond-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.cond-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--ink2);flex-shrink:0;margin-right:3px;}
+.cond{font-size:10px;padding:2px 9px;border-radius:20px;border:1px solid var(--bd);color:var(--ink2);cursor:pointer;user-select:none;transition:all .15s;background:transparent;}
+.cond.active{background:var(--red);border-color:var(--red);color:#fff;font-weight:700;}
+.res-pill{font-size:10px;padding:2px 9px;border-radius:20px;background:rgba(29,158,117,0.12);border:1px solid var(--green);color:var(--green);}
+.imm-pill{font-size:10px;padding:2px 9px;border-radius:20px;background:rgba(83,74,183,0.12);border:1px solid var(--purple);color:var(--purple);}
+.ds-box{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:.5px solid var(--bd);}
+.ds-label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);flex-shrink:0;}
+.ds-group{display:flex;gap:5px;align-items:center;}
+.ds-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--bd);background:transparent;cursor:pointer;flex-shrink:0;}
+.ds-dot.suc{background:var(--green);border-color:var(--green);}
+.ds-dot.fail{background:var(--red);border-color:var(--red);}
+.insp-pip{width:16px;height:16px;border-radius:50%;background:transparent;border:2px solid var(--gold-l);cursor:pointer;transition:background .15s;flex-shrink:0;}
+.insp-pip.active{background:var(--gold-l);}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <div class="cname">Jimbly Hasselflower</div>
+    <div class="meta">
+      <span class="pill">Rogue <b>5</b></span>
+      <span class="pill">Soulknife</span>
+      <span class="pill">Lightfoot Halfling</span>
+      <span class="pill">Criminal</span>
+      <span class="pill">Prof <b>+3</b></span>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;justify-content:flex-end;">
+      <span style="font-size:10px;color:var(--ink2);">Inspiration</span>
+      <div class="insp-pip" id="inspPip" onclick="toggleInspiration()" title="Heroic Inspiration"></div>
+      <button class="dark-btn" onclick="toggleDark()" title="Toggle dark mode" id="darkBtn">🌙</button>
+    </div>
+    <div class="srow">
+      <div class="sb"><div class="v" id="acHeader">15</div><div class="l">AC</div></div>
+      <div class="sb"><div class="v">+7</div><div class="l">Init</div></div>
+      <div class="sb"><div class="v">30ft</div><div class="l">Speed</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- HP TRACKER -->
+<div class="hp-box">
+  <div class="hp-top">
+    <div>
+      <div class="hp-lbl">Hit Points</div>
+      <div style="display:flex;align-items:baseline;gap:4px;flex-wrap:wrap;">
+        <div class="hp-nums">
+          <div class="hp-cur" id="hpCur">28</div>
+          <div class="hp-sep">/</div>
+          <div class="hp-max">28</div>
+        </div>
+        <span class="tmp-badge" id="tmpBadge">+<span id="tmpVal">0</span>&nbsp;tmp</span>
+      </div>
+    </div>
+    <div class="hp-bar-wrap"><div class="hp-bar" id="hpBar" style="width:100%"></div></div>
+    <div class="hp-pct" id="hpPct">100%</div>
+  </div>
+  <div class="hp-controls">
+    <input type="number" id="hpAmt" placeholder="Amount" min="0">
+    <button class="btn btn-dmg" onclick="applyDmg()">Take Damage</button>
+    <button class="btn btn-heal" onclick="applyHeal()">Heal</button>
+    <button class="btn btn-sm" onclick="setTmp()">Set Temp HP</button>
+    <button class="btn btn-sm" onclick="resetLR()">Long Rest</button>
+    <button class="btn btn-sr" onclick="shortRest()">Short Rest</button>
+  </div>
+  <div class="ds-box" id="deathSaves" style="display:none;">
+    <span class="ds-label">Death Saves</span>
+    <div class="ds-group">
+      <span style="font-size:10px;color:var(--green);margin-right:3px;">Success</span>
+      <div class="ds-dot" id="ds-s0" onclick="toggleDS('s',0)"></div>
+      <div class="ds-dot" id="ds-s1" onclick="toggleDS('s',1)"></div>
+      <div class="ds-dot" id="ds-s2" onclick="toggleDS('s',2)"></div>
+    </div>
+    <div class="ds-group">
+      <span style="font-size:10px;color:var(--red);margin-right:3px;">Failure</span>
+      <div class="ds-dot" id="ds-f0" onclick="toggleDS('f',0)"></div>
+      <div class="ds-dot" id="ds-f1" onclick="toggleDS('f',1)"></div>
+      <div class="ds-dot" id="ds-f2" onclick="toggleDS('f',2)"></div>
+    </div>
+    <button class="btn btn-sm" onclick="clearDS()">Clear</button>
+  </div>
+</div>
+
+<!-- CONDITIONS -->
+<div class="cond-box">
+  <div class="cond-row">
+    <span class="cond-lbl">Conditions</span>
+    <span class="cond" onclick="toggleCond(this)">Blinded</span>
+    <span class="cond" onclick="toggleCond(this)">Charmed</span>
+    <span class="cond" onclick="toggleCond(this)">Deafened</span>
+    <span class="cond" onclick="toggleCond(this)">Exhausted</span>
+    <span class="cond" onclick="toggleCond(this)">Frightened</span>
+    <span class="cond" onclick="toggleCond(this)">Grappled</span>
+    <span class="cond" onclick="toggleCond(this)">Incapacitated</span>
+    <span class="cond" onclick="toggleCond(this)">Paralyzed</span>
+    <span class="cond" onclick="toggleCond(this)">Poisoned</span>
+    <span class="cond" onclick="toggleCond(this)">Prone</span>
+    <span class="cond" onclick="toggleCond(this)">Restrained</span>
+    <span class="cond" onclick="toggleCond(this)">Stunned</span>
+  </div>
+  <div class="cond-row" style="margin-top:6px;padding-top:6px;border-top:0.5px solid var(--bd);">
+    <span class="cond-lbl">Resist</span>
+    <span style="font-size:11px;color:var(--ink2);">None</span>
+    <span class="cond-lbl" style="margin-left:6px;">Immune</span>
+    <span style="font-size:11px;color:var(--ink2);">None</span>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('stats',this)">Stats &amp; Roleplay</button>
+  <button class="tab" onclick="showTab('combat',this)">Combat</button>
+  <button class="tab" onclick="showTab('features',this)">Features &amp; Traits</button>
+  <button class="tab" onclick="showTab('equipment',this)">Equipment</button>
+</div>
+
+<!-- ═══ STATS & ROLEPLAY ═══ -->
+<div id="stats" class="panel active">
+  <div class="grid2">
+    <div class="col">
+      <div class="sec">
+        <div class="sec-t">Ability Scores</div>
+        <div class="ab6">
+          <div class="ab"><div class="abm">+0</div><div class="abs">10</div><div class="abn">STR</div></div>
+          <div class="ab"><div class="abm pos">+4</div><div class="abs">18</div><div class="abn">DEX</div></div>
+          <div class="ab"><div class="abm neg">-1</div><div class="abs">8</div><div class="abn">CHA</div></div>
+          <div class="ab"><div class="abm pos">+1</div><div class="abs">13</div><div class="abn">INT</div></div>
+          <div class="ab"><div class="abm pos">+1</div><div class="abs">12</div><div class="abn">WIS</div></div>
+          <div class="ab"><div class="abm pos">+2</div><div class="abs">15</div><div class="abn">CON</div></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Saving Throws — ✦ proficient</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:5px;">
+          <div class="pbox"><div class="pv">+0</div><div class="pl">STR</div></div>
+          <div class="pbox" style="border:1.5px solid var(--purple);"><div class="pv pos">+7</div><div class="pl">DEX ✦</div></div>
+          <div class="pbox"><div class="pv neg">-1</div><div class="pl">CHA</div></div>
+          <div class="pbox" style="border:1.5px solid var(--purple);"><div class="pv pos">+4</div><div class="pl">INT ✦</div></div>
+          <div class="pbox"><div class="pv pos">+1</div><div class="pl">WIS</div></div>
+          <div class="pbox"><div class="pv pos">+2</div><div class="pl">CON</div></div>
+        </div>
+        <div style="font-size:10px;color:var(--ink2);">Halfling Luck: reroll nat 1s on saves</div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Passives</div>
+        <div class="prow">
+          <div class="pbox"><div class="pv">11</div><div class="pl">Percep.</div></div>
+          <div class="pbox"><div class="pv">11</div><div class="pl">Insight</div></div>
+          <div class="pbox"><div class="pv">14</div><div class="pl">Investig.</div></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Proficiencies</div>
+        <div style="font-size:11px;color:var(--ink2);line-height:1.8;">
+          <div><b style="color:var(--ink);">Armor:</b> Light</div>
+          <div><b style="color:var(--ink);">Weapons:</b> Simple; Finesse &amp; Light martial (Rapier, Scimitar, Shortsword, Whip, Hand Crossbow)</div>
+          <div><b style="color:var(--ink);">Tools:</b> Thieves' Tools, Disguise Kit</div>
+          <div><b style="color:var(--ink);">Languages:</b> Common, Thieves' Cant, Goblin</div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="sec">
+        <div class="sec-t">Skills — filled dot = proficient · outlined dot = expertise</div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;">
+          <div>
+            <div class="sg"><div class="sg-h">STR +0</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Athletics</span><span class="skv">+0</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">DEX +4</div>
+              <div class="sk hi"><div class="dot p"></div><span class="skn">Acrobatics</span><span class="skv">+7</span></div>
+              <div class="sk hi"><div class="dot e"></div><span class="skn">Sleight of Hand</span><span class="skv">+10</span><span class="sk-bonus">Exp</span></div>
+              <div class="sk hi"><div class="dot e"></div><span class="skn">Stealth</span><span class="skv">+10</span><span class="sk-bonus">Exp</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">CHA -1</div>
+              <div class="sk"><div class="dot p"></div><span class="skn">Deception</span><span class="skv">+2</span></div>
+              <div class="sk"><div class="dot p"></div><span class="skn">Intimidation</span><span class="skv">+2</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Performance</span><span class="skv">-1</span></div>
+              <div class="sk hi"><div class="dot e"></div><span class="skn">Persuasion</span><span class="skv">+5</span><span class="sk-bonus">Exp</span></div>
+            </div>
+          </div>
+          <div>
+            <div class="sg"><div class="sg-h">INT +1</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Arcana</span><span class="skv">+1</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">History</span><span class="skv">+1</span></div>
+              <div class="sk"><div class="dot p"></div><span class="skn">Investigation</span><span class="skv">+4</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Nature</span><span class="skv">+1</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Religion</span><span class="skv">+1</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">WIS +1</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Animal Handling</span><span class="skv">+1</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Insight</span><span class="skv">+1</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Medicine</span><span class="skv">+1</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Perception</span><span class="skv">+1</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Survival</span><span class="skv">+1</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">CON +2</div>
+              <div class="sk"><span class="sk-note">No special CON notes</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--gold);padding-bottom:4px;border-bottom:.5px solid var(--bd);">Roleplay &amp; Exploration Cheat Sheet</div>
+      <div class="util-card" style="margin-top:6px;">
+        <div class="util-hdr">Always available — no cost</div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Cunning Action</span><span class="badge b-free">Bonus Action</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">Bonus action every turn: Dash, Disengage, or Hide. Use Disengage to escape melee without provoking opportunity attacks. Use Hide when you want Sneak Attack without a nearby ally.</div>
+        </div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Psychic Blades</span><span class="badge b-free">No cost</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">Manifest a blade of psychic energy as part of your Attack action — no materials needed, can't be disarmed. After the primary attack, if your other hand is free you can make a bonus action attack with a second blade (1d4+4 psychic). Both blades are Finesse and Thrown (60/120 ft).</div>
+        </div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Halfling Luck</span><span class="badge b-free">Passive</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">When you roll a 1 on a d20 test (attack, save, ability check), reroll the die and use the new result. Happens automatically — no action needed.</div>
+        </div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Naturally Stealthy</span><span class="badge b-free">Passive</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">You can attempt to Hide even when only obscured by a creature at least one size larger than you. Perfect for sneaking behind a large ally or creature.</div>
+        </div>
+      </div>
+      <div class="util-card">
+        <div class="util-hdr">Psionic abilities (cost psi dice)</div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Psi-Bolstered Knack</span><span class="badge b-sr">Maybe costs 1 die</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">When you fail an ability check using a skill or tool you're proficient with, roll one Psionic Energy Die (d8) and add the result to the check. The die is only expended if the check now succeeds. No action required — just happens when you fail.</div>
+        </div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Psychic Whispers</span><span class="badge b-lr">1 free / LR</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">Magic action: choose up to 3 creatures (= Proficiency Bonus), roll 1d8, establish a telepathic link for that many hours. All chosen creatures can communicate telepathically with each other. First use per Long Rest is free; additional uses cost 1 psi die each.</div>
+        </div>
+      </div>
+      <div class="util-card">
+        <div class="util-hdr">Key skills &amp; tactics</div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Stealth +10 (Expertise)</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">Best skill. Passive Stealth 20. Use before combat for positioning. Naturally Stealthy lets you hide behind larger allies. Sneak Attack triggers when hidden (you have advantage).</div>
+        </div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Sleight of Hand +10 (Expertise)</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">Pickpocketing, planting items, concealing objects. Also used for disabling non-magical traps. Passive is 20 — most things just happen without a roll.</div>
+        </div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Thieves' Tools +6</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">Pick locks and disarm magical traps (uses DEX + Proficiency = +6). Psychic Blades can't help here — bring the actual tools. Psi-Bolstered Knack can bail you out on a failed roll.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMBAT ═══ -->
+<div id="combat" class="panel">
+  <div style="display:flex;flex-direction:column;gap:9px;">
+
+    <div class="sec">
+      <div class="sec-t">Sneak Attack — 3d6 extra damage, once per turn</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.7;">
+        <div><b style="color:var(--ink);">Triggers:</b> Attack with a Finesse or Ranged weapon while you have <b>advantage on the attack</b>, OR while a <b>conscious ally is within 5 ft of the target</b> (and you don't have disadvantage).</div>
+        <div style="margin-top:4px;"><b style="color:var(--ink);">Cunning Strike:</b> Spend 1d6 of Sneak Attack dice (reducing SA to 2d6) to add one effect. Save DC <b>15</b>.</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:5px;">
+          <span class="cpill">Poison — CON save or Poisoned 1 min</span>
+          <span class="cpill">Trip — DEX save or Prone</span>
+          <span class="cpill">Withdraw — move half speed after attack</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Weapons &amp; Attacks</div>
+      <table class="wtb">
+        <tr><th>Weapon</th><th>Hit</th><th>Damage</th><th>Type</th><th>Notes</th></tr>
+        <tr>
+          <td><b>Psychic Blade</b></td>
+          <td><span class="hbadge">+7</span></td>
+          <td>1d6+4</td>
+          <td>Psychic</td>
+          <td style="color:var(--ink2);">Finesse · Thrown 60/120 · Vex mastery · manifested as part of Attack action</td>
+        </tr>
+        <tr>
+          <td><b>Psychic Blade (BA)</b></td>
+          <td><span class="hbadge">+7</span></td>
+          <td>1d4+4</td>
+          <td>Psychic</td>
+          <td style="color:var(--ink2);">Bonus action only · other hand must be free · no dual-weapon feat needed</td>
+        </tr>
+        <tr>
+          <td><b>Shortsword</b></td>
+          <td><span class="hbadge">+7</span></td>
+          <td>1d6+4</td>
+          <td>Piercing</td>
+          <td style="color:var(--ink2);">Finesse · Light</td>
+        </tr>
+        <tr>
+          <td><b>Dagger</b></td>
+          <td><span class="hbadge">+7</span></td>
+          <td>1d4+4</td>
+          <td>Piercing</td>
+          <td style="color:var(--ink2);">Finesse · Light · Thrown 20/60</td>
+        </tr>
+        <tr>
+          <td><b>Shortbow</b></td>
+          <td><span class="hbadge">+7</span></td>
+          <td>1d6+4</td>
+          <td>Piercing</td>
+          <td style="color:var(--ink2);">Range 80/320 · Vex mastery · Two-Handed</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Psionic Energy Dice — 6 dice (d8) · +1 on Short Rest · all on Long Rest</div>
+      <div class="ut">
+        <div class="ut-top">
+          <span class="ut-name">Psi Dice remaining</span>
+          <span class="badge b-sr">+1 Short Rest</span>
+          <div class="udots">
+            <button class="udot" data-res="psi" onclick="toggleDot(this)"></button>
+            <button class="udot" data-res="psi" onclick="toggleDot(this)"></button>
+            <button class="udot" data-res="psi" onclick="toggleDot(this)"></button>
+            <button class="udot" data-res="psi" onclick="toggleDot(this)"></button>
+            <button class="udot" data-res="psi" onclick="toggleDot(this)"></button>
+            <button class="udot" data-res="psi" onclick="toggleDot(this)"></button>
+          </div>
+        </div>
+        <div class="ut-desc">Used for: Psi-Bolstered Knack (maybe 1 die on failed prof check), Psychic Whispers (1 die after first use/LR). Roll a d8 when spending a die.</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Bonus Actions &amp; Reactions</div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Cunning Action</span><span class="cd-tag t-ba">Bonus Action</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">Each turn, use your bonus action to Dash (double speed), Disengage (no OAs until end of turn), or Hide (Stealth check vs. passive perceptions).</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Steady Aim</span><span class="cd-tag t-ba">Bonus Action</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">If you haven't moved this turn, use your bonus action to gain advantage on your next attack roll this turn. Your speed becomes 0 for the rest of the turn. Great for guaranteed Sneak Attack when no ally is nearby.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Psychic Blade (offhand)</span><span class="cd-tag t-ba">Bonus Action</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">After attacking with a Psychic Blade this turn, if your other hand is free, manifest a second blade as a bonus action. Deals 1d4 + DEX (+4) = 1d4+4 psychic damage. Attack bonus +7. No dual-weapon feat required.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Uncanny Dodge</span><span class="cd-tag t-react">Reaction</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">When an attacker you can see hits you, use your reaction to halve the attack's damage against you. Does not work on area damage or attacks from unseen attackers.</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Key Advantages &amp; Notes</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.8;">
+        <div><b style="color:var(--ink);">Alert feat:</b> Initiative = DEX +4 + Prof +3 = +7. After rolling, can swap Initiative with any willing ally.</div>
+        <div><b style="color:var(--ink);">Halfling Luck:</b> Reroll any natural 1 on a d20 test (attack, save, or check).</div>
+        <div><b style="color:var(--ink);">Brave:</b> Advantage on saves to avoid or end the Frightened condition.</div>
+        <div><b style="color:var(--ink);">Vex mastery:</b> If you hit with a Vex weapon, the target has disadvantage on its next attack roll before your next turn. Psychic Blades always have Vex.</div>
+        <div><b style="color:var(--ink);">Halfling Nimbleness:</b> Move through spaces of creatures at least one size larger without difficulty.</div>
+        <div><b style="color:var(--ink);">Cunning Strike save DC:</b> 8 + DEX +4 + Prof +3 = <b>DC 15</b></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ FEATURES & TRAITS ═══ -->
+<div id="features" class="panel">
+  <div class="grid2x">
+    <div class="col">
+      <div class="sec">
+        <div class="sec-t">Racial Traits — Lightfoot Halfling</div>
+        <div class="ft"><div class="ftn">Brave</div><div class="ftd">Advantage on saving throws to avoid or end the Frightened condition.</div></div>
+        <div class="ft"><div class="ftn">Halfling Nimbleness</div><div class="ftd">You can move through the space of any creature that is at least one size larger than you. You cannot end your movement in their space.</div></div>
+        <div class="ft"><div class="ftn">Luck</div><div class="ftd">When you roll a 1 on a d20 for an attack roll, ability check, or saving throw, you can reroll the die and must use the new result.</div></div>
+        <div class="ft"><div class="ftn">Naturally Stealthy</div><div class="ftd">You can attempt to Hide even when you are obscured only by a creature that is at least one size larger than you.</div></div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Feats</div>
+        <div class="ft">
+          <div class="ftn">Alert</div>
+          <div class="ftd">Add your Proficiency Bonus (+3) to your Initiative rolls. After you roll Initiative, you can swap your Initiative with that of one willing ally in the same combat.</div>
+        </div>
+        <div class="ft">
+          <div class="ftn">Skill Expert</div>
+          <div class="ftd">+1 DEX (now 18). Gained Investigation proficiency. Gained Expertise in Stealth (doubles proficiency bonus for Stealth checks).</div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="sec">
+        <div class="sec-t">Rogue Features</div>
+        <div class="ft">
+          <div class="ftn">Expertise (Level 1)</div>
+          <div class="ftd">Double proficiency bonus for Sleight of Hand and Persuasion (chosen at level 1). Stealth expertise added via Skill Expert feat at level 4.</div>
+        </div>
+        <div class="ft">
+          <div class="ftn">Sneak Attack (Level 1) — 3d6</div>
+          <div class="ftd">Once per turn, deal 3d6 extra damage when attacking with a Finesse or Ranged weapon and you have advantage, OR a conscious ally is within 5 ft of the target and you don't have disadvantage.</div>
+        </div>
+        <div class="ft">
+          <div class="ftn">Thieves' Cant (Level 1)</div>
+          <div class="ftd">You know Thieves' Cant — a secret mix of dialect, jargon, and code that lets you hide messages in conversations. You also know Goblin as an additional language.</div>
+        </div>
+        <div class="ft">
+          <div class="ftn">Weapon Mastery (Level 1)</div>
+          <div class="ftd">Apply the Mastery property of 2 weapon types you're proficient with. Can change selections after a Long Rest. Psychic Blades always have Vex (Soulknife feature, independent of this).</div>
+        </div>
+        <div class="ft">
+          <div class="ftn">Cunning Action (Level 2)</div>
+          <div class="ftd">Bonus action each turn: Dash, Disengage, or Hide.</div>
+        </div>
+        <div class="ft">
+          <div class="ftn">Steady Aim (Level 3)</div>
+          <div class="ftd">Bonus action: Gain advantage on your next attack roll this turn. Requirement: you haven't moved this turn. Cost: your speed becomes 0 for the rest of the turn.</div>
+        </div>
+        <div class="ft">
+          <div class="ftn">Cunning Strike (Level 5)</div>
+          <div class="ftd">When you deal Sneak Attack damage, spend 1d6 (reducing SA from 3d6 to 2d6) to apply one of: Poison (CON save DC 15 or Poisoned 1 min), Trip (DEX save DC 15 or Prone), or Withdraw (move up to half speed immediately after attack).</div>
+        </div>
+        <div class="ft">
+          <div class="ftn">Uncanny Dodge (Level 5)</div>
+          <div class="ftd">Reaction: When an attacker you can see hits you with an attack, halve the attack's damage against you. Once per turn.</div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Soulknife Subclass</div>
+        <div class="ut" style="margin-bottom:6px;">
+          <div class="ut-top">
+            <span class="ut-name">Psionic Power (Level 3)</span>
+            <span class="badge b-sr">+1 Short Rest</span>
+            <div class="udots">
+              <button class="udot" data-res="psi" onclick="toggleDot(this)"></button>
+              <button class="udot" data-res="psi" onclick="toggleDot(this)"></button>
+              <button class="udot" data-res="psi" onclick="toggleDot(this)"></button>
+              <button class="udot" data-res="psi" onclick="toggleDot(this)"></button>
+              <button class="udot" data-res="psi" onclick="toggleDot(this)"></button>
+              <button class="udot" data-res="psi" onclick="toggleDot(this)"></button>
+            </div>
+          </div>
+          <div class="ut-desc">6 Psionic Energy Dice (d8). Regain 1 die on Short Rest, all on Long Rest.</div>
+        </div>
+        <div class="ft">
+          <div class="ftn">Psi-Bolstered Knack</div>
+          <div class="ftd">When you fail an ability check using a skill or tool you're proficient with, roll one Psionic Energy Die (d8) and add it to the check. The die is expended only if the check now succeeds.</div>
+        </div>
+        <div class="ft">
+          <div class="ftn">Psychic Whispers — 1 free per Long Rest</div>
+          <div class="ftd">Magic action: Choose up to 3 creatures (Proficiency Bonus) you can see. Roll a d8. For that many hours, those creatures can communicate telepathically with each other even if they don't share a language. First use per Long Rest is free; additional uses each cost 1 psi die.</div>
+        </div>
+        <div class="ft">
+          <div class="ftn">Psychic Blades (Level 3)</div>
+          <div class="ftd">Manifest blades of psychic energy as part of the Attack action — no material needed, can't be disarmed. Primary blade: 1d6 psychic + DEX (+4), Finesse, Thrown 60/120, Vex mastery. Bonus action offhand blade (other hand free): 1d4+4 psychic. Both vanish immediately after the attack.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EQUIPMENT ═══ -->
+<div id="equipment" class="panel">
+  <div style="display:flex;flex-direction:column;gap:9px;">
+
+    <div class="sec">
+      <div class="sec-t">Armor &amp; AC Tracker — click to equip/unequip</div>
+      <div style="font-size:11px;color:var(--ink2);margin-bottom:8px;">AC = Leather Armor (11) + DEX mod (+4) = 15</div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px;">
+        <div class="armor-slot" id="slot-leather" onclick="toggleArmor('leather')" style="cursor:pointer;background:var(--sec);border:2px solid var(--gold);border-radius:var(--r);padding:9px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;">Leather Armor</div>
+          <div style="font-size:10px;color:var(--ink2);">Light Armor</div>
+          <div style="font-size:18px;font-weight:700;margin-top:3px;">AC 15</div>
+          <div style="font-size:10px;color:var(--green);margin-top:3px;">Equipped</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:var(--sec);border-radius:var(--r);padding:10px 14px;">
+        <div>
+          <div style="font-size:10px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;">Current AC</div>
+          <div style="font-size:32px;font-weight:700;" id="acDisplay">15</div>
+        </div>
+        <div style="flex:1;font-size:11px;color:var(--ink2);line-height:1.7;" id="acBreakdown">
+          Leather Armor (15)
+        </div>
+        <div style="text-align:right;">
+          <div style="font-size:10px;color:var(--ink2);">Unarmored</div>
+          <div style="font-size:16px;font-weight:700;" id="acNoShield">14</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Weapons &amp; Combat Gear</div>
+      <table class="wtb">
+        <tr><th>Item</th><th>Hit</th><th>Damage</th><th>Notes</th></tr>
+        <tr><td><b>Shortsword</b></td><td><span class="hbadge">+7</span></td><td>1d6+4 piercing</td><td style="color:var(--ink2);">Finesse, Light</td></tr>
+        <tr><td><b>Dagger</b></td><td><span class="hbadge">+7</span></td><td>1d4+4 piercing</td><td style="color:var(--ink2);">Finesse, Light, Thrown 20/60</td></tr>
+        <tr><td><b>Shortbow</b></td><td><span class="hbadge">+7</span></td><td>1d6+4 piercing</td><td style="color:var(--ink2);">Range 80/320, Two-Handed</td></tr>
+        <tr><td><b>Arrows</b></td><td>—</td><td>—</td><td style="color:var(--ink2);">20 remaining</td></tr>
+      </table>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Adventuring Gear</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Thieves' Tools</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Disguise Kit</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Crowbar</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Traveler's Clothes</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">2 Pouches</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Ball Bearings (1000)</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Rations</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);"><b>Gold: 16 gp</b></span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<script>
+const STORE_KEY='dnd-jimbly-165996399';
+
+const RES_MAX={
+  'psi':6,
+};
+const resRem={...RES_MAX};
+const ALL_RES=Object.keys(RES_MAX);
+
+let hp=28,maxHp=28,tmp=0;
+
+const armor={
+  leather:{equipped:true,ac:15},
+};
+
+function getState(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{};}catch(e){return {};}}
+
+function renderRes(res){
+  const rem=resRem[res];
+  const groups=new Map();
+  document.querySelectorAll(`.udot[data-res="${res}"]`).forEach(dot=>{
+    const c=dot.closest('.udots');
+    if(!groups.has(c))groups.set(c,[]);
+    groups.get(c).push(dot);
+  });
+  groups.forEach(dots=>dots.forEach((d,i)=>d.classList.toggle('used',i>=rem)));
+}
+function renderAllRes(){ALL_RES.forEach(r=>renderRes(r));}
+
+function toggleCond(el){el.classList.toggle('active');saveState();}
+
+function saveState(){
+  const s=getState();
+  const res={};ALL_RES.forEach(r=>res[r]=resRem[r]);s.res=res;
+  const conds={};
+  document.querySelectorAll('.cond').forEach((c,i)=>conds['c'+i]=c.classList.contains('active'));
+  s.conds=conds;
+  s.hp=hp;s.tmp=tmp;s.ds=dsState;
+  localStorage.setItem(STORE_KEY,JSON.stringify(s));
+}
+
+function loadState(){
+  const s=getState();
+  if(s.res)ALL_RES.forEach(r=>{if(s.res[r]!==undefined)resRem[r]=s.res[r];});
+  renderAllRes();
+  if(s.conds)document.querySelectorAll('.cond').forEach((c,i)=>{if(s.conds['c'+i])c.classList.add('active');});
+  if(s.hp!==undefined)hp=s.hp;
+  if(s.tmp!==undefined)tmp=s.tmp;
+}
+
+window.addEventListener('storage',e=>{if(e.key===STORE_KEY){loadState();upd();}});
+
+function toggleDot(el){
+  const res=el.dataset.res;
+  if(res){
+    const rem=resRem[res];
+    const max=RES_MAX[res];
+    const dots=Array.from(el.closest('.udots').querySelectorAll(`.udot[data-res="${res}"]`));
+    const pipIdx=dots.indexOf(el);
+    resRem[res]=pipIdx<rem?Math.max(0,rem-1):Math.min(max,rem+1);
+    renderRes(res);
+  } else {
+    el.classList.toggle('used');
+  }
+  saveState();
+}
+
+function toggleDark(){
+  const dark=document.body.classList.toggle('dark');
+  document.getElementById('darkBtn').textContent=dark?'☀️':'🌙';
+  const s=getState();s.dark=dark;localStorage.setItem(STORE_KEY,JSON.stringify(s));
+}
+
+function toggleArmor(id){
+  armor[id].equipped=!armor[id].equipped;
+  const slot=document.getElementById('slot-'+id);
+  const eq=armor[id].equipped;
+  slot.style.borderColor=eq?'var(--gold)':'transparent';
+  slot.querySelector('div:last-child').textContent=eq?'Equipped':'Not equipped';
+  slot.querySelector('div:last-child').style.color=eq?'var(--green)':'var(--ink2)';
+  updateAC();
+}
+function updateAC(){
+  let ac=10,parts=[];
+  if(armor.leather&&armor.leather.equipped){ac=armor.leather.ac;parts.push('Leather Armor ('+ac+')');}
+  else{parts.push('Unarmored ('+ac+')');}
+  document.getElementById('acDisplay').textContent=ac;
+  document.getElementById('acHeader').textContent=ac;
+  // "no shield" column shows unarmored DEX-based AC when armor is removed
+  const unarmored=14; // 10 + DEX +4
+  document.getElementById('acNoShield').textContent=armor.leather&&armor.leather.equipped?unarmored:ac;
+  document.getElementById('acBreakdown').innerHTML=parts.join(' + ')+' = <b style="color:var(--ink);">'+ac+'</b>';
+}
+
+function upd(){
+  const c=Math.max(0,Math.min(maxHp,hp));
+  document.getElementById('hpCur').textContent=c;
+  const pct=maxHp>0?Math.round((c/maxHp)*100):0;
+  document.getElementById('hpPct').textContent=pct+'%';
+  const bar=document.getElementById('hpBar');
+  bar.style.width=pct+'%';
+  bar.style.background=pct>50?'#1D9E75':pct>25?'#BA7517':'#D85A30';
+  const badge=document.getElementById('tmpBadge');
+  if(tmp>0){badge.classList.add('visible');document.getElementById('tmpVal').textContent=tmp;}
+  else badge.classList.remove('visible');
+  document.getElementById('deathSaves').style.display=c===0?'flex':'none';
+}
+function getAmt(){return Math.abs(parseInt(document.getElementById('hpAmt').value)||0);}
+function clearAmt(){document.getElementById('hpAmt').value='';}
+function applyDmg(){const a=getAmt();if(!a)return;let r=a;if(tmp>0){const ab=Math.min(tmp,r);tmp-=ab;r-=ab;}hp=Math.max(0,hp-r);clearAmt();upd();saveState();}
+function applyHeal(){const a=getAmt();if(!a)return;hp=Math.min(maxHp,hp+a);clearAmt();upd();saveState();}
+function setTmp(){const v=parseInt(prompt('Set Temp HP (current: '+tmp+'):','0'));if(!isNaN(v))tmp=Math.max(0,v);upd();saveState();}
+
+function resetLR(){
+  hp=maxHp;tmp=0;
+  ALL_RES.forEach(r=>{resRem[r]=RES_MAX[r];});
+  renderAllRes();
+  clearDS();
+  upd();saveState();
+}
+function shortRest(){
+  resRem['psi']=Math.min(RES_MAX['psi'],resRem['psi']+1);
+  renderAllRes();
+  saveState();
+}
+
+const dsState={s:[false,false,false],f:[false,false,false]};
+function toggleDS(type,idx){
+  dsState[type][idx]=!dsState[type][idx];
+  const el=document.getElementById('ds-'+type+idx);
+  el.classList.toggle(type==='s'?'suc':'fail',dsState[type][idx]);
+  saveState();
+}
+function clearDS(){
+  ['s','f'].forEach(t=>[0,1,2].forEach(i=>{dsState[t][i]=false;const el=document.getElementById('ds-'+t+i);if(el)el.classList.remove('suc','fail');}));
+  saveState();
+}
+
+let inspired=false;
+function toggleInspiration(){
+  inspired=!inspired;
+  document.getElementById('inspPip').classList.toggle('active',inspired);
+  const s=getState();s.inspired=inspired;localStorage.setItem(STORE_KEY,JSON.stringify(s));
+}
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+}
+
+(function init(){
+  const s=getState();
+  if(s.dark){document.body.classList.add('dark');document.getElementById('darkBtn').textContent='☀️';}
+  loadState();
+  if(s.inspired){inspired=true;document.getElementById('inspPip').classList.add('active');}
+  if(s.ds){['s','f'].forEach(t=>[0,1,2].forEach(i=>{if(s.ds[t]&&s.ds[t][i]){dsState[t][i]=true;const el=document.getElementById('ds-'+t+i);if(el)el.classList.add(t==='s'?'suc':'fail');}}));}
+  upd();
+  updateAC();
+})();
+</script>
+</body>
+</html>
