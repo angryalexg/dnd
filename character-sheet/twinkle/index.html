@@ -171,7 +171,7 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
       <button class="dark-btn" onclick="toggleDark()" title="Toggle dark mode" id="darkBtn">🌙</button>
     </div>
     <div class="srow">
-      <div class="sb"><div class="v" id="acHeader">11</div><div class="l">AC</div></div>
+      <div class="sb"><div class="v" id="acHeader">14</div><div class="l">AC</div></div>
       <div class="sb"><div class="v">+3</div><div class="l">Init</div></div>
       <div class="sb"><div class="v">30ft</div><div class="l">Speed</div></div>
     </div>
@@ -300,7 +300,7 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
         <div style="font-size:11px;color:var(--ink2);line-height:1.8;">
           <div><b style="color:var(--ink);">Armor:</b> Light, Medium, Shields</div>
           <div><b style="color:var(--ink);">Weapons:</b> Simple Weapons</div>
-          <div><b style="color:var(--ink);">Tools:</b> Cartographer's Tools, Forgery Kit, Thieves' Tools, Tinker's Tools</div>
+          <div><b style="color:var(--ink);">Tools:</b> Alchemist's Supplies, Forgery Kit, Thieves' Tools, Tinker's Tools</div>
           <div><b style="color:var(--ink);">Languages:</b> Common, Elvish, Goblin</div>
         </div>
       </div>
@@ -406,7 +406,7 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
           <td><b>Dagger</b></td>
           <td><span class="hbadge">+3</span></td>
           <td>1d4+1 Piercing</td>
-          <td style="color:var(--ink2);">Finesse · Light · Thrown 20/60</td>
+          <td style="color:var(--ink2);">Finesse · Light · Thrown 20/60 · <span style="color:var(--amber);font-weight:700;">Nick</span></td>
         </tr>
         <tr>
           <td>Unarmed Strike</td>
@@ -443,6 +443,10 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
 
     <div class="sec">
       <div class="sec-t">War Caster — Reaction OA</div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Nick mastery (Dagger) — free extra attack</span><span class="cd-tag t-act">Free</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">When you attack with a Light weapon and hit, Nick lets you make the bonus Light weapon attack as part of the same Attack action — not a Bonus Action, freeing your BA for something else. One Nick attack per Attack action. Your dagger qualifies.</div>
+      </div>
       <div class="cd-opt" onclick="this.classList.toggle('open')">
         <div class="cd-hdr"><span class="cd-name">Opportunity Attack = cast a spell</span><span class="cd-tag t-react">Reaction</span><span class="cd-arr">▶</span></div>
         <div class="cd-desc">When a creature leaves your reach without Disengaging, you can use your reaction to cast a spell targeting ONLY that creature, as long as it has a casting time of 1 Action.<br><br><b>Best options:</b> Catapult (3d8, no V), Tasha's Caustic Brew (ongoing acid). Save Faerie Fire for Action since it needs to catch multiple targets.<br><br><b>Also:</b> War Caster lets you perform somatic components even with weapons/shield in your hands.</div>
@@ -670,8 +674,8 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
           <div class="ftn">Replicate Magic Item — 4 plans · 2 items/LR</div>
           <div class="ftd">On a Long Rest, create 2 magic items from your known plans. Items vanish when you learn a new plan or after 1d4 days if you die. Currently known plans:<br><br>
             <b>Bag of Holding</b> — extradimensional 500 lb bag<br>
+            <b>Sending Stones</b> — paired stones; cast Sending once per day between holders<br>
             <b>Shield, +1</b> — requires attunement; +3 to AC total (+2 shield +1 magic)<br>
-            <b>Talking Doll</b> — can speak up to 6 phrases<br>
             <b>Wand of the War Mage, +1</b> — +1 to spell attacks; ignore half cover
           </div>
         </div>
@@ -704,8 +708,8 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
             <input type="checkbox" id="rep1" onchange="saveReplicated()" style="width:14px;height:14px;accent-color:var(--purple);">
             <select id="repSel1" onchange="saveReplicated()" style="flex:1;font-size:12px;padding:3px;border:.5px solid var(--bd);border-radius:4px;background:var(--sec);color:var(--ink);font-family:inherit;">
               <option>Bag of Holding</option>
+              <option>Sending Stones</option>
               <option>Shield, +1</option>
-              <option>Talking Doll</option>
               <option>Wand of the War Mage, +1</option>
             </select>
           </div>
@@ -715,8 +719,8 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
             <input type="checkbox" id="rep2" onchange="saveReplicated()" style="width:14px;height:14px;accent-color:var(--purple);">
             <select id="repSel2" onchange="saveReplicated()" style="flex:1;font-size:12px;padding:3px;border:.5px solid var(--bd);border-radius:4px;background:var(--sec);color:var(--ink);font-family:inherit;">
               <option>Bag of Holding</option>
+              <option>Sending Stones</option>
               <option>Shield, +1</option>
-              <option>Talking Doll</option>
               <option>Wand of the War Mage, +1</option>
             </select>
           </div>
@@ -733,12 +737,12 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
 
     <div class="sec">
       <div class="sec-t">Armor &amp; AC — click to switch</div>
-      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px;">
-        <div class="armor-slot equipped" id="slot-unarmored" onclick="setArmor('unarmored')">
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-bottom:10px;">
+        <div class="armor-slot" id="slot-unarmored" onclick="setArmor('unarmored')">
           <div style="font-size:11px;font-weight:700;">Unarmored</div>
           <div style="font-size:10px;color:var(--ink2);">10 + DEX</div>
           <div style="font-size:18px;font-weight:700;margin-top:3px;">AC 11</div>
-          <div data-eq style="font-size:10px;color:var(--green);margin-top:3px;">Current</div>
+          <div data-eq style="font-size:10px;color:var(--ink2);margin-top:3px;">Not worn</div>
         </div>
         <div class="armor-slot" id="slot-studded" onclick="setArmor('studded')">
           <div style="font-size:11px;font-weight:700;">Studded Leather</div>
@@ -746,19 +750,25 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
           <div style="font-size:18px;font-weight:700;margin-top:3px;">AC 13</div>
           <div data-eq style="font-size:10px;color:var(--ink2);margin-top:3px;">Not worn</div>
         </div>
+        <div class="armor-slot equipped" id="slot-chainshirt" onclick="setArmor('chainshirt')">
+          <div style="font-size:11px;font-weight:700;">Chain Shirt</div>
+          <div style="font-size:10px;color:var(--ink2);">Medium Armor · 20 lb</div>
+          <div style="font-size:18px;font-weight:700;margin-top:3px;">AC 14</div>
+          <div data-eq style="font-size:10px;color:var(--green);margin-top:3px;">Current</div>
+        </div>
         <div class="armor-slot" id="slot-full" onclick="setArmor('full')">
-          <div style="font-size:11px;font-weight:700;">Studded + +1 Shield</div>
+          <div style="font-size:11px;font-weight:700;">Chain Shirt + +1 Shield</div>
           <div style="font-size:10px;color:var(--ink2);">Requires attunement</div>
-          <div style="font-size:18px;font-weight:700;margin-top:3px;">AC 16</div>
+          <div style="font-size:18px;font-weight:700;margin-top:3px;">AC 17</div>
           <div data-eq style="font-size:10px;color:var(--ink2);margin-top:3px;">Not worn</div>
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:12px;background:var(--sec);border-radius:var(--r);padding:10px 14px;">
         <div>
           <div style="font-size:10px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;">Current AC</div>
-          <div style="font-size:32px;font-weight:700;" id="acDisplay">11</div>
+          <div style="font-size:32px;font-weight:700;" id="acDisplay">14</div>
         </div>
-        <div style="flex:1;font-size:11px;color:var(--ink2);line-height:1.7;" id="acBreakdown">Unarmored (10 + DEX 1)</div>
+        <div style="flex:1;font-size:11px;color:var(--ink2);line-height:1.7;" id="acBreakdown">Chain Shirt (AC 14)</div>
       </div>
     </div>
 
@@ -766,15 +776,17 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
       <div class="sec-t">Weapons</div>
       <table class="wtb">
         <tr><th>Item</th><th>Hit</th><th>Damage</th><th>Notes</th></tr>
-        <tr><td><b>Dagger</b></td><td><span class="hbadge">+3</span></td><td>1d4+1 Piercing</td><td style="color:var(--ink2);">Finesse · Light · Thrown 20/60</td></tr>
+        <tr><td><b>Dagger</b></td><td><span class="hbadge">+3</span></td><td>1d4+1 Piercing</td><td style="color:var(--ink2);">Finesse · Light · Thrown 20/60 · <span style="color:var(--amber);font-weight:700;">Nick</span></td></tr>
       </table>
     </div>
 
     <div class="sec">
       <div class="sec-t">Adventuring Gear</div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Chain Shirt</span></div>
         <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Studded Leather Armor</span></div>
         <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Backpack</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Smith's Tools</span></div>
         <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Tinker's Tools</span></div>
         <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Thieves' Tools</span></div>
         <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Oil ×2</span></div>
@@ -802,9 +814,10 @@ let hp=19,maxHp=19,tmp=0;
 const armorData={
   unarmored:{ac:11,label:'Unarmored (10 + DEX 1)'},
   studded:{ac:13,label:'Studded Leather (AC 13)'},
-  full:{ac:16,label:'Studded Leather + +1 Shield (AC 16)'}
+  chainshirt:{ac:14,label:'Chain Shirt (AC 14)'},
+  full:{ac:17,label:'Chain Shirt + +1 Shield (AC 17)'}
 };
-let currentArmor='unarmored';
+let currentArmor='chainshirt';
 
 function getState(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{};}catch(e){return {};}}
 
