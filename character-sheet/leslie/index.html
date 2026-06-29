@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leslie Lightfoot — Rogue 2</title>
+<style>
+:root{--gold:#8B6914;--gold-l:#c9a84c;--gold-p:#f5e9c8;--bg:#faf8f3;--card:#fff;--sec:#f5f2ea;--ink:#1a1a18;--ink2:#6b6860;--bd:rgba(0,0,0,0.12);--r:8px;--green:#1D9E75;--purple:#534AB7;--red:#D85A30;--amber:#BA7517;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:var(--bg);color:var(--ink);font-size:14px;}
+.sheet{max-width:960px;margin:0 auto;padding:16px;}
+.hdr{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;margin-bottom:12px;padding-bottom:12px;border-bottom:2px solid var(--gold-l);}
+.cname{font-size:22px;font-weight:700;}
+.meta{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
+.pill{font-size:11px;background:var(--sec);border:0.5px solid var(--bd);border-radius:20px;padding:2px 9px;color:var(--ink2);}
+.pill b{font-weight:700;color:var(--ink);}
+.hdr-r{display:flex;flex-direction:column;gap:7px;align-items:flex-end;}
+.srow{display:flex;gap:7px;}
+.sb{text-align:center;background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:6px 12px;min-width:58px;}
+.sb .v{font-size:18px;font-weight:700;}.sb .l{font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.5px;margin-top:1px;}
+.hp-box{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:10px 14px;margin-bottom:12px;}
+.hp-top{display:flex;align-items:center;gap:12px;margin-bottom:8px;}
+.hp-nums{display:flex;align-items:baseline;gap:3px;}
+.hp-cur{font-size:30px;font-weight:700;min-width:38px;text-align:center;}
+.hp-sep{font-size:20px;color:var(--ink2);}.hp-max{font-size:20px;color:var(--ink2);}
+.hp-lbl{font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;}
+.hp-bar-wrap{flex:1;background:var(--sec);border-radius:4px;height:7px;overflow:hidden;}
+.hp-bar{height:7px;border-radius:4px;background:var(--green);transition:width .25s,background .25s;}
+.hp-pct{font-size:11px;color:var(--ink2);min-width:34px;text-align:right;}
+.hp-controls{display:flex;gap:6px;align-items:center;flex-wrap:wrap;}
+.hp-controls input{width:70px;padding:5px 7px;font-size:13px;border:0.5px solid var(--bd);border-radius:var(--r);background:var(--card);color:var(--ink);font-family:inherit;}
+.btn{font-size:12px;padding:5px 11px;border:0.5px solid var(--bd);border-radius:var(--r);cursor:pointer;background:transparent;color:var(--ink);font-family:inherit;}
+.btn:hover{background:var(--sec);}
+.btn-dmg{border-color:var(--red);color:var(--red);}
+.btn-heal{border-color:var(--green);color:var(--green);}
+.btn-sr{border-color:var(--amber);color:var(--amber);}
+.btn-sm{font-size:11px;padding:4px 8px;color:var(--ink2);}
+.tabs{display:flex;gap:4px;margin-bottom:12px;flex-wrap:wrap;}
+.tab{font-size:12px;padding:5px 13px;border:0.5px solid var(--bd);border-radius:20px;cursor:pointer;background:transparent;color:var(--ink2);font-family:inherit;}
+.tab.active,.tab:hover{background:var(--gold);color:#fff;border-color:var(--gold);}
+.panel{display:none;}.panel.active{display:block;animation:panelIn .18s ease;}
+@keyframes panelIn{from{opacity:0;transform:translateX(12px)}to{opacity:1;transform:translateX(0)}}
+.grid2{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:10px;}
+.grid2x{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;}
+.col{display:flex;flex-direction:column;gap:8px;}
+.sec{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:9px;}
+.sec-t{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--gold);margin-bottom:7px;border-bottom:.5px solid var(--bd);padding-bottom:4px;}
+.ab6{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
+.ab{background:var(--sec);border-radius:6px;padding:5px 3px;text-align:center;}
+.abm{font-size:15px;font-weight:700;}.abs{font-size:11px;color:var(--ink2);margin-top:1px;}.abn{font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.3px;margin-top:1px;}
+.pos{color:var(--green);}.neg{color:var(--red);}
+.sg{background:var(--sec);border-radius:6px;padding:6px 7px;margin-bottom:4px;}
+.sg-h{font-size:10px;font-weight:700;color:var(--gold);margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px;}
+.sk{display:flex;align-items:center;gap:5px;font-size:12px;padding:1px 0;}
+.dot{width:7px;height:7px;border-radius:50%;border:1.5px solid var(--bd);flex-shrink:0;}
+.dot.p{background:var(--gold);border-color:var(--gold);}
+.skn{flex:1;color:var(--ink2);}.skv{font-weight:700;color:var(--ink);}
+.sk-note{font-size:10px;color:var(--purple);font-style:italic;}
+.sk-bonus{font-size:10px;color:var(--gold);margin-left:3px;}
+.sk.hi .skn{color:var(--green);font-weight:700;}.sk.hi .skv{color:var(--green);}
+.prow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;}
+.pbox{background:var(--sec);border-radius:6px;padding:5px;text-align:center;}
+.pv{font-size:16px;font-weight:700;}.pl{font-size:9px;color:var(--ink2);text-transform:uppercase;}
+.wtb{width:100%;border-collapse:collapse;font-size:12px;}
+.wtb th{text-align:left;font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);padding:4px 6px;border-bottom:.5px solid var(--bd);font-weight:700;}
+.wtb td{padding:5px 6px;border-bottom:.5px solid rgba(0,0,0,.05);}
+.hbadge{background:var(--sec);border:.5px solid var(--bd);border-radius:4px;padding:2px 6px;font-weight:700;}
+.ft{padding:7px 9px;background:var(--sec);border-radius:6px;margin-bottom:5px;}
+.ftn{font-size:12px;font-weight:700;}.ftd{font-size:11px;color:var(--ink2);margin-top:3px;line-height:1.55;}
+.cd-opt{background:var(--sec);border-radius:6px;padding:7px 9px;margin-bottom:4px;cursor:pointer;border:.5px solid transparent;}
+.cd-opt:hover,.cd-opt.open{border-color:var(--bd);}
+.cd-hdr{display:flex;align-items:center;gap:6px;}
+.cd-name{font-size:12px;font-weight:700;flex:1;}
+.cd-tag{font-size:10px;padding:1px 6px;border-radius:3px;font-weight:600;}
+.t-act{background:#FAEEDA;color:#854F0B;}
+.t-ba{background:#E1F5EE;color:#0F6E56;}
+.t-react{background:#FAECE7;color:#993C1D;}
+.t-spec{background:#EEEDFE;color:var(--purple);}
+.cd-arr{font-size:10px;color:var(--ink2);transition:transform .15s;}
+.cd-opt.open .cd-arr{transform:rotate(90deg);}
+.cd-desc{display:none;font-size:11px;color:var(--ink2);line-height:1.55;margin-top:5px;padding-top:5px;border-top:.5px solid var(--bd);}
+.cd-opt.open .cd-desc{display:block;}
+.util-card{background:var(--card);border:.5px solid var(--bd);border-radius:var(--r);padding:9px;margin-bottom:8px;}
+.util-hdr{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.8px;color:var(--gold);margin-bottom:7px;padding-bottom:4px;border-bottom:.5px solid var(--bd);}
+.utool{padding:5px 7px;border-radius:5px;margin-bottom:3px;cursor:pointer;border:.5px solid transparent;}
+.utool:hover,.utool.open{background:var(--sec);border-color:var(--bd);}
+.utool-hdr{display:flex;align-items:center;gap:6px;}
+.utool-name{font-size:12px;font-weight:700;flex:1;}
+.utool-arr{font-size:10px;color:var(--ink2);transition:transform .15s;}
+.utool.open .utool-arr{transform:rotate(90deg);}
+.utool-desc{display:none;font-size:11px;color:var(--ink2);line-height:1.55;margin-top:5px;padding-top:5px;border-top:.5px solid var(--bd);}
+.utool.open .utool-desc{display:block;}
+.badge{font-size:10px;padding:1px 7px;border-radius:3px;font-weight:600;}
+.b-lr{background:#EEEDFE;color:var(--purple);}
+.b-sr{background:#E1F5EE;color:#0F6E56;}
+.b-free{background:#EAF3DE;color:#3B6D11;}
+.armor-slot{cursor:pointer;background:var(--sec);border:2px solid var(--gold);border-radius:var(--r);padding:9px;text-align:center;}
+@media(max-width:600px){.grid2,.grid2x{grid-template-columns:1fr;}.hdr{grid-template-columns:1fr;}.ab6{grid-template-columns:repeat(3,1fr);}}
+body.dark{--bg:#1b1917;--card:#242220;--sec:#2d2b28;--ink:#e8e4da;--ink2:#9b9890;--bd:rgba(255,255,255,0.1);--gold:#c9a84c;--gold-l:#4a3808;--gold-p:#2a2008;--green:#18a06b;--purple:#7c73d4;--red:#d96040;--amber:#c98a20;}
+body.dark .hp-bar{background:#18a06b;}
+body.dark .hbadge{background:var(--sec);}
+body.dark .cd-opt:hover,body.dark .cd-opt.open,body.dark .utool:hover,body.dark .utool.open{background:var(--gold-p);}
+.dark-btn{font-size:18px;background:none;border:none;cursor:pointer;padding:2px 4px;line-height:1;border-radius:4px;}
+.dark-btn:hover{background:var(--sec);}
+.tmp-badge{display:none;font-size:13px;font-weight:700;color:var(--purple);background:rgba(83,74,183,0.12);border:1.5px solid var(--purple);border-radius:6px;padding:2px 8px;margin-left:6px;align-items:baseline;gap:3px;}
+.tmp-badge.visible{display:inline-flex;}
+.ds-box{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:.5px solid var(--bd);}
+.ds-label{font-size:10px;text-transform:uppercase;letter-spacing:.5px;color:var(--ink2);flex-shrink:0;}
+.ds-group{display:flex;gap:5px;align-items:center;}
+.ds-dot{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--bd);background:transparent;cursor:pointer;flex-shrink:0;}
+.ds-dot.suc{background:var(--green);border-color:var(--green);}
+.ds-dot.fail{background:var(--red);border-color:var(--red);}
+.insp-pip{width:16px;height:16px;border-radius:50%;background:transparent;border:2px solid var(--gold-l);cursor:pointer;transition:background .15s;flex-shrink:0;}
+.insp-pip.active{background:var(--gold-l);}
+.char-notes{width:100%;min-height:90px;font-size:11px;line-height:1.6;border:.5px solid var(--bd);border-radius:6px;background:var(--sec);color:var(--ink);font-family:inherit;padding:7px 9px;resize:vertical;outline:none;}
+.char-notes::placeholder{color:var(--ink2);}
+.char-notes:focus{border-color:var(--gold);}
+.cond-box{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:8px 12px;margin-bottom:10px;}
+.cond-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.cond-lbl{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--ink2);flex-shrink:0;margin-right:3px;}
+.cond{font-size:10px;padding:2px 9px;border-radius:20px;border:1px solid var(--bd);color:var(--ink2);cursor:pointer;user-select:none;transition:all .15s;background:transparent;}
+.cond.active{background:var(--red);border-color:var(--red);color:#fff;font-weight:700;}
+/* Vex tracker */
+.vex-box{background:var(--card);border:0.5px solid var(--bd);border-radius:var(--r);padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.vex-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.6px;color:var(--amber);flex-shrink:0;}
+.vex-target{flex:1;min-width:120px;font-size:13px;border:none;background:transparent;color:var(--ink);font-family:inherit;outline:none;}
+.vex-target::placeholder{color:var(--ink2);}
+.vex-clear{font-size:11px;color:var(--ink2);background:none;border:none;cursor:pointer;padding:2px 5px;}
+.vex-active .vex-label{color:var(--green);}
+</style>
+</head>
+<body>
+<div class="sheet">
+
+<!-- HEADER -->
+<div class="hdr">
+  <div>
+    <div class="cname">Leslie Lightfoot</div>
+    <div class="meta">
+      <span class="pill">Rogue <b>2</b></span>
+      <span class="pill">Lightfoot Halfling</span>
+      <span class="pill">Criminal</span>
+      <span class="pill">Chaotic Neutral</span>
+      <span class="pill">Prof <b>+2</b></span>
+    </div>
+  </div>
+  <div class="hdr-r">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px;justify-content:flex-end;">
+      <span style="font-size:10px;color:var(--ink2);">Inspiration</span>
+      <div class="insp-pip" id="inspPip" onclick="toggleInspiration()" title="Heroic Inspiration"></div>
+      <button class="dark-btn" onclick="toggleDark()" title="Toggle dark mode" id="darkBtn">🌙</button>
+    </div>
+    <div class="srow">
+      <div class="sb"><div class="v" id="acHeader">14</div><div class="l">AC</div></div>
+      <div class="sb"><div class="v">+5</div><div class="l">Init</div></div>
+      <div class="sb"><div class="v">30ft</div><div class="l">Speed</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- VEX TRACKER -->
+<div class="vex-box" id="vexBox">
+  <span class="vex-label" id="vexLabel">Vex on</span>
+  <input class="vex-target" id="vexTarget" placeholder="— no target —" oninput="saveVex()">
+  <button class="vex-clear" onclick="clearVex()">✕ clear</button>
+</div>
+
+<!-- HP TRACKER -->
+<div class="hp-box">
+  <div class="hp-top">
+    <div>
+      <div class="hp-lbl">Hit Points</div>
+      <div style="display:flex;align-items:baseline;gap:4px;flex-wrap:wrap;">
+        <div class="hp-nums">
+          <div class="hp-cur" id="hpCur">17</div>
+          <div class="hp-sep">/</div>
+          <div class="hp-max">17</div>
+        </div>
+        <span class="tmp-badge" id="tmpBadge">+<span id="tmpVal">0</span>&nbsp;tmp</span>
+      </div>
+    </div>
+    <div class="hp-bar-wrap"><div class="hp-bar" id="hpBar" style="width:100%"></div></div>
+    <div class="hp-pct" id="hpPct">100%</div>
+  </div>
+  <div class="hp-controls">
+    <input type="number" id="hpAmt" placeholder="Amount" min="0">
+    <button class="btn btn-dmg" onclick="applyDmg()">Take Damage</button>
+    <button class="btn btn-heal" onclick="applyHeal()">Heal</button>
+    <button class="btn btn-sm" onclick="setTmp()">Set Temp HP</button>
+    <button class="btn btn-sm" onclick="resetLR()">Long Rest</button>
+    <button class="btn btn-sr" onclick="shortRest()">Short Rest</button>
+  </div>
+  <div class="ds-box" id="deathSaves" style="display:none;">
+    <span class="ds-label">Death Saves</span>
+    <div class="ds-group">
+      <span style="font-size:10px;color:var(--green);margin-right:3px;">Success</span>
+      <div class="ds-dot" id="ds-s0" onclick="toggleDS('s',0)"></div>
+      <div class="ds-dot" id="ds-s1" onclick="toggleDS('s',1)"></div>
+      <div class="ds-dot" id="ds-s2" onclick="toggleDS('s',2)"></div>
+    </div>
+    <div class="ds-group">
+      <span style="font-size:10px;color:var(--red);margin-right:3px;">Failure</span>
+      <div class="ds-dot" id="ds-f0" onclick="toggleDS('f',0)"></div>
+      <div class="ds-dot" id="ds-f1" onclick="toggleDS('f',1)"></div>
+      <div class="ds-dot" id="ds-f2" onclick="toggleDS('f',2)"></div>
+    </div>
+    <button class="btn btn-sm" onclick="clearDS()">Clear</button>
+  </div>
+</div>
+
+<!-- CONDITIONS -->
+<div class="cond-box">
+  <div class="cond-row">
+    <span class="cond-lbl">Conditions</span>
+    <span class="cond" onclick="toggleCond(this)">Blinded</span>
+    <span class="cond" onclick="toggleCond(this)">Charmed</span>
+    <span class="cond" onclick="toggleCond(this)">Deafened</span>
+    <span class="cond" onclick="toggleCond(this)">Exhausted</span>
+    <span class="cond" onclick="toggleCond(this)">Frightened</span>
+    <span class="cond" onclick="toggleCond(this)">Grappled</span>
+    <span class="cond" onclick="toggleCond(this)">Incapacitated</span>
+    <span class="cond" onclick="toggleCond(this)">Paralyzed</span>
+    <span class="cond" onclick="toggleCond(this)">Poisoned</span>
+    <span class="cond" onclick="toggleCond(this)">Prone</span>
+    <span class="cond" onclick="toggleCond(this)">Restrained</span>
+    <span class="cond" onclick="toggleCond(this)">Stunned</span>
+  </div>
+  <div class="cond-row" style="margin-top:6px;padding-top:6px;border-top:0.5px solid var(--bd);">
+    <span class="cond-lbl">Note</span>
+    <span style="font-size:10px;color:var(--green);">Advantage on saves vs Frightened (Brave)</span>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab active" onclick="showTab('stats',this)">Stats &amp; Roleplay</button>
+  <button class="tab" onclick="showTab('combat',this)">Combat</button>
+  <button class="tab" onclick="showTab('features',this)">Features &amp; Traits</button>
+  <button class="tab" onclick="showTab('equipment',this)">Equipment</button>
+</div>
+
+<!-- ═══ STATS & ROLEPLAY ═══ -->
+<div id="stats" class="panel active">
+  <div class="grid2">
+    <div class="col">
+      <div class="sec">
+        <div class="sec-t">Ability Scores</div>
+        <div class="ab6">
+          <div class="ab"><div class="abm neg">−1</div><div class="abs">8</div><div class="abn">STR</div></div>
+          <div class="ab"><div class="abm pos">+3</div><div class="abs">17</div><div class="abn">DEX</div></div>
+          <div class="ab"><div class="abm pos">+1</div><div class="abs">13</div><div class="abn">CHA</div></div>
+          <div class="ab"><div class="abm pos">+1</div><div class="abs">12</div><div class="abn">INT</div></div>
+          <div class="ab"><div class="abm">+0</div><div class="abs">10</div><div class="abn">WIS</div></div>
+          <div class="ab"><div class="abm pos">+2</div><div class="abs">15</div><div class="abn">CON</div></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Saving Throws — ✦ proficient</div>
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin-bottom:5px;">
+          <div class="pbox"><div class="pv neg">−1</div><div class="pl">STR</div></div>
+          <div class="pbox" style="border:1.5px solid var(--purple);"><div class="pv" style="color:var(--purple);">+5 ✦</div><div class="pl">DEX</div></div>
+          <div class="pbox"><div class="pv">+1</div><div class="pl">CHA</div></div>
+          <div class="pbox" style="border:1.5px solid var(--purple);"><div class="pv" style="color:var(--purple);">+3 ✦</div><div class="pl">INT</div></div>
+          <div class="pbox"><div class="pv">+0</div><div class="pl">WIS</div></div>
+          <div class="pbox"><div class="pv">+2</div><div class="pl">CON</div></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Passives</div>
+        <div class="prow">
+          <div class="pbox"><div class="pv">10</div><div class="pl">Percep.</div></div>
+          <div class="pbox"><div class="pv">10</div><div class="pl">Insight</div></div>
+          <div class="pbox"><div class="pv">13</div><div class="pl">Investig.</div></div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Proficiencies</div>
+        <div style="font-size:11px;color:var(--ink2);line-height:1.8;">
+          <div><b style="color:var(--ink);">Armor:</b> Light Armor</div>
+          <div><b style="color:var(--ink);">Weapons:</b> Simple Weapons, Rapier, Scimitar, Shortsword, Whip, Hand Crossbow</div>
+          <div><b style="color:var(--ink);">Tools:</b> Disguise Kit, Thieves' Tools</div>
+          <div><b style="color:var(--ink);">Languages:</b> Common, Dwarvish, Goblin, Orc, Thieves' Cant</div>
+        </div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Background &amp; Notes</div>
+        <textarea class="char-notes" id="charNotes" placeholder="Backstory, session notes, NPC names, bonds, flaws..." oninput="saveNotes()"></textarea>
+      </div>
+    </div>
+    <div class="col">
+      <div class="sec">
+        <div class="sec-t">Skills by Ability — filled dot = proficient</div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:6px;">
+          <div>
+            <div class="sg"><div class="sg-h">STR −1</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Athletics</span><span class="skv">−1</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">DEX +3</div>
+              <div class="sk"><div class="dot p"></div><span class="skn">Acrobatics</span><span class="skv">+5</span></div>
+              <div class="sk hi"><div class="dot p"></div><span class="skn">Sleight of Hand</span><span class="skv">+7</span><span class="sk-bonus">Expert</span></div>
+              <div class="sk hi"><div class="dot p"></div><span class="skn">Stealth</span><span class="skv">+7</span><span class="sk-bonus">Expert</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">CHA +1</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Deception</span><span class="skv">+3</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Intimidation</span><span class="skv">+1</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Performance</span><span class="skv">+1</span></div>
+              <div class="sk"><div class="dot p"></div><span class="skn">Persuasion</span><span class="skv">+3</span></div>
+            </div>
+          </div>
+          <div>
+            <div class="sg"><div class="sg-h">INT +1</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Arcana</span><span class="skv">+1</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">History</span><span class="skv">+1</span></div>
+              <div class="sk hi"><div class="dot p"></div><span class="skn">Investigation</span><span class="skv">+3</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Nature</span><span class="skv">+1</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Religion</span><span class="skv">+1</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">WIS +0</div>
+              <div class="sk"><div class="dot"></div><span class="skn">Animal Handling</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Insight</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Medicine</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Perception</span><span class="skv">+0</span></div>
+              <div class="sk"><div class="dot"></div><span class="skn">Survival</span><span class="skv">+0</span></div>
+            </div>
+            <div class="sg" style="margin-top:5px;"><div class="sg-h">CON +2</div>
+              <div class="sk"><span class="sk-note">No CON skills</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div style="margin-top:4px;font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.9px;color:var(--gold);padding-bottom:4px;border-bottom:.5px solid var(--bd);">Roleplay &amp; Exploration Cheat Sheet</div>
+      <div class="util-card" style="margin-top:6px;">
+        <div class="util-hdr">Always available</div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Stealth +7 (passive 17)</span><span class="badge b-free">At will</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">Your go-to. Passive Stealth of 17 means you're hard to spot even without rolling. Use Naturally Stealthy to hide behind ANY creature larger than you — that includes most party members and many NPCs. Don't wait to be told you can hide; ask for it.</div>
+        </div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Sleight of Hand +7</span><span class="badge b-free">At will</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">Pickpocketing, planting items, palming objects, cutting purses. You're exceptional at this. Also covers fine manipulation tasks — disabling devices, sleight-of-hand tricks, anything requiring nimble fingers. Ask your DM when in doubt.</div>
+        </div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Thieves' Tools (Investigation +3)</span><span class="badge b-free">At will</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">Pick locks and disarm traps. Roll Investigation to examine a lock or trap first — knowing what you're dealing with helps. You have TWO sets of thieves' tools so losing one isn't fatal.</div>
+        </div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Cunning Action</span><span class="badge b-sr" style="background:#E1F5EE;color:#0F6E56;">Bonus Action</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">Every turn you can Dash, Disengage, or Hide as a Bonus Action — no action cost. Disengage to escape melee without provoking opportunity attacks. Hide to set up Sneak Attack advantage. Dash to reposition fast.</div>
+        </div>
+      </div>
+      <div class="util-card">
+        <div class="util-hdr">Alert feat — initiative edge</div>
+        <div class="utool" onclick="this.classList.toggle('open')">
+          <div class="utool-hdr"><span class="utool-name">Initiative +5 · swap with ally</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">You almost always go first. After rolling initiative, you can immediately swap your result with one willing ally who isn't Incapacitated — useful if a frontliner rolled low and needs to act before an enemy. Decide before anyone acts.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ COMBAT ═══ -->
+<div id="combat" class="panel">
+  <div style="display:flex;flex-direction:column;gap:9px;">
+
+    <div class="sec">
+      <div class="sec-t">Weapons</div>
+      <table class="wtb">
+        <tr><th>Weapon</th><th>Hit</th><th>Damage</th><th>Mastery</th><th>Notes</th></tr>
+        <tr>
+          <td><b>Shortsword</b></td>
+          <td><span class="hbadge">+5</span></td>
+          <td>1d6+3 Piercing</td>
+          <td style="color:var(--amber);font-weight:700;">Vex</td>
+          <td style="color:var(--ink2);">Finesse · Light</td>
+        </tr>
+        <tr>
+          <td><b>Dagger</b></td>
+          <td><span class="hbadge">+5</span></td>
+          <td>1d4+3 Piercing</td>
+          <td style="color:var(--amber);font-weight:700;">Nick</td>
+          <td style="color:var(--ink2);">Finesse · Light · Thrown 20/60</td>
+        </tr>
+        <tr>
+          <td><b>Shortbow</b></td>
+          <td><span class="hbadge">+5</span></td>
+          <td>1d6+3 Piercing</td>
+          <td style="color:var(--amber);font-weight:700;">Vex</td>
+          <td style="color:var(--ink2);">Range 80/320</td>
+        </tr>
+        <tr>
+          <td>Unarmed</td>
+          <td><span class="hbadge">+1</span></td>
+          <td>1 Bludgeoning</td>
+          <td>—</td>
+          <td style="color:var(--ink2);">STR based</td>
+        </tr>
+      </table>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Sneak Attack — 1d6 · once per turn</div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">When do I qualify?</span><span class="cd-tag t-act">Action</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">You qualify if EITHER condition is true:<br><br>
+        <b>① You have Advantage</b> on the attack roll (e.g. from Vex, from ally flanking, after hiding), OR<br><br>
+        <b>② An ally is within 5ft of your target</b> — that ally can't be Incapacitated, and you can't have Disadvantage on the roll.<br><br>
+        Once per turn only, but <b>does apply to Opportunity Attacks</b> if you qualify.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Nick mastery (Dagger) — free extra attack</span><span class="cd-tag t-act">Free</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">When you attack with a Light weapon and hit, Nick lets you make the extra Light weapon attack as part of the SAME Attack action — not a Bonus Action. This frees your Bonus Action for Cunning Action (Hide, Dash, Disengage).<br><br>Attack with Shortsword → if you want a second swing, use Dagger as your Light weapon and get the Nick attack free. One Nick attack per Attack action.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Vex mastery (Shortsword &amp; Shortbow)</span><span class="cd-tag" style="background:#FFF3E0;color:#E65100;">Next turn</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc">When you hit with a Vex weapon, you have <b>Advantage on your next attack roll against that creature</b> before the end of your next turn.<br><br>Track your Vex target in the box at the top of the page. That Advantage qualifies you for Sneak Attack automatically — no ally nearby needed.</div>
+      </div>
+      <div class="cd-opt" onclick="this.classList.toggle('open')">
+        <div class="cd-hdr"><span class="cd-name">Best combat opener</span><span class="cd-tag t-spec">Combo</span><span class="cd-arr">▶</span></div>
+        <div class="cd-desc"><b>Round 1:</b> BA Hide (Cunning Action) → Attack with Shortsword with Advantage (from hiding) → Sneak Attack triggers → Vex now active on that target.<br><br><b>Round 2:</b> Attack Vex target with Advantage → Sneak Attack again → consider Nick (Dagger) for a free second swing if your first attack hits.<br><br>Keep repeating: Vex keeps refreshing your Advantage each time you hit.</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Key Advantages &amp; Notes</div>
+      <div style="font-size:12px;color:var(--ink2);line-height:1.8;">
+        <div><b style="color:var(--ink);">Halfling Lucky:</b> Any time you roll a 1 on a d20 test (attack, check, save) — reroll it, must use the new result</div>
+        <div><b style="color:var(--ink);">Brave:</b> Advantage on saving throws to avoid or end Frightened</div>
+        <div><b style="color:var(--ink);">Naturally Stealthy:</b> Can Hide even when only obscured by a creature one size larger than you</div>
+        <div><b style="color:var(--ink);">No reaction ability yet:</b> Uncanny Dodge comes at level 5 — for now, just opportunity attacks</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ═══ FEATURES & TRAITS ═══ -->
+<div id="features" class="panel">
+  <div class="grid2x">
+    <div class="col">
+      <div class="sec">
+        <div class="sec-t">Halfling Traits</div>
+        <div class="ft"><div class="ftn">Brave</div><div class="ftd">Advantage on saving throws you make to avoid or end the Frightened condition.</div></div>
+        <div class="ft"><div class="ftn">Halfling Nimbleness</div><div class="ftd">You can move through the space of any creature that is a size larger than you, but you can't stop in the same space.</div></div>
+        <div class="ft"><div class="ftn">Luck</div><div class="ftd">When you roll a 1 on the d20 of a D20 Test, you can reroll the die, and you must use the new roll.</div></div>
+        <div class="ft"><div class="ftn">Naturally Stealthy</div><div class="ftd">You can take the Hide action even when you are obscured only by a creature that is at least one size larger than you.</div></div>
+      </div>
+      <div class="sec">
+        <div class="sec-t">Feats</div>
+        <div class="ft">
+          <div class="ftn">Alert</div>
+          <div class="ftd">+2 to Initiative rolls. Immediately after you roll Initiative, you can swap your Initiative with the Initiative of one willing ally in the same combat. You can't make this swap if you or the ally has the Incapacitated condition.</div>
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="sec">
+        <div class="sec-t">Rogue Features</div>
+        <div class="ft"><div class="ftn">Expertise — Sleight of Hand &amp; Stealth</div><div class="ftd">Your proficiency bonus is doubled for these two skills (+7 each).</div></div>
+        <div class="ft"><div class="ftn">Sneak Attack — 1d6</div><div class="ftd">Once per turn, deal extra 1d6 damage when you have Advantage on the attack, OR an ally is within 5ft of the target (and you don't have Disadvantage). Scales with level.</div></div>
+        <div class="ft"><div class="ftn">Thieves' Cant</div><div class="ftd">You know Thieves' Cant and one other language of your choice. A secret mix of slang, jargon, and code that rogues use.</div></div>
+        <div class="ft"><div class="ftn">Weapon Mastery — Nick &amp; Vex</div><div class="ftd">Nick (Dagger): The extra Light weapon attack can be made as part of the Attack action instead of a Bonus Action, once per turn. Vex (Shortsword, Shortbow): Hitting a creature gives Advantage on your next attack against it before end of your next turn.</div></div>
+        <div class="ft"><div class="ftn">Cunning Action</div><div class="ftd">Bonus Action: Dash, Disengage, or Hide. Frees your main action for attacks while still repositioning or hiding every turn.</div></div>
+        <div class="ft" style="border:1px dashed var(--gold-l);">
+          <div class="ftn" style="color:var(--gold);">Coming at Level 3 — Soulknife</div>
+          <div class="ftd">Psionic Energy Dice, Psychic Blades, Psi-Bolstered Knack, Psychic Whispers.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EQUIPMENT ═══ -->
+<div id="equipment" class="panel">
+  <div style="display:flex;flex-direction:column;gap:9px;">
+
+    <div class="sec">
+      <div class="sec-t">Armor &amp; AC</div>
+      <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:10px;">
+        <div class="armor-slot" id="slot-leather" onclick="toggleArmor('leather')">
+          <div style="font-size:11px;font-weight:700;">Leather Armor</div>
+          <div style="font-size:10px;color:var(--ink2);">Light Armor</div>
+          <div style="font-size:18px;font-weight:700;margin-top:3px;">AC 14</div>
+          <div data-eq style="font-size:10px;color:var(--green);margin-top:3px;">Equipped</div>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;background:var(--sec);border-radius:var(--r);padding:10px 14px;">
+        <div>
+          <div style="font-size:10px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;">Current AC</div>
+          <div style="font-size:32px;font-weight:700;" id="acDisplay">14</div>
+        </div>
+        <div style="flex:1;font-size:11px;color:var(--ink2);line-height:1.7;" id="acBreakdown">Leather Armor (14)</div>
+      </div>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Weapons</div>
+      <table class="wtb">
+        <tr><th>Item</th><th>Hit</th><th>Damage</th><th>Notes</th></tr>
+        <tr><td><b>Shortsword</b></td><td><span class="hbadge">+5</span></td><td>1d6+3 Piercing</td><td style="color:var(--ink2);">Finesse · Light · Vex</td></tr>
+        <tr><td><b>Dagger ×4</b></td><td><span class="hbadge">+5</span></td><td>1d4+3 Piercing</td><td style="color:var(--ink2);">Finesse · Light · Thrown 20/60 · Nick</td></tr>
+        <tr><td><b>Shortbow</b></td><td><span class="hbadge">+5</span></td><td>1d6+3 Piercing</td><td style="color:var(--ink2);">Range 80/320 · Vex · Arrows ×20</td></tr>
+      </table>
+    </div>
+
+    <div class="sec">
+      <div class="sec-t">Adventuring Gear</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Backpack</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Leather Armor</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Thieves' Tools ×2</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Disguise Kit</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Quiver · Arrows ×20</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Hooded Lantern</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Oil ×7</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Ball Bearings ×1000</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Rations ×5</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Rope · Bell · Tinderbox</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Waterskin · Candles ×10</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Crowbar ×2 · Pouch ×2</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Traveler's Clothes</span></div>
+        <div style="font-size:12px;padding:3px 0;border-bottom:0.5px solid rgba(0,0,0,.05);"><span style="color:var(--ink2);">Currency: 24 GP</span></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<script>
+const STORE_KEY='dnd-leslielightfoot-166135198';
+const RES_MAX={};
+const resRem={...RES_MAX};
+const ALL_RES=Object.keys(RES_MAX);
+let hp=17,maxHp=17,tmp=0;
+const armor={leather:{ac:14,equipped:true,name:'Leather Armor'}};
+
+function getState(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{};}catch(e){return {};}}
+
+function toggleCond(el){el.classList.toggle('active');saveState();}
+
+function saveState(){
+  const s=getState();
+  const conds={};
+  document.querySelectorAll('.cond').forEach((c,i)=>conds['c'+i]=c.classList.contains('active'));
+  s.conds=conds;
+  s.hp=hp;s.tmp=tmp;s.ds=dsState;
+  localStorage.setItem(STORE_KEY,JSON.stringify(s));
+}
+
+function loadState(){
+  const s=getState();
+  if(s.conds)document.querySelectorAll('.cond').forEach((c,i)=>{if(s.conds['c'+i])c.classList.add('active');});
+  if(s.hp!==undefined)hp=s.hp;
+  if(s.tmp!==undefined)tmp=s.tmp;
+}
+
+window.addEventListener('storage',e=>{if(e.key===STORE_KEY){loadState();upd();}});
+
+function toggleDark(){
+  const dark=document.body.classList.toggle('dark');
+  document.getElementById('darkBtn').textContent=dark?'☀️':'🌙';
+  const s=getState();s.dark=dark;localStorage.setItem(STORE_KEY,JSON.stringify(s));
+}
+
+function toggleArmor(id){
+  armor[id].equipped=!armor[id].equipped;
+  const slot=document.getElementById('slot-'+id);
+  const eq=armor[id].equipped;
+  slot.style.borderColor=eq?'var(--gold)':'transparent';
+  slot.querySelector('[data-eq]').textContent=eq?'Equipped':'Not equipped';
+  slot.querySelector('[data-eq]').style.color=eq?'var(--green)':'var(--ink2)';
+  updateAC();
+}
+function updateAC(){
+  const equipped=Object.values(armor).filter(a=>a.equipped);
+  const total=equipped.reduce((s,a)=>s+a.ac,0)||10;
+  const parts=equipped.length?equipped.map(a=>a.name+' ('+a.ac+')'):'Unarmored (10)';
+  document.getElementById('acDisplay').textContent=total;
+  document.getElementById('acHeader').textContent=total;
+  document.getElementById('acBreakdown').innerHTML=(Array.isArray(parts)?parts.join(' + '):parts)+' = <b style="color:var(--ink);">'+total+'</b>';
+}
+
+function upd(){
+  const c=Math.max(0,Math.min(maxHp,hp));
+  document.getElementById('hpCur').textContent=c;
+  const pct=maxHp>0?Math.round((c/maxHp)*100):0;
+  document.getElementById('hpPct').textContent=pct+'%';
+  const bar=document.getElementById('hpBar');
+  bar.style.width=pct+'%';bar.style.background=pct>50?'#1D9E75':pct>25?'#BA7517':'#D85A30';
+  const badge=document.getElementById('tmpBadge');
+  if(tmp>0){badge.classList.add('visible');document.getElementById('tmpVal').textContent=tmp;}
+  else badge.classList.remove('visible');
+  document.getElementById('deathSaves').style.display=c===0?'flex':'none';
+}
+function getAmt(){return Math.abs(parseInt(document.getElementById('hpAmt').value)||0);}
+function clearAmt(){document.getElementById('hpAmt').value='';}
+function applyDmg(){const a=getAmt();if(!a)return;let r=a;if(tmp>0){const ab=Math.min(tmp,r);tmp-=ab;r-=ab;}hp=Math.max(0,hp-r);clearAmt();upd();saveState();}
+function applyHeal(){const a=getAmt();if(!a)return;hp=Math.min(maxHp,hp+a);clearAmt();upd();saveState();}
+function setTmp(){const v=parseInt(prompt('Set Temp HP (current: '+tmp+'):','0'));if(!isNaN(v))tmp=Math.max(0,v);upd();saveState();}
+
+function resetLR(){hp=maxHp;tmp=0;clearDS();clearVex();upd();saveState();}
+function shortRest(){saveState();}
+
+function saveVex(){
+  const val=document.getElementById('vexTarget').value;
+  const s=getState();s.vex=val;localStorage.setItem(STORE_KEY,JSON.stringify(s));
+  document.getElementById('vexBox').classList.toggle('vex-active',val.length>0);
+  document.getElementById('vexLabel').textContent=val?'Vex on':'Vex on';
+}
+function clearVex(){document.getElementById('vexTarget').value='';saveVex();}
+function saveNotes(){const s=getState();s.notes=document.getElementById('charNotes').value;localStorage.setItem(STORE_KEY,JSON.stringify(s));}
+
+const dsState={s:[false,false,false],f:[false,false,false]};
+function toggleDS(type,idx){
+  dsState[type][idx]=!dsState[type][idx];
+  const el=document.getElementById('ds-'+type+idx);
+  el.classList.toggle(type==='s'?'suc':'fail',dsState[type][idx]);saveState();
+}
+function clearDS(){
+  ['s','f'].forEach(t=>[0,1,2].forEach(i=>{dsState[t][i]=false;const el=document.getElementById('ds-'+t+i);if(el)el.classList.remove('suc','fail');}));saveState();
+}
+
+let inspired=false;
+function toggleInspiration(){
+  inspired=!inspired;document.getElementById('inspPip').classList.toggle('active',inspired);
+  const s=getState();s.inspired=inspired;localStorage.setItem(STORE_KEY,JSON.stringify(s));
+}
+
+function showTab(id,btn){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');btn.classList.add('active');
+}
+
+(function init(){
+  const s=getState();
+  if(s.dark){document.body.classList.add('dark');document.getElementById('darkBtn').textContent='☀️';}
+  loadState();
+  if(s.notes)document.getElementById('charNotes').value=s.notes;
+  if(s.vex){document.getElementById('vexTarget').value=s.vex;document.getElementById('vexBox').classList.toggle('vex-active',s.vex.length>0);}
+  if(s.inspired){inspired=true;document.getElementById('inspPip').classList.add('active');}
+  if(s.ds){['s','f'].forEach(t=>[0,1,2].forEach(i=>{if(s.ds[t]&&s.ds[t][i]){dsState[t][i]=true;const el=document.getElementById('ds-'+t+i);if(el)el.classList.add(t==='s'?'suc':'fail');}}));}
+  upd();updateAC();
+})();
+</script>
+</body>
+</html>
