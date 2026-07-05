@@ -357,12 +357,12 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
           <div class="utool-desc">Your sharpest tools. Investigation uncovers hidden things and solves puzzles. Arcana covers magical phenomena, creatures, and lore. Passive Investigation of 15 means you notice a lot without rolling.</div>
         </div>
         <div class="utool" onclick="this.classList.toggle('open')">
-          <div class="utool-hdr"><span class="utool-name">Identify — learn magic item properties</span><span class="badge b-lr">1 slot</span><span class="utool-arr">▶</span></div>
-          <div class="utool-desc">1 minute cast, Touch range. Instantly learn all magical properties of an item you're touching — no attunement needed just to identify it. Also detects what spells are affecting a creature.</div>
+          <div class="utool-hdr"><span class="utool-name">Identify [R] — no slot needed</span><span class="badge b-ritual">Ritual</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">1 min cast (11 min as ritual), Touch range. Instantly learn all magical properties of an item you're touching — no attunement needed just to identify it. Cast as a ritual every time; this should never cost a slot.</div>
         </div>
         <div class="utool" onclick="this.classList.toggle('open')">
-          <div class="utool-hdr"><span class="utool-name">Detect Magic — sense auras</span><span class="badge b-lr">1 slot · Conc</span><span class="utool-arr">▶</span></div>
-          <div class="utool-desc">1 Action, 30ft sphere, Conc up to 10 min. Detect the presence of magic within 30ft — you see auras around magical creatures or objects and can sense the school of magic. Great for scouting before entering a room.</div>
+          <div class="utool-hdr"><span class="utool-name">Detect Magic [R] — no slot needed</span><span class="badge b-ritual">Ritual · Conc</span><span class="utool-arr">▶</span></div>
+          <div class="utool-desc">1 Action (11 min as ritual), 30ft sphere, Conc up to 10 min. Detect magic auras within 30ft and sense the school of magic. Great for scouting before entering a room — cast as a ritual to conserve slots.</div>
         </div>
         <div class="utool" onclick="this.classList.toggle('open')">
           <div class="utool-hdr"><span class="utool-name">Thieves' Tools / Forgery Kit</span><span class="badge b-free">At will</span><span class="utool-arr">▶</span></div>
@@ -475,7 +475,7 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
       <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--purple);">13</div><div style="font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;">Spell Save DC</div></div>
       <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--purple);">+5</div><div style="font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;">Spell Attack</div></div>
       <div style="text-align:center;"><div style="font-size:22px;font-weight:700;color:var(--purple);">INT</div><div style="font-size:9px;color:var(--ink2);text-transform:uppercase;letter-spacing:.4px;">Ability</div></div>
-      <div style="flex:1;font-size:11px;color:var(--ink2);line-height:1.6;">Prepare <b>4 spells</b> per Long Rest (INT 3 + half level 1).</div>
+      <div style="flex:1;font-size:11px;color:var(--ink2);line-height:1.6;">Prepare <b>4 spells</b> per Long Rest (INT 3 + half level 1). Spells marked <span style="color:var(--purple);font-weight:700;">[R]</span> can be cast as rituals (add 10 min, no slot used).</div>
     </div>
 
     <div class="sec">
@@ -537,9 +537,9 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
       <div class="spell-row" onclick="this.classList.toggle('open')">
         <div class="prep-dot" onclick="event.stopPropagation();togglePrep(this)"></div>
         <div style="flex:1;">
-          <div class="spell-name">Detect Magic <span class="spell-conc">Conc</span></div>
-          <div class="spell-meta">1A · Self / 30 ft Sphere · V,S · up to 10 min</div>
-          <div class="spell-detail">Sense the presence of magic within 30ft. As an action you can see magical auras around visible magical creatures or objects and learn the school of magic.</div>
+          <div class="spell-name">Detect Magic <span class="spell-conc">Conc</span> <span class="spell-ritual">[R]</span></div>
+          <div class="spell-meta">1A (or +10 min as ritual) · Self / 30 ft Sphere · V,S · up to 10 min</div>
+          <div class="spell-detail">Sense the presence of magic within 30ft. As an action you can see magical auras around visible magical creatures or objects and learn the school of magic. Cast as a ritual to conserve your spell slots.</div>
         </div>
       </div>
       <div class="spell-row" onclick="this.classList.toggle('open')">
@@ -604,9 +604,9 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
       <div class="spell-row" onclick="this.classList.toggle('open')">
         <div class="prep-dot" onclick="event.stopPropagation();togglePrep(this)"></div>
         <div style="flex:1;">
-          <div class="spell-name">Identify</div>
-          <div class="spell-meta">1 min · Touch · V,S,M · Instant</div>
-          <div class="spell-detail">Learn all magical properties of a magic item you're touching, including how to use them and whether attuning is needed. Also detects spells affecting a creature.</div>
+          <div class="spell-name">Identify <span class="spell-ritual">[R]</span></div>
+          <div class="spell-meta">1 min (or +10 min as ritual) · Touch · V,S,M · Instant</div>
+          <div class="spell-detail">Learn all magical properties of a magic item you're touching, including how to use them and whether attuning is needed. Also detects spells affecting a creature. Cast as a ritual — this should almost never cost a slot.</div>
         </div>
       </div>
       <div class="spell-row" onclick="this.classList.toggle('open')">
@@ -644,17 +644,17 @@ body.dark .conc-active{background:rgba(124,115,212,0.1);}
       <div class="spell-row" onclick="this.classList.toggle('open')">
         <div class="prep-dot" onclick="event.stopPropagation();togglePrep(this)"></div>
         <div style="flex:1;">
-          <div class="spell-name">Alarm</div>
-          <div class="spell-meta">1A · 30 ft / 20 ft Cube · V,S,M · 8 hours</div>
-          <div class="spell-detail">Set a mental or audible alarm on an area. You're alerted when a Tiny+ creature enters. Great for camping security or guarding a perimeter.</div>
+          <div class="spell-name">Alarm <span class="spell-ritual">[R]</span></div>
+          <div class="spell-meta">1A (or +10 min as ritual) · 30 ft / 20 ft Cube · V,S,M · 8 hours</div>
+          <div class="spell-detail">Set a mental or audible alarm on an area. You're alerted when a Tiny+ creature enters. Great for camping security. Cast as a ritual before resting — no slot needed.</div>
         </div>
       </div>
       <div class="spell-row" onclick="this.classList.toggle('open')">
         <div class="prep-dot" onclick="event.stopPropagation();togglePrep(this)"></div>
         <div style="flex:1;">
-          <div class="spell-name">Purify Food and Drink</div>
-          <div class="spell-meta">1A · 10 ft / 5 ft Sphere · V,S · Instant</div>
-          <div class="spell-detail">Purifies all nonmagical food and drink in a 5 ft radius. Removes poison, disease, and contamination. Situational.</div>
+          <div class="spell-name">Purify Food and Drink <span class="spell-ritual">[R]</span></div>
+          <div class="spell-meta">1A (or +10 min as ritual) · 10 ft / 5 ft Sphere · V,S · Instant</div>
+          <div class="spell-detail">Purifies all nonmagical food and drink in a 5 ft radius. Removes poison, disease, and contamination. Situational — cast as a ritual if ever needed.</div>
         </div>
       </div>
       <div class="spell-row" onclick="this.classList.toggle('open')">
