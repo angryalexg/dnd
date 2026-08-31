@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Waterdeep: Dragon Heist — Campaign Log</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink: #100d0f;
+    --card: #1c171a;
+    --card-line: #372a26;
+    --brass: #c9a227;
+    --brass-dim: #8a7020;
+    --blood: #8a2734;
+    --blood-bright: #b3394a;
+    --parchment: #ece1c6;
+    --parchment-dim: #b9ac8e;
+    --sewer: #4c6b66;
+    --sewer-bright: #7fae9f;
+    --max: 700px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background: radial-gradient(1200px 600px at 50% -10%, #241a1c 0%, var(--ink) 55%), var(--ink);
+    color: var(--parchment);
+    font-family:"Crimson Pro", Georgia, serif;
+    font-size:18px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    padding-bottom: 90px;
+  }
+  a{ color: var(--sewer-bright); }
+  .wrap{ max-width: var(--max); margin: 0 auto; padding: 0 20px; }
+
+  /* ---------- Top bar ---------- */
+  .topbar{
+    padding: 22px 20px 0;
+    text-align:center;
+  }
+  .topbar .eyebrow{
+    font-family:"Cinzel", serif;
+    letter-spacing:0.08em;
+    font-size: 12px;
+    color: var(--brass);
+    font-weight:600;
+    margin: 0 0 4px;
+  }
+  .topbar h1{
+    font-family:"Cinzel", serif;
+    font-weight:700;
+    font-size: clamp(22px, 5.5vw, 28px);
+    margin: 0 0 16px;
+    color: var(--parchment);
+  }
+
+  /* ---------- Tabs ---------- */
+  nav.tabs{
+    position: sticky; top:0; z-index:20;
+    background: rgba(16,13,15,0.95);
+    backdrop-filter: blur(3px);
+    border-bottom: 1px solid var(--card-line);
+    overflow-x:auto; white-space:nowrap;
+    -ms-overflow-style:none; scrollbar-width:none;
+  }
+  nav.tabs::-webkit-scrollbar{ display:none; }
+  nav.tabs .inner{
+    max-width: var(--max); margin:0 auto;
+    display:flex; gap:6px; padding: 10px 16px;
+  }
+  nav.tabs button.tab{
+    flex:0 0 auto;
+    font-family:"Cinzel", serif;
+    font-size: 12.5px;
+    letter-spacing:0.02em;
+    background: transparent;
+    color: var(--parchment-dim);
+    border:1px solid var(--card-line);
+    padding: 8px 14px;
+    border-radius: 3px;
+    cursor:pointer;
+  }
+  nav.tabs button.tab.active{
+    color: var(--ink);
+    background: var(--brass);
+    border-color: var(--brass);
+  }
+
+  /* ---------- Session panels ---------- */
+  .session{ display:none; padding-top: 8px; }
+  .session.active{ display:block; }
+
+  .session-head{
+    text-align:center;
+    padding: 30px 0 26px;
+    border-bottom: 1px solid var(--card-line);
+    margin-bottom: 8px;
+  }
+  .session-head .campaign{
+    font-family:"Cinzel", serif;
+    letter-spacing:0.06em;
+    font-size: 13px;
+    color: var(--brass);
+    margin: 0 0 10px;
+    font-weight:600;
+  }
+  .session-head h2.title{
+    font-family:"Cinzel", serif;
+    font-weight:700;
+    font-size: clamp(24px, 6vw, 30px);
+    line-height:1.25;
+    margin: 0 0 16px;
+    color: var(--parchment);
+  }
+  .session-head .divider{
+    width:56px; height:3px; margin: 0 auto 16px;
+    background: linear-gradient(90deg, transparent, var(--blood-bright), transparent);
+  }
+  .party{
+    display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+    font-size: 13.5px; color: var(--parchment-dim);
+    max-width: 560px; margin: 0 auto;
+  }
+  .party span{
+    border:1px solid var(--card-line); background: var(--card);
+    padding: 5px 10px; border-radius: 3px; white-space:nowrap;
+  }
+  .party .role{ color: var(--brass); }
+  .dm-line{ margin-top:14px; font-size: 13.5px; color: var(--parchment-dim); font-style: italic; }
+
+  section.block{ padding: 30px 0 4px; border-bottom: 1px solid var(--card-line); }
+  section.block:last-of-type{ border-bottom:none; }
+
+  h3.head{
+    font-family:"Cinzel", serif; font-weight:600; font-size: 19px;
+    color: var(--brass); margin: 0 0 16px;
+    display:flex; align-items:baseline; gap:10px;
+  }
+  h3.head .rule{ flex:1; height:1px; background: linear-gradient(90deg, var(--card-line), transparent); }
+
+  p{ margin: 0 0 16px; }
+  p.matters{ color: var(--sewer-bright); font-style: italic; font-size: 15.5px; }
+
+  ul.list{ margin:0 0 6px; padding-left: 0; list-style:none; }
+  ul.list li{ position:relative; padding-left: 20px; margin-bottom: 12px; }
+  ul.list li::before{
+    content:""; position:absolute; left:0; top:0.6em;
+    width:7px; height:7px; background: var(--blood-bright);
+    border-radius:1px; transform: rotate(45deg);
+  }
+
+  .npc-card{
+    border:1px solid var(--card-line); background: var(--card);
+    border-left: 3px solid var(--brass-dim); border-radius: 4px;
+    padding: 14px 16px; margin-bottom: 12px;
+  }
+  .npc-card .name{ font-family:"Cinzel", serif; font-size: 15px; margin-bottom: 4px; font-weight:600; }
+  .npc-card .desc{ font-size: 15px; color: var(--parchment-dim); margin:0; }
+
+  blockquote{
+    margin: 0 0 6px; padding: 10px 0 10px 16px;
+    border-left: 3px solid var(--blood-bright);
+    font-style: italic; font-size: 17px;
+  }
+  blockquote cite{
+    display:block; font-style: normal; font-family:"Cinzel", serif;
+    font-size: 12px; letter-spacing:0.03em; color: var(--brass); margin-top: 6px;
+  }
+
+  .snapshot-note{
+    font-size: 13.5px; color: var(--parchment-dim); font-style: italic;
+    border: 1px dashed var(--card-line); border-radius: 4px;
+    padding: 10px 14px; margin-bottom: 4px;
+  }
+
+  .tldr{ background: var(--card); border: 1px solid var(--card-line); border-radius: 6px; padding: 18px 18px 6px; }
+
+  footer.page-foot{ text-align:center; padding: 40px 0 10px; color: var(--parchment-dim); font-size: 13px; font-style: italic; }
+
+  /* ---------- Quest log FAB + drawer ---------- */
+  .quest-fab{
+    position: fixed; right: 18px; bottom: 18px; z-index: 40;
+    font-family:"Cinzel", serif; font-size: 13px; letter-spacing:0.02em;
+    background: var(--blood-bright); color: var(--parchment);
+    border: none; border-radius: 999px;
+    padding: 12px 18px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    cursor:pointer;
+    display:flex; align-items:center; gap:8px;
+  }
+  .quest-fab .count{
+    background: rgba(0,0,0,0.25); border-radius:999px;
+    font-size: 11.5px; padding: 2px 8px;
+  }
+
+  .overlay{
+    position: fixed; inset:0; background: rgba(0,0,0,0.5);
+    opacity:0; pointer-events:none; transition: opacity 200ms ease;
+    z-index: 45;
+  }
+  .overlay.open{ opacity:1; pointer-events:auto; }
+
+  .drawer{
+    position: fixed; left:0; right:0; bottom:0; z-index:50;
+    max-width: var(--max); margin: 0 auto;
+    background: var(--ink);
+    border: 1px solid var(--card-line);
+    border-bottom: none;
+    border-radius: 14px 14px 0 0;
+    max-height: 82vh;
+    transform: translateY(100%);
+    transition: transform 260ms ease;
+    display:flex; flex-direction:column;
+  }
+  .drawer.open{ transform: translateY(0); }
+  .drawer-head{
+    display:flex; align-items:center; justify-content:space-between;
+    padding: 16px 20px 10px; border-bottom: 1px solid var(--card-line);
+  }
+  .drawer-head h3{
+    font-family:"Cinzel", serif; color: var(--brass); font-size: 18px; margin:0;
+  }
+  .drawer-head button{
+    background: transparent; border:1px solid var(--card-line); color: var(--parchment-dim);
+    border-radius: 999px; width:30px; height:30px; font-size:16px; cursor:pointer;
+  }
+  .drawer-body{ padding: 8px 20px 20px; overflow-y:auto; }
+
+  .quest{ display:flex; gap:12px; padding: 12px 0; border-bottom: 1px dashed var(--card-line); }
+  .quest:last-child{ border-bottom:none; }
+  .quest .dot{ flex:0 0 auto; margin-top: 6px; width:10px; height:10px; border-radius:50%; }
+  .quest.done .dot{ background: var(--sewer-bright); }
+  .quest.open .dot{ background: var(--brass); }
+  .quest .qtext .tag{
+    display:inline-block; font-family:"Cinzel", serif; font-size: 10.5px;
+    letter-spacing:0.03em; padding: 2px 7px; border-radius: 3px; margin-bottom: 5px;
+  }
+  .quest.done .tag{ background: rgba(127,174,159,0.15); color: var(--sewer-bright); }
+  .quest.open .tag{ background: rgba(201,162,39,0.15); color: var(--brass); }
+  .quest p{ margin:0; font-size:15px; }
+
+  @media (min-width: 560px){ body{ font-size: 19px; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <p class="eyebrow">Waterdeep: Dragon Heist</p>
+  <h1>Campaign Log</h1>
+</div>
+
+<nav class="tabs">
+  <div class="inner">
+    <button class="tab" data-tab="session-01" onclick="activate('session-01')">Session 01</button>
+    <button class="tab" data-tab="session-02" onclick="activate('session-02')">Session 02</button>
+    <!-- TEMPLATE: add a new <button class="tab" data-tab="session-0N" onclick="activate('session-0N')">Session 0N</button> here for each new session -->
+  </div>
+</nav>
+
+<div class="wrap">
+
+<!-- ============================================================ -->
+<!-- SESSION 01 -->
+<!-- ============================================================ -->
+<section id="session-01" class="session">
+
+  <div class="session-head">
+    <p class="campaign">Waterdeep: Dragon Heist — Session 01</p>
+    <h2 class="title">The Yawning Portal Just Got Chompy</h2>
+    <div class="divider"></div>
+    <div class="party">
+      <span><span class="role">Murky Stormwatcher</span> · Orc Rogue (Isaac)</span>
+      <span><span class="role">JoJo Battle</span> · Goliath Barbarian (Joe)</span>
+      <span><span class="role">Victor St. Clair</span> · Human Paladin (Jerry)</span>
+      <span><span class="role">Moth Ironpots</span> · Halfling Artificer (Alex)</span>
+      <span><span class="role">Lissix Qineiros</span> · Elf Cleric (Bones)</span>
+      <span><span class="role">Tony Frissetti</span> · Guest (Keyan)</span>
+    </div>
+    <p class="dm-line">DM: Cole — the campaign begins at the Yawning Portal tavern in Waterdeep.</p>
+  </div>
+
+  <section class="block">
+    <h3 class="head">General Plot Summary<span class="rule"></span></h3>
+    <p>The night began quietly enough at the Yawning Portal, Waterdeep's famous adventurer's tavern built atop a literal bottomless pit. One by one, a mismatched crew claimed the last open table: Murky Stormwatcher, a weathered orc ex-pirate scanning the room with quiet, dangerous confidence; Josaphine "JoJo" Battle, an 8'5" Goliath barbarian who simply shoved her way to the only open seat; Victor St. Clair, a paladin only by technicality, more interested in "connections" than commandments; and Tomothy "Moth" Ironpots, a halfling artificer whose experimental armor sparked, whirred, and promptly died the moment he needed to look impressive. Rounding out the table was Lissix Qineiros, a half-elf cleric of a wellness-and-beauty goddess who talks like she's always mid-pitch for a multi-level marketing scheme.</p>
+    <p class="matters">This mattered: strangers an hour ago, they were already a "table" — and the Yawning Portal was about to test that bond immediately.</p>
+
+    <p>A bar fight erupted nearby — a Kraken gang thug with an octopus tattoo throwing punches — and into the middle of it stormed Tony Frissetti, a legendary, gregarious old adventurer nobody had seen in thirty years, breaking it up with pure swagger and inviting himself to the table. Barely had introductions finished when the real threat arrived: a twelve-foot, regenerating troll wreathed in a swarm of bat-like creatures came climbing directly up out of the Yawning Portal's pit itself, right in the middle of the crowded bar.</p>
+    <p class="matters">This mattered: the party's first fight wasn't a set encounter, it was chaos erupting from the one thing everyone thought was just tavern decor.</p>
+
+    <p>The fight was brutal and fast: JoJo went toe-to-toe with the troll, Moth got two bats latched onto his neck and nearly went down, and Victor stood on the table to land a sneak-attack crossbow bolt. Someone finally recognized the troll's regeneration and rallied the group to focus it down before it could heal — and it went down hard, Lissix finishing it in a blast that folded the creature over, while JoJo skewered the last flying bat to the tavern wall with a thrown battleaxe.</p>
+    <p class="matters">This mattered: it welded six strangers into a party in under an hour — and left something very interesting in the corpse's throat.</p>
+
+    <p>Reaching into the dead troll's mouth, the party pulled out a gem shaped like a dragon's eye — clearly magical, clearly not a usable item, and (per a very good Arcana check) very clearly a key. That's when Gundren Rockseeker, an old, wealthy, and surprisingly randy gnome legend, strolled over to buy the house a round and recognized the stone on sight: it matched an artifact Tony's missing son Vinny had delivered to him just last week — right before Vinny vanished. Gundren revealed the stakes plainly: rumors of a million-gold-dragon treasure hidden somewhere in Waterdeep have suddenly gone from myth to fact, every crime family in the city is hunting for the keys, and the party is now holding one. He hired them on the spot to find Vinny. Leads then took them to Old Klebob's potion shop in the Dock/Dark Ward — where JoJo cracked the fish tank of Klebob's all-seeing fish, Sheila, nearly starting a second brawl — and on to the Skewered Dragon tavern, where a waitress named Helga, well-persuaded (and one Nat 20), revealed that Vinny was last seen with a woman tied to the Z Boys gang, and — in a detail that only came to light as the party compared notes before Session 2 — that Sheila the fish has apparently been spying on the docks for the crime lord Don Calamari all along.</p>
+    <p class="matters">This mattered: this is the moment the campaign actually started — a missing person's case that's secretly a treasure hunt, with half the underworld already circling and one of the party's own local contacts turning out to be a spy's eyes.</p>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Key Moments &amp; Highlights<span class="rule"></span></h3>
+    <ul class="list">
+      <li>The portal itself attacked them — the troll climbed straight out of the Yawning Portal's namesake pit, mid-conversation.</li>
+      <li>The regen-check save — a history check (after a rough Nat 1 from Tony) revealed the troll heals ~10 HP a turn, prompting the party to coordinate for the first time.</li>
+      <li>JoJo's axe-throw finisher, pinning the last surviving bat-creature to the tavern wall to end the fight.</li>
+      <li>The gemstone reveal — a 22 on an Arcana check identified the stone as a magical key, setting up the campaign's central mystery.</li>
+      <li>Gundren Rockseeker's entrance, casually confirming the treasure legend is real and connecting it to Tony's missing son.</li>
+      <li>The near-fight with Old Klebob after JoJo cracked his fish tank trying to create a distraction — rolled all the way into initiative before everyone talked it down.</li>
+      <li>The tavern intel chain — persuading Helga (with gold, charm, and one Nat 20) into revealing Vinny's last known movements and the Z Boys' warehouse location.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Funny &amp; Memorable Moments<span class="rule"></span></h3>
+    <ul class="list">
+      <li>Tony Frissetti's entrance, complete with a flubbed walk-up cue and a full "How you doin'?" bit that became the table's favorite runner.</li>
+      <li>Moth's suit dying instantly on arrival, followed by his catchphrase "It's a beaut."</li>
+      <li>Lissix's deeply unsettling MLM-cult backstory, including a "wellness" product called Arcane Fizzle that's basically arsenic with marketing.</li>
+      <li>Murky spitting into the bottomless pit just to see how deep it actually goes (answer: very).</li>
+      <li>The entire Old Klebob fish tank incident — a distraction attempt that nearly became a fight over an aquarium.</li>
+      <li>The impromptu dice blackjack game at the bar, complete with someone trying to split a hand of ones ("no splitting, no gambling").</li>
+      <li>Tony shamelessly flirting information out of Helga ("you're absolutely radiant tonight") while asking about his missing son in the same breath.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Characters Met This Session<span class="rule"></span></h3>
+    <div class="npc-card"><div class="name">Gundren Rockseeker</div><p class="desc">Ancient, wealthy, wildly charismatic gnome legend; old friend of Tony's; connects the gemstone to the missing-son plot and hires the party.</p></div>
+    <div class="npc-card"><div class="name">Old Klebob</div><p class="desc">Cranky elderly gnome potion-shop owner in the Dock/Dark Ward; sells suspiciously cheap "clearance" potions.</p></div>
+    <div class="npc-card"><div class="name">Sheila</div><p class="desc">Old Klebob's all-seeing fish. Later revealed to have been spying on the docks for Don Calamari.</p></div>
+    <div class="npc-card"><div class="name">Helga</div><p class="desc">Waitress at the Skewered Dragon tavern with excellent dock-ward gossip; the party's best lead on Vinny's last known movements.</p></div>
+    <div class="npc-card"><div class="name">The Kraken Gang</div><p class="desc">Rowdy dockside crew (octopus tattoos); connected to the bar brawl and a bloody crime scene the party stumbled across.</p></div>
+    <div class="npc-card"><div class="name">The Z Boys</div><p class="desc">Rival gang believed to have taken Vinny; warehouse marked with snake/Z graffiti at the southeast docks.</p></div>
+    <div class="npc-card"><div class="name">Vinny "Vincenzo" Frissetti</div><p class="desc">Tony's missing son; last seen gambling and drinking with Gundren before leaving with a mystery woman connected to the Z Boys.</p></div>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Key Quotes<span class="rule"></span></h3>
+    <blockquote>You motherfucker... how you doin', huh?<cite>Tony, crashing the table</cite></blockquote>
+    <blockquote>It's a beaut, this... this never happens, don't worry about that.<cite>Moth, mid-malfunction</cite></blockquote>
+    <blockquote>My adventuring days are behind me... but you might be wrapped up in something that's a lot for a group of young adventurers.<cite>Gundren, handing over the quest</cite></blockquote>
+    <blockquote>You fucking twack, my son's not dead. He's just missing.<cite>Tony, refusing to accept the worst</cite></blockquote>
+    <blockquote>You didn't hear it from me.<cite>Helga, dropping the lead</cite></blockquote>
+  </section>
+
+  <section class="block">
+    <h3 class="head">What's Next? <span style="font-size:12px; font-weight:normal; color:var(--parchment-dim);">(as of Session 01)</span><span class="rule"></span></h3>
+    <ul class="list">
+      <li>Track down Vinny at the Z Boys' warehouse, southeast corner of the docks (snake/Z graffiti on the wall).</li>
+      <li>Figure out what the recovered key/gemstone actually unlocks — and whether more keys exist.</li>
+      <li>Watch their backs: word may already be reaching the local crime Don that this party is asking questions about Vinny.</li>
+      <li>Report back to Gundren Rockseeker once Vinny is found or accounted for.</li>
+      <li>Keep an eye on Kraken gang activity — the same octopus tattoo showed up at the bar fight and at a nearby crime scene.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Session Impact<span class="rule"></span></h3>
+    <p>A brand-new campaign kicked off with the party forming organically under fire rather than by design — nothing bonds strangers like co-op troll-slaying. The session also front-loaded the campaign's central hook: a literal fable-turned-fact treasure (1,000,000 gold dragons) hidden somewhere in Waterdeep, a magic key the party now possesses, and a missing-person case that's clearly more than it looks. Waterdeep's Dock/Dark Ward gang politics (Kraken Gang vs. Z Boys) were also established as a likely recurring thread.</p>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Strategic Considerations<span class="rule"></span></h3>
+    <ul class="list">
+      <li>The party is level 2 — the Yawning Portal itself is recommended for level 7+ adventurers, a reminder of how far out of their depth the "real" dungeon below the tavern is.</li>
+      <li>The Z Boys are implicated in a kidnapping and operate out of a fortified warehouse — approach with caution rather than a straight assault.</li>
+      <li>The gemstone/key is clearly valuable to multiple criminal factions; keeping it secure (and quiet) should be a priority.</li>
+      <li>Local NPC goodwill (Klebob, Helga) was built through gold and persuasion — worth maintaining as informants, though Sheila's loyalty is now in question.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Quest Log <span style="font-size:12px; font-weight:normal; color:var(--parchment-dim);">(snapshot as of Session 01)</span><span class="rule"></span></h3>
+    <p class="snapshot-note">This is the quest log as it stood at the end of this session — for the current, up-to-date log across all sessions, tap the Quest Log button.</p>
+    <ul class="list">
+      <li>OPEN: Find Vinny "Vincenzo" Frissetti — last seen with a woman connected to the Z Boys.</li>
+      <li>OPEN: Investigate the legendary treasure of 1,000,000 gold dragons hidden in Waterdeep; determine what the recovered stone key unlocks.</li>
+      <li>OPEN: Report back to Gundren Rockseeker once Vinny's situation is resolved.</li>
+      <li>OPEN (background): Kraken Gang activity — same tattoo spotted at the bar fight and at a nearby crime scene; unclear if connected to Vinny's disappearance.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h3 class="head">TL;DR<span class="rule"></span></h3>
+    <div class="tldr">
+      <ul class="list">
+        <li>New party meets at the Yawning Portal in Waterdeep; a bar fight breaks out and Tony crashes the table.</li>
+        <li>A regenerating troll + bat swarm climbs out of the tavern's bottomless pit and attacks.</li>
+        <li>Party defeats it; a magic gemstone "key" is pulled from the troll's throat.</li>
+        <li>Gundren Rockseeker reveals it ties to a legendary 1,000,000-gold-dragon treasure and his friend's missing son, Vinny.</li>
+        <li>Party is hired to find Vinny; leads take them to Old Klebob's shop and the Skewered Dragon tavern.</li>
+        <li>They learn Vinny was last seen with a woman tied to the Z Boys, whose warehouse sits at the southeast docks.</li>
+        <li>Session ends ~2 AM, party planning to rest before hitting the docks.</li>
+      </ul>
+    </div>
+  </section>
+
+</section>
+
+<!-- ============================================================ -->
+<!-- SESSION 02 -->
+<!-- ============================================================ -->
+<section id="session-02" class="session">
+
+  <div class="session-head">
+    <p class="campaign">Waterdeep: Dragon Heist — Session 02</p>
+    <h2 class="title">ABC Plumbing Co. and the Vinny-Shaped Hole in the Vortex</h2>
+    <div class="divider"></div>
+    <div class="party">
+      <span><span class="role">Murky Stormwatcher</span> · Orc Rogue (Isaac)</span>
+      <span><span class="role">JoJo Battle</span> · Goliath Barbarian (Joe)</span>
+      <span><span class="role">Victor St. Clair</span> · Human Paladin (Jerry)</span>
+      <span><span class="role">Moth Ironpots</span> · Halfling Artificer (Alex)</span>
+      <span><span class="role">Lissix Qineiros</span> · Elf Cleric (Bones)</span>
+      <span><span class="role">Tony Frissetti</span> · Guest (Keyan)</span>
+    </div>
+    <p class="dm-line">DM: Cole — picks up right where Session 1 left off, chasing Helga's tip on the Z Boys' warehouse.</p>
+  </div>
+
+  <section class="block">
+    <h3 class="head">General Plot Summary<span class="rule"></span></h3>
+    <p>The night picked up right where Helga's lead left off: somewhere in the dock ward sat a warehouse marked with the Z Boys' chalk sigil — a winged snake curled into the shape of a Z. A round of investigation checks found it fast, a run-down two-story building glowing faintly from within despite the late hour. The party split its approach: Tony, Victor, and JoJo would play it straight and knock on the front door under the flimsiest of pretexts (plumbing, AC repair, "picking up a parcel" — the cover story changed by the sentence), while Murky, Moth, and Lissix grappled up to the roof to scout a skylight from above. Murky's moment on that rooftop — a quiet, unguarded beat admiring the harbor view, a nat 20 on the Wisdom check to boot — was a small, real character moment before everything went sideways. Lissix, however, promptly undercut the stealth of it all by scampering forward, dropping a vial that shattered loudly enough to echo through the whole building.</p>
+    <p class="matters">This mattered: it planted Murky's homesickness for the sea right before the party dropped into a warehouse full of corpses — and nearly blew their cover before they even got inside.</p>
+
+    <p>Inside was a crime scene, not an ambush: six bodies, shattered crates, a fight that had clearly already happened without them. What followed was equal parts loot run and horror show — three intact Sword Coast paintings, a rigged crate that detonated like a flashbang, a squat rack hiding a Potion of Hill Giant Strength, and long tables covered in what turned out to be an arcane drug operation (moon dust and "arcane cocaine," cooked and bagged like a meth lab dressed in wizard's robes). Lissix, trying to patch Murky up mid-search with a confident "yeah, this will probably work," instead saddled him with a nasty debuff that'll dog him the rest of the campaign — a reminder that not every vial in a drug den is medicine.</p>
+    <p class="matters">This mattered: the Z Boys' warehouse wasn't just a hideout, it was infrastructure, and somebody had already torn through it before the party arrived.</p>
+
+    <p>Then came Floon Blagmaar: a terrified, strawberry-blond priest who'd been kidnapped, beaten, and mistaken for Vinny. Murky pinned him to a wall at knifepoint and got the truth — Vinny had been here, tortured for information about "a treasure," chained up, and dragged off only hours before the party's arrival. It was the first hard confirmation Vinny was alive. Making it worse, the city watch showed up mid-search; Tony's silver-tongued (and nat-20-lucky) performance as a distraught, law-abiding father bought the party a clean exit, complete with Officer Brightbraid calling out a Kraken Gang tattoo on one of the corpses — confirming rival gang violence was already tearing through the docks before the party ever got there.</p>
+    <p class="matters">This mattered: it tied the warehouse slaughter to the Kraken/Z Boys gang war and cleared the party of suspicion, buying them room to keep digging.</p>
+
+    <p>The trail led into the sewers — a featherfall escape off the warehouse roof, a rest at the Skewered Dragon, and then a manhole dive into a tunnel that ended at a glowing whirlpool vortex. A rope-and-grapple crossing under arrow fire, a bathroom infested by a corpse-eating ooze (defeated after Tony's legendary "ABC Plumbing Co." con job scared off two thugs), and the party finally found Vinny — chained between two braziers of magical fire, Grum'Shar's boot on his chest, and Jimmy Noodles (a mind flayer lieutenant of Don Calamari) in a pinstripe suit, cradling a disembodied brain nearby. Jimmy Noodles fled the instant he clocked them. A brutal, desperate fight got Vinny stabilized and moving — punctuated by Victor's unhinged, half-panicked rant while scrambling to save Tony mid-fight — but a portal tore open and disgorged a corpse and Big Ceff, a monstrous new mind flayer enforcer, right as the party reached Vinny — forcing an all-or-nothing group leap into the vortex itself. They tumbled through and were flushed out into Waterdeep's harbor at dawn, soaked, exhausted, and — for the first time — with Vinny actually in hand.</p>
+    <p class="matters">This mattered: the rescue succeeded, but Don Calamari's organization is now aware of exactly who's been digging into his business.</p>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Key Moments &amp; Highlights<span class="rule"></span></h3>
+    <ul class="list">
+      <li>Nat 20 rooftop moment for Murky — a genuine, quiet character beat admiring the harbor view before the horror below.</li>
+      <li>Investigating the warehouse crime scene — six dead bodies, a battle that already happened, a drug lab in full swing.</li>
+      <li>The priest interrogation — Murky's knife-at-the-throat intimidation (16) confirmed Vinny was alive, tortured, and recently moved.</li>
+      <li>The city watch encounter — Tony's nat 20 Persuasion talked the party out of a very bad spot; Officer Brightbraid flagged the Kraken Gang tattoos.</li>
+      <li>The vortex crossing — a rope-and-grapple traverse over a glowing whirlpool, under arrow fire, capped by a clean axe-throw kill.</li>
+      <li>The Jimmy Noodles reveal — a mind flayer lieutenant of Don Calamari, casually petting a disembodied brain, who fled the second he was spotted.</li>
+      <li>The Vinny rescue and vortex escape — a portal disgorged a corpse and Big Ceff, forcing an all-together leap into the vortex with Vinny in tow.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Funny &amp; Memorable Moments<span class="rule"></span></h3>
+    <ul class="list">
+      <li>The evolving cover story for knocking on the door — plumbing, AC repair, then "the internet" (in a world with no internet), settling on picking up a parcel.</li>
+      <li>The Ghostbusters riff about pretending to be from "Con Edison" while casing the building.</li>
+      <li>Murky signaling "all clear" via a deliberately terrible bird call.</li>
+      <li>Pocketing a whole stash of arcane cocaine and moon dust "for later."</li>
+      <li>Lissix's healing item accidentally cursing Murky with a permanent -4 instead of a buff — "the choice of words was deliberate."</li>
+      <li>Floon Blagmaar's confession for why he was wandering the docks at 3 a.m.: a nightly ritual visit to a very anatomically generous harbor mermaid statue.</li>
+      <li>Tony's full "ABC Plumbing Co." routine, invented union rate and all, used to walk straight into a room and scare off two armed thugs.</li>
+      <li>Tony's in-character shakedown of the watch, name-dropping Gundren Rockseeker's missing person report on the spot.</li>
+      <li>Victor's unhinged rant while trying to save Tony — half battlefield panic, half family drama.</li>
+      <li>Vinny's groggy first words on being healed: thanking his rescuers for nearly finishing the job the kidnappers started.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Characters Met This Session<span class="rule"></span></h3>
+    <div class="npc-card"><div class="name">Floon Blagmaar</div><p class="desc">Kidnapped, beaten priest mistaken for Vinny; confirmed Vinny was tortured for treasure information and recently moved. Freed and healed by the party.</p></div>
+    <div class="npc-card"><div class="name">Officer Brightbraid</div><p class="desc">Sharp, no-nonsense dwarven officer who nearly hauled the party in on suspicion, then let them go after spotting a Kraken Gang tattoo on one of the bodies.</p></div>
+    <div class="npc-card"><div class="name">Jimmy Noodles</div><p class="desc">Mind flayer lieutenant of Don Calamari, found guarding Vinny in a pinstriped suit, calmly stroking a disembodied brain. Fled the instant he was spotted.</p></div>
+    <div class="npc-card"><div class="name">Grum'Shar</div><p class="desc">Hulking torturer holding Vinny down between two magical fire braziers; killed by the party.</p></div>
+    <div class="npc-card"><div class="name">Big Ceff</div><p class="desc">Massive, newly-arrived mind flayer enforcer that burst through a portal alongside a corpse just as the party reached Vinny, forcing the group's vortex escape.</p></div>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Key Quotes<span class="rule"></span></h3>
+    <blockquote>They put my boy in chains.<cite>Tony, on learning Vinny had been shackled</cite></blockquote>
+    <blockquote>You fucking sent me to this hellhole.<cite>Vinny, groggily thanking the party for his healing</cite></blockquote>
+    <blockquote>That worked out so much better than I could have imagined.<cite>On the featherfall escape off the warehouse roof</cite></blockquote>
+    <blockquote>We're on a real adventure here, boys.<cite>Heading down the sewer tunnel toward the vortex</cite></blockquote>
+  </section>
+
+  <section class="block">
+    <h3 class="head">What's Next? <span style="font-size:12px; font-weight:normal; color:var(--parchment-dim);">(as of Session 02)</span><span class="rule"></span></h3>
+    <ul class="list">
+      <li>Vinny is safe but was tortured — needs somewhere secure, and the party needs to learn what he actually knows about the treasure.</li>
+      <li>Don Calamari's organization now knows the party exists — Jimmy Noodles saw their faces and fled.</li>
+      <li>Kraken Gang vs. Z Boys violence is escalating — independent of the party's involvement.</li>
+      <li>The drug operation is a loose thread — stash in hand, live production facility location known.</li>
+      <li>Report back to Gundren Rockseeker now that Vinny's recovered.</li>
+      <li>Unsold loot — three paintings and a Potion of Hill Giant Strength need a home.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Session Impact<span class="rule"></span></h3>
+    <p>The party went from chasing a lead to holding the actual objective — Vinny is rescued, resolving the campaign's opening mission but immediately opening a bigger one: the party is now visibly on Don Calamari's radar, and the warehouse fight revealed the Kraken Gang/Z Boys conflict is more violent and further along than anyone realized. Murky picked up a lingering mechanical curse from the healing mishap. The rescue came at real cost — a portal-summoned mind flayer enforcer nearly caught them, and the escape (a blind dive into a magical vortex) was a genuine leap of faith rather than a clean getaway.</p>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Strategic Considerations<span class="rule"></span></h3>
+    <ul class="list">
+      <li>Jimmy Noodles is still alive and knows what the party looks like — assume Don Calamari's people are actively aware of them.</li>
+      <li>The unresolved drug lab and Kraken/Z Boys war are both threads that could escalate without the party's input.</li>
+      <li>Murky's lingering debuff should get addressed with Remove Curse or restoration before it becomes a liability in a fight.</li>
+      <li>Vinny's condition and what he knows about "the treasure" should be a priority follow-up.</li>
+      <li>The stash of arcane drugs and salvaged paintings are both potential income and potential liability if traced back to the warehouse.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h3 class="head">Quest Log <span style="font-size:12px; font-weight:normal; color:var(--parchment-dim);">(snapshot as of Session 02)</span><span class="rule"></span></h3>
+    <p class="snapshot-note">This is the quest log as it stood at the end of this session — for the current, up-to-date log across all sessions, tap the Quest Log button.</p>
+    <ul class="list">
+      <li>RESOLVED: Find Vinny "Vincenzo" Frissetti — located, rescued, and pulled out of the vortex alive.</li>
+      <li>OPEN: Investigate the legendary 1,000,000 gold dragon treasure hidden in Waterdeep; determine what the stone key unlocks.</li>
+      <li>OPEN: Report back to Gundren Rockseeker now that Vinny has been recovered.</li>
+      <li>OPEN: Don Calamari's organization is now aware of the party — expect consequences.</li>
+      <li>OPEN (escalated): Kraken Gang vs. Z Boys conflict — confirmed active and violent.</li>
+      <li>OPEN (new): The arcane drug lab discovered in the warehouse — disposition undecided.</li>
+      <li>OPEN (new): Murky's lingering debuff condition — needs a cure.</li>
+      <li>OPEN (new): Three salvaged paintings and a Potion of Hill Giant Strength — unsold loot.</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h3 class="head">TL;DR<span class="rule"></span></h3>
+    <div class="tldr">
+      <ul class="list">
+        <li>Party finds the Z Boys warehouse via Helga's tip; splits into a front-door team and a rooftop team.</li>
+        <li>Warehouse is already a crime scene — six dead bodies, a wrecked drug lab, no live enemies at first.</li>
+        <li>Loot: three paintings, a Potion of Hill Giant Strength, a stash of arcane drugs.</li>
+        <li>Lissix accidentally curses Murky instead of healing him.</li>
+        <li>Party interrogates a kidnapped priest, Floon Blagmaar — confirms Vinny was tortured here and moved hours earlier.</li>
+        <li>City watch shows up; Tony's nat 20 Persuasion and a tattoo ID from Officer Brightbraid gets the party cleared.</li>
+        <li>Trail leads into the sewers, across a vortex chamber under arrow fire, through a bathroom-ooze fight, into a final chamber.</li>
+        <li>Vinny found tortured between fire braziers, guarded by Jimmy Noodles and Grum'Shar.</li>
+        <li>Jimmy Noodles flees; a portal disgorges a corpse and Big Ceff.</li>
+        <li>Party stabilizes Vinny, dives into the vortex together, and is flushed into Waterdeep's harbor at dawn — mission accomplished.</li>
+      </ul>
+    </div>
+  </section>
+
+</section>
+
+</div>
+
+<footer class="page-foot">Waterdeep: Dragon Heist &middot; DM Cole</footer>
+
+<!-- ============================================================ -->
+<!-- QUEST LOG (persistent, current, all sessions) -->
+<!-- ============================================================ -->
+<button class="quest-fab" onclick="openQuests()">
+  📜 Quest Log <span class="count" id="quest-count">7 open</span>
+</button>
+
+<div class="overlay" id="quest-overlay" onclick="closeQuests()"></div>
+
+<div class="drawer" id="quest-drawer">
+  <div class="drawer-head">
+    <h3>Quest Log — Current</h3>
+    <button onclick="closeQuests()" aria-label="Close">×</button>
+  </div>
+  <div class="drawer-body">
+    <!-- TEMPLATE: this is the single running quest log. Update statuses/text here each session; don't duplicate per-session. -->
+    <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved</span><p>Find Vinny "Vincenzo" Frissetti — located, rescued, and pulled out of the vortex alive.</p></div></div>
+    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open</span><p>Investigate the legendary 1,000,000 gold dragon treasure hidden in Waterdeep; determine what the stone key unlocks. Vinny may hold the missing piece.</p></div></div>
+    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open</span><p>Report back to Gundren Rockseeker now that Vinny has been recovered.</p></div></div>
+    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open</span><p>Don Calamari's organization (Jimmy Noodles and whoever he answers to) is now aware of the party — expect consequences.</p></div></div>
+    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · escalated</span><p>Kraken Gang vs. Z Boys conflict — confirmed active and violent (six dead in the warehouse, tattoo identified by Officer Brightbraid).</p></div></div>
+    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>The arcane drug lab (moon dust / arcane cocaine) discovered in the warehouse — production facility location known, disposition undecided.</p></div></div>
+    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>Murky's lingering debuff condition from the healing mishap — needs a cure.</p></div></div>
+    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>Three salvaged Sword Coast paintings (~75gp each) and a Potion of Hill Giant Strength — unsold/unused loot.</p></div></div>
+  </div>
+</div>
+
+<script>
+  var TABS = ['session-01','session-02']; // TEMPLATE: append new session ids here, in order
+
+  function activate(id, push){
+    if (push === undefined) push = true;
+    TABS.forEach(function(t){
+      document.getElementById(t).classList.toggle('active', t === id);
+      document.querySelector('.tab[data-tab="' + t + '"]').classList.toggle('active', t === id);
+    });
+    try { localStorage.setItem('wh-last-tab', id); } catch(e){}
+    if (push) history.pushState(null, '', '#' + id);
+  }
+
+  function openQuests(push){
+    if (push === undefined) push = true;
+    document.getElementById('quest-drawer').classList.add('open');
+    document.getElementById('quest-overlay').classList.add('open');
+    if (push) history.pushState(null, '', '#quests');
+  }
+
+  function closeQuests(){
+    document.getElementById('quest-drawer').classList.remove('open');
+    document.getElementById('quest-overlay').classList.remove('open');
+    var last = 'session-02';
+    try { last = localStorage.getItem('wh-last-tab') || last; } catch(e){}
+    history.pushState(null, '', '#' + last);
+  }
+
+  function routeFromHash(){
+    var h = location.hash.replace('#', '');
+    if (h === 'quests'){
+      openQuests(false);
+    } else if (TABS.indexOf(h) !== -1) {
+      activate(h, false);
+      document.getElementById('quest-drawer').classList.remove('open');
+      document.getElementById('quest-overlay').classList.remove('open');
+    } else {
+      activate(TABS[TABS.length - 1], false);
+    }
+  }
+
+  window.addEventListener('hashchange', routeFromHash);
+  window.addEventListener('DOMContentLoaded', routeFromHash);
+
+  // keep the open-quest badge count in sync automatically
+  document.addEventListener('DOMContentLoaded', function(){
+    var openCount = document.querySelectorAll('#quest-drawer .quest.open').length;
+    document.getElementById('quest-count').textContent = openCount + ' open';
+  });
+</script>
+
+</body>
+</html>
