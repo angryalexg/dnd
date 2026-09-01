@@ -249,6 +249,92 @@
   .quest.open .tag{ background: rgba(201,162,39,0.15); color: var(--brass); }
   .quest p{ margin:0; font-size:15px; }
 
+  /* ---------- NPC directory FAB + drawer ---------- */
+  .npc-fab{
+    position: fixed; left: 18px; bottom: 18px; z-index: 40;
+    font-family:"Cinzel", serif; font-size: 13px; letter-spacing:0.02em;
+    background: var(--sewer); color: var(--parchment);
+    border: none; border-radius: 999px;
+    padding: 12px 18px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    cursor:pointer;
+    display:flex; align-items:center; gap:8px;
+  }
+  .npc-fab .count{
+    background: rgba(0,0,0,0.25); border-radius:999px;
+    font-size: 11.5px; padding: 2px 8px;
+  }
+
+  .npc-search-wrap{
+    padding: 10px 20px 4px;
+    border-bottom: 1px solid var(--card-line);
+  }
+  .npc-search-wrap input{
+    width:100%; box-sizing:border-box;
+    background: var(--card); border: 1px solid var(--card-line);
+    color: var(--parchment); border-radius: 6px;
+    padding: 9px 12px; font-size: 15px; font-family:"Crimson Pro", serif;
+  }
+  .npc-search-wrap input::placeholder{ color: var(--parchment-dim); }
+  .npc-search-wrap input:focus{ outline: none; border-color: var(--brass-dim); }
+
+  .npc-filters{
+    display:flex; gap:6px; flex-wrap:wrap;
+    padding: 10px 20px; border-bottom: 1px solid var(--card-line);
+  }
+  .npc-filters button{
+    font-family:"Cinzel", serif; font-size: 11px; letter-spacing:0.02em;
+    background: transparent; color: var(--parchment-dim);
+    border: 1px solid var(--card-line); border-radius: 999px;
+    padding: 6px 11px; cursor:pointer;
+  }
+  .npc-filters button.active{ background: var(--sewer); color: var(--parchment); border-color: var(--sewer); }
+
+  .npc-hint{
+    font-size: 12.5px; color: var(--parchment-dim); font-style: italic;
+    padding: 10px 20px 0;
+  }
+
+  .npc-card{
+    border:1px solid var(--card-line); background: var(--card);
+    border-radius: 6px; padding: 14px 16px; margin: 12px 0;
+  }
+  .npc-card .npc-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:10px; }
+  .npc-card .name{ font-family:"Cinzel", serif; font-size: 16px; font-weight:600; margin: 0 0 4px; }
+  .npc-card .npc-tag{
+    flex: 0 0 auto;
+    display:inline-flex; align-items:center; gap:4px;
+    font-family:"Cinzel", serif; font-size: 10px; letter-spacing:0.03em;
+    padding: 3px 8px; border-radius: 999px; white-space:nowrap;
+  }
+  .npc-card.ally .npc-tag{ background: rgba(127,174,159,0.15); color: var(--sewer-bright); }
+  .npc-card.neutral .npc-tag{ background: rgba(201,162,39,0.15); color: var(--brass); }
+  .npc-card.hostile .npc-tag{ background: rgba(179,57,74,0.18); color: var(--blood-bright); }
+  .npc-card.unknown .npc-tag{ background: rgba(185,172,142,0.15); color: var(--parchment-dim); }
+  .npc-card .desc{ font-size: 14.5px; color: var(--parchment-dim); margin: 6px 0 10px; }
+  .npc-card .npc-bottom{ display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px; }
+
+  .stars{ display:inline-flex; gap:2px; }
+  .stars button{
+    background:none; border:none; padding:0; cursor:pointer;
+    font-size: 17px; line-height:1; color: var(--card-line);
+  }
+  .stars button.filled{ color: var(--brass); }
+  .npc-rating-label{ font-size: 11px; color: var(--parchment-dim); margin-left: 6px; }
+  .npc-reset{
+    background:none; border:none; color: var(--parchment-dim);
+    font-size: 11px; text-decoration: underline; cursor:pointer; padding:0; margin-left:6px;
+  }
+
+  .npc-goto{
+    font-family:"Cinzel", serif; font-size: 10.5px; letter-spacing:0.02em;
+    background: transparent; color: var(--parchment-dim);
+    border: 1px solid var(--card-line); border-radius: 999px;
+    padding: 5px 10px; cursor:pointer;
+  }
+
+  .npc-empty{ text-align:center; color: var(--parchment-dim); font-style:italic; padding: 30px 0; }
+
   @media (min-width: 560px){ body{ font-size: 19px; } }
 </style>
 </head>
@@ -716,7 +802,12 @@
   📜 Quest Log <span class="count" id="quest-count">7 open</span>
 </button>
 
+<button class="npc-fab" onclick="openNpcs()">
+  🎭 NPCs <span class="count" id="npc-count">0</span>
+</button>
+
 <div class="overlay" id="quest-overlay" onclick="closeQuests()"></div>
+<div class="overlay" id="npc-overlay" onclick="closeNpcs()"></div>
 
 <div class="drawer" id="quest-drawer">
   <div class="drawer-head">
@@ -737,6 +828,23 @@
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>Recruit Helga to bartend at Trollskull Manor — sent the street-urchin trio to make the pitch.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>The Salty Serpent job — steal a silk handkerchief from Laertes Hansburg and deliver it to Yura, for 400 gold. Captain Silverhand visits the manor "tomorrow."</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>Investigate Lith's unsolved murder and Trollskull Manor's Shadow Thieves / sewer-tunnel history.</p></div></div>
+  </div>
+</div>
+
+<div class="drawer" id="npc-drawer">
+  <div class="drawer-head">
+    <h3>NPC Directory</h3>
+    <button onclick="closeNpcs()" aria-label="Close">×</button>
+  </div>
+  <div class="npc-search-wrap">
+    <input type="text" id="npc-search" placeholder="Search NPCs by name or note…" oninput="renderNpcs()">
+  </div>
+  <div class="npc-filters" id="npc-filters">
+    <!-- populated by JS from NPC_TAGS -->
+  </div>
+  <p class="npc-hint">★ shows the party's running consensus. Tap the stars to set your own — saved only in this browser, not shared with the group.</p>
+  <div class="drawer-body" id="npc-list">
+    <!-- populated by JS from the NPCS array -->
   </div>
 </div>
 
@@ -772,10 +880,14 @@
     var h = location.hash.replace('#', '');
     if (h === 'quests'){
       openQuests(false);
+    } else if (h === 'npcs'){
+      openNpcs(false);
     } else if (TABS.indexOf(h) !== -1) {
       activate(h, false);
       document.getElementById('quest-drawer').classList.remove('open');
       document.getElementById('quest-overlay').classList.remove('open');
+      document.getElementById('npc-drawer').classList.remove('open');
+      document.getElementById('npc-overlay').classList.remove('open');
     } else {
       activate(TABS[TABS.length - 1], false);
     }
@@ -788,6 +900,166 @@
   document.addEventListener('DOMContentLoaded', function(){
     var openCount = document.querySelectorAll('#quest-drawer .quest.open').length;
     document.getElementById('quest-count').textContent = openCount + ' open';
+  });
+
+  /* ============================================================ */
+  /* NPC DIRECTORY                                                  */
+  /* TEMPLATE: add a new object to NPCS below for each new NPC.     */
+  /* tag must be one of: ally, neutral, hostile, unknown.           */
+  /* rating is 1-5, or null if the party hasn't formed an opinion   */
+  /* (e.g. NPCs mentioned but not yet met in person).               */
+  /* ============================================================ */
+  var NPCS = [
+    { id: 'gundren', name: 'Gundren Rockseeker', session: 'session-01', tag: 'ally', rating: 5,
+      notes: 'Ancient, wealthy, and delightfully horny old benefactor. Hired the party to find Vinny, then deeded Trollskull Manor over to them outright.' },
+    { id: 'tony', name: 'Tony Frissetti', session: 'session-01', tag: 'ally', rating: 5,
+      notes: "Vinny's father and the party's original guest member. Retired in Session 3 to go home to his family for good." },
+    { id: 'klebob', name: 'Old Klebob', session: 'session-01', tag: 'neutral', rating: 2,
+      notes: 'Cranky potion-shop owner in the Dock Ward. Relationship soured fast after the party cracked his prized fish tank.' },
+    { id: 'sheila', name: 'Sheila (the fish)', session: 'session-01', tag: 'hostile', rating: 1,
+      notes: "Old Klebob's \u201Call-seeing\u201D fish \u2014 actually a spy feeding information to Don Calamari. Trust nothing with gills." },
+    { id: 'helga', name: 'Helga', session: 'session-01', tag: 'ally', rating: 5,
+      notes: 'Waitress at the Skewered Dragon with the best gossip in the Dock Ward. Currently being recruited to bartend at Trollskull Manor.' },
+    { id: 'floon', name: 'Floon Blagmaar', session: 'session-02', tag: 'ally', rating: 3,
+      notes: 'Kidnapped priest turned reluctant tenant and employee. Means well, gets punched in the groin by nine-year-olds regularly.' },
+    { id: 'brightbraid', name: 'Officer Brightbraid', session: 'session-02', tag: 'neutral', rating: 4,
+      notes: 'Sharp dwarven watch officer. Surprisingly reasonable for a cop who caught the party at a literal crime scene.' },
+    { id: 'noodles', name: 'Jimmy Noodles', session: 'session-02', tag: 'hostile', rating: 1,
+      notes: 'Mind flayer lieutenant of Don Calamari. Fled the Session 2 fight and is still at large.' },
+    { id: 'grumshar', name: "Grum'Shar", session: 'session-02', tag: 'hostile', rating: 1,
+      notes: "Vinny's torturer, holding him between the fire braziers. Killed in the Session 2 rescue." },
+    { id: 'bigceff', name: 'Big Ceff', session: 'session-02', tag: 'hostile', rating: 1,
+      notes: 'Massive mind flayer enforcer that nearly caught the party mid-escape through the portal. Whereabouts unknown.' },
+    { id: 'calamari', name: 'Don Calamari', session: 'session-02', tag: 'hostile', rating: 1,
+      notes: 'The crime lord behind the Z Boys/Kraken conflict and Jimmy Noodles. Never met directly \u2014 but very much aware of the party now.' },
+    { id: 'urchins', name: 'Jenks, Squidly & Nat', session: 'session-03', tag: 'ally', rating: 5,
+      notes: 'Three street-urchin kids who "toll" strangers in imitation of local gangs. Now the party\u2019s first hires \u2014 unreasonably good at their jobs (mostly punching Floon).' },
+    { id: 'trench', name: 'Vincent Trench', session: 'session-03', tag: 'neutral', rating: 3,
+      notes: 'Noir private investigator next door at the Tiger\u2019s Eye. Knows more about Trollskull Manor\u2019s past than he\u2019s letting on \u2014 for a price.' },
+    { id: 'rishal', name: 'Rishal the Page Turner', session: 'session-03', tag: 'neutral', rating: 4,
+      notes: 'Gold-skinned tiefling scholar at Bookworm\u2019s Treasure. Long-winded, but turned up the bombshell that the manor\u2019s deed changed hands to the party overnight.' },
+    { id: 'thalla', name: 'Thalla', session: 'session-03', tag: 'neutral', rating: 4,
+      notes: 'Wood elf herbalist running Corellian\u2019s Crown. Friendly, all-natural, and quietly deals a little more than potions.' },
+    { id: 'lith', name: 'Lith (deceased)', session: 'session-03', tag: 'unknown', rating: null,
+      notes: 'The elf who ran Trollskull Manor as a tavern roughly 50 years ago, murdered at the bar in an unsolved case. The manor\u2019s resident mystery.' },
+    { id: 'jbnevercut', name: 'JB "Never Cut"', session: 'session-03', tag: 'ally', rating: 4,
+      notes: 'Drow pirate under Captain Silverhand of the Salty Serpent. Handed the party their first real side job.' },
+    { id: 'hansburg', name: 'Laertes Hansburg', session: 'session-03', tag: 'unknown', rating: null,
+      notes: 'An extremely wealthy, extremely fat Waterdeep noble. Currently just a name and a target \u2014 the party hasn\u2019t met him in person yet.' },
+    { id: 'yura', name: 'Yura', session: 'session-03', tag: 'unknown', rating: null,
+      notes: 'A tiefling girl living by the docks in a box. Intended recipient of the stolen handkerchief \u2014 not yet met.' }
+  ];
+
+  var NPC_TAGS = [
+    { key: 'all', label: 'All' },
+    { key: 'ally', label: '🤝 Ally' },
+    { key: 'neutral', label: '🎭 Neutral' },
+    { key: 'hostile', label: '🗡️ Hostile' },
+    { key: 'unknown', label: '❓ Unknown' }
+  ];
+
+  var npcFilter = 'all';
+  var sessionLabels = { 'session-01': 'Session 01', 'session-02': 'Session 02', 'session-03': 'Session 03' };
+
+  function initNpcFilters(){
+    var wrap = document.getElementById('npc-filters');
+    wrap.innerHTML = '';
+    NPC_TAGS.forEach(function(t){
+      var b = document.createElement('button');
+      b.textContent = t.label;
+      b.className = (t.key === npcFilter) ? 'active' : '';
+      b.onclick = function(){ npcFilter = t.key; initNpcFilters(); renderNpcs(); };
+      wrap.appendChild(b);
+    });
+  }
+
+  function getNpcRating(npc){
+    var stored = null;
+    try { stored = localStorage.getItem('npc-rating-' + npc.id); } catch(e){}
+    if (stored !== null && stored !== '') return { value: parseInt(stored, 10), personal: true };
+    return { value: npc.rating, personal: false };
+  }
+
+  function setNpcRating(id, value){
+    try { localStorage.setItem('npc-rating-' + id, String(value)); } catch(e){}
+    renderNpcs();
+  }
+
+  function resetNpcRating(id){
+    try { localStorage.removeItem('npc-rating-' + id); } catch(e){}
+    renderNpcs();
+  }
+
+  function renderNpcs(){
+    var list = document.getElementById('npc-list');
+    var q = (document.getElementById('npc-search').value || '').toLowerCase();
+    list.innerHTML = '';
+    var shown = 0;
+
+    NPCS.forEach(function(npc){
+      if (npcFilter !== 'all' && npc.tag !== npcFilter) return;
+      var haystack = (npc.name + ' ' + npc.notes).toLowerCase();
+      if (q && haystack.indexOf(q) === -1) return;
+      shown++;
+
+      var card = document.createElement('div');
+      card.className = 'npc-card ' + npc.tag;
+
+      var rating = getNpcRating(npc);
+      var starsHtml = '<span class="stars">';
+      for (var i = 1; i <= 5; i++){
+        var filled = rating.value && i <= rating.value ? ' filled' : '';
+        starsHtml += '<button class="' + filled.trim() + '" onclick="setNpcRating(\'' + npc.id + '\',' + i + ')">\u2605</button>';
+      }
+      starsHtml += '</span>';
+
+      var ratingLabel = rating.value
+        ? '<span class="npc-rating-label">' + (rating.personal ? 'your rating' : 'party rating') + '</span>'
+        : '<span class="npc-rating-label">not yet rated</span>';
+
+      var resetBtn = rating.personal
+        ? '<button class="npc-reset" onclick="resetNpcRating(\'' + npc.id + '\')">reset</button>'
+        : '';
+
+      card.innerHTML =
+        '<div class="npc-top">' +
+          '<div class="name">' + npc.name + '</div>' +
+          '<span class="npc-tag">' + (NPC_TAGS.filter(function(t){return t.key===npc.tag;})[0] || {}).label + '</span>' +
+        '</div>' +
+        '<p class="desc">' + npc.notes + '</p>' +
+        '<div class="npc-bottom">' +
+          '<div>' + starsHtml + ratingLabel + resetBtn + '</div>' +
+          '<button class="npc-goto" onclick="closeNpcs(); activate(\'' + npc.session + '\');">Met in ' + sessionLabels[npc.session] + ' \u2192</button>' +
+        '</div>';
+
+      list.appendChild(card);
+    });
+
+    if (shown === 0){
+      list.innerHTML = '<p class="npc-empty">No NPCs match that search.</p>';
+    }
+
+    document.getElementById('npc-count').textContent = NPCS.length;
+  }
+
+  function openNpcs(push){
+    if (push === undefined) push = true;
+    document.getElementById('npc-drawer').classList.add('open');
+    document.getElementById('npc-overlay').classList.add('open');
+    if (push) history.pushState(null, '', '#npcs');
+  }
+
+  function closeNpcs(){
+    document.getElementById('npc-drawer').classList.remove('open');
+    document.getElementById('npc-overlay').classList.remove('open');
+    var last = 'session-03';
+    try { last = localStorage.getItem('wh-last-tab') || last; } catch(e){}
+    history.pushState(null, '', '#' + last);
+  }
+
+  document.addEventListener('DOMContentLoaded', function(){
+    initNpcFilters();
+    renderNpcs();
   });
 </script>
 
