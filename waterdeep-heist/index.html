@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Waterdeep: Dragon Heist — Campaign Log</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231b1416'/%3E%3Cpolygon points='32,6 55,19 55,45 32,58 9,45 9,19' fill='%232a1d20' stroke='%23c9a227' stroke-width='3' stroke-linejoin='round'/%3E%3Cpolygon points='32,17 46,41 18,41' fill='none' stroke='%23c9a227' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M32 6V17M55 19L46 41M9 19L18 41M32 58L18 41M32 58L46 41M55 45L46 41M9 45L18 41' stroke='%23c9a227' stroke-width='2' fill='none'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
@@ -336,6 +337,53 @@
   .npc-empty{ text-align:center; color: var(--parchment-dim); font-style:italic; padding: 30px 0; }
 
   @media (min-width: 560px){ body{ font-size: 19px; } }
+  /* ---------- NPC recurring / sort controls ---------- */
+  .npc-extra{ display:flex; gap:6px; flex-wrap:wrap; align-items:center; padding: 8px 20px 10px; border-bottom: 1px solid var(--card-line); }
+  .npc-extra button, .npc-extra select{
+    font-family:"Cinzel", serif; font-size: 11px; letter-spacing:0.02em;
+    background: transparent; color: var(--parchment-dim);
+    border: 1px solid var(--card-line); border-radius: 999px; padding: 6px 11px; cursor:pointer;
+  }
+  .npc-extra select{ background: var(--card); margin-left:auto; }
+  .npc-extra button.active{ background: var(--brass-dim, #7a6320); color: var(--parchment); border-color: var(--brass-dim, #7a6320); }
+  .npc-seen{ display:inline-block; font-family:"Cinzel", serif; font-size:10.5px; letter-spacing:0.03em; padding:2px 7px; border-radius:3px; margin-left:6px; vertical-align:middle; }
+  .npc-seen.recurring{ background: rgba(201,162,39,0.15); color: var(--brass); }
+  .npc-seen.oneoff{ background: rgba(185,172,142,0.12); color: var(--parchment-dim); }
+
+  /* ---------- Section jump nav ---------- */
+  .block{ scroll-margin-top: 70px; }
+  .secnav{ position: fixed; left: calc(50vw - 570px); top: 130px; width: 190px; display:none; z-index: 30; max-height: calc(100vh - 170px); overflow-y:auto; }
+  .secnav h4{ font-family:"Cinzel", serif; font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color: var(--brass); margin:0 0 8px 12px; }
+  .secnav a, .sec-list a{ display:block; padding:5px 12px; border-left:2px solid var(--card-line); color: var(--parchment-dim); font-size:14.5px; text-decoration:none; cursor:pointer; line-height:1.35; }
+  .secnav a:hover, .sec-list a:hover{ color: var(--parchment); }
+  .secnav a.active, .sec-list a.active{ border-left-color: var(--brass); color: var(--parchment); }
+  @media (min-width: 1200px){ .secnav{ display:block; } .sec-fab{ display:none !important; } }
+  .sec-fab{
+    position: fixed; left: 18px; bottom: 72px; z-index: 40; width:44px; height:44px; border-radius:50%;
+    background: var(--card); color: var(--brass); border: 1px solid var(--brass-dim, #7a6320);
+    font-size: 18px; cursor:pointer; box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+  }
+  .sec-list{ padding: 8px 20px 20px; overflow-y:auto; }
+  .sec-list a{ font-size:16px; padding:10px 12px; }
+
+  /* ---------- Illustrated recap gallery ---------- */
+  .gallery .car{ position:relative; display:flex; align-items:center; gap:8px; }
+  .gallery figure{ margin:0; flex:1; text-align:center; touch-action: pan-y; }
+  .gallery figure img{ width:100%; max-height:70vh; object-fit:contain; border-radius:6px; border:1px solid var(--card-line); background:#000; cursor: zoom-in; display:block; }
+  .gallery figcaption{ font-size:14px; font-style:italic; color: var(--parchment-dim); margin-top:8px; min-height:1.4em; }
+  .car-btn{ flex:0 0 auto; width:36px; height:36px; border-radius:50%; border:1px solid var(--card-line); background: var(--card); color: var(--parchment); font-size:20px; cursor:pointer; line-height:1; }
+  .car-btn:hover{ border-color: var(--brass); color: var(--brass); }
+  .car-thumbs{ display:flex; gap:6px; overflow-x:auto; padding:10px 0 2px; }
+  .car-thumbs img{ height:54px; width:80px; object-fit:cover; border-radius:4px; border:2px solid transparent; opacity:.6; cursor:pointer; flex:0 0 auto; }
+  .car-thumbs img.active{ border-color: var(--brass); opacity:1; }
+  .car-count{ text-align:center; font-family:"Cinzel", serif; font-size:11px; letter-spacing:0.06em; color: var(--parchment-dim); margin-top:4px; }
+  .lightbox{ position:fixed; inset:0; background: rgba(0,0,0,0.92); z-index:80; display:none; align-items:center; justify-content:center; flex-direction:column; padding:16px; touch-action: pan-y; }
+  .lightbox.open{ display:flex; }
+  .lightbox img{ max-width:96vw; max-height:82vh; object-fit:contain; }
+  .lightbox .lb-cap{ color: var(--parchment-dim); font-style:italic; margin-top:10px; font-size:15px; text-align:center; }
+  .lightbox .lb-close{ position:absolute; top:12px; right:14px; }
+  .lightbox .lb-prev{ position:absolute; left:10px; top:50%; }
+  .lightbox .lb-next{ position:absolute; right:10px; top:50%; }
 </style>
 </head>
 <body>
@@ -391,7 +439,7 @@
     <p>The fight was brutal and fast: JoJo went toe-to-toe with the troll, Moth got two bats latched onto his neck and nearly went down, and Victor stood on the table to land a sneak-attack crossbow bolt. Someone finally recognized the troll's regeneration and rallied the group to focus it down before it could heal — and it went down hard, Lissix finishing it in a blast that folded the creature over, while JoJo skewered the last flying bat to the tavern wall with a thrown battleaxe.</p>
     <p class="matters">This mattered: it welded six strangers into a party in under an hour — and left something very interesting in the corpse's throat.</p>
 
-    <p>Reaching into the dead troll's mouth, the party pulled out a gem shaped like a dragon's eye — clearly magical, clearly not a usable item, and (per a very good Arcana check) very clearly a key. That's when Gundren Rockseeker, an old, wealthy, and surprisingly randy gnome legend, strolled over to buy the house a round and recognized the stone on sight: it matched an artifact Tony's missing son Vinny had delivered to him just last week — right before Vinny vanished. Gundren revealed the stakes plainly: rumors of a million-gold-dragon treasure hidden somewhere in Waterdeep have suddenly gone from myth to fact, every crime family in the city is hunting for the keys, and the party is now holding one. He hired them on the spot to find Vinny. Leads then took them to Old Klebob's potion shop in the Dock/Dark Ward — where JoJo cracked the fish tank of Klebob's all-seeing fish, Sheila, nearly starting a second brawl — and on to the Skewered Dragon tavern, where a waitress named Helga, well-persuaded (and one Nat 20), revealed that Vinny was last seen with a woman tied to the Z Boys gang, and — in a detail that only came to light as the party compared notes before Session 2 — that Sheila the fish has apparently been spying on the docks for the crime lord Don Calamari all along.</p>
+    <p>Reaching into the dead troll's mouth, the party pulled out a gem shaped like a dragon's eye — clearly magical, clearly not a usable item, and (per a very good Arcana check) very clearly a key. That's when Gundren Rockseeker, an old, wealthy, and surprisingly randy gnome legend, strolled over to buy the house a round and recognized the stone on sight: it matched an artifact Tony's missing son Vinny had delivered to him just last week — right before Vinny vanished. Gundren revealed the stakes plainly: rumors of a million-gold-dragon treasure hidden somewhere in Waterdeep have suddenly gone from myth to fact, every crime family in the city is hunting for the keys, and the party is now holding one. He hired them on the spot to find Vinny. Leads then took them to Old Klebob's potion shop in the Dock/Dark Ward — where JoJo cracked the fish tank of Klebob's all-seeing fish, Sheila, nearly starting a second brawl — and on to the Skewered Dragon tavern, where a waitress named Hilga, well-persuaded (and one Nat 20), revealed that Vinny was last seen with a woman tied to the Z Boys gang, and — in a detail that only came to light as the party compared notes before Session 2 — that Sheila the fish has apparently been spying on the docks for the crime lord Don Calamari all along.</p>
     <p class="matters">This mattered: this is the moment the campaign actually started — a missing person's case that's secretly a treasure hunt, with half the underworld already circling and one of the party's own local contacts turning out to be a spy's eyes.</p>
   </section>
 
@@ -404,7 +452,7 @@
       <li>The gemstone reveal — a 22 on an Arcana check identified the stone as a magical key, setting up the campaign's central mystery.</li>
       <li>Gundren Rockseeker's entrance, casually confirming the treasure legend is real and connecting it to Tony's missing son.</li>
       <li>The near-fight with Old Klebob after JoJo cracked his fish tank trying to create a distraction — rolled all the way into initiative before everyone talked it down.</li>
-      <li>The tavern intel chain — persuading Helga (with gold, charm, and one Nat 20) into revealing Vinny's last known movements and the Z Boys' warehouse location.</li>
+      <li>The tavern intel chain — persuading Hilga (with gold, charm, and one Nat 20) into revealing Vinny's last known movements and the Z Boys' warehouse location.</li>
     </ul>
   </section>
 
@@ -417,7 +465,7 @@
       <li>Murky spitting into the bottomless pit just to see how deep it actually goes (answer: very).</li>
       <li>The entire Old Klebob fish tank incident — a distraction attempt that nearly became a fight over an aquarium.</li>
       <li>The impromptu dice blackjack game at the bar, complete with someone trying to split a hand of ones ("no splitting, no gambling").</li>
-      <li>Tony shamelessly flirting information out of Helga ("you're absolutely radiant tonight") while asking about his missing son in the same breath.</li>
+      <li>Tony shamelessly flirting information out of Hilga ("you're absolutely radiant tonight") while asking about his missing son in the same breath.</li>
     </ul>
   </section>
 
@@ -426,7 +474,7 @@
     <div class="npc-card"><div class="name">Gundren Rockseeker</div><p class="desc">Ancient, wealthy, wildly charismatic gnome legend; old friend of Tony's; connects the gemstone to the missing-son plot and hires the party.</p></div>
     <div class="npc-card"><div class="name">Old Klebob</div><p class="desc">Cranky elderly gnome potion-shop owner in the Dock/Dark Ward; sells suspiciously cheap "clearance" potions.</p></div>
     <div class="npc-card"><div class="name">Sheila</div><p class="desc">Old Klebob's all-seeing fish. Later revealed to have been spying on the docks for Don Calamari.</p></div>
-    <div class="npc-card"><div class="name">Helga</div><p class="desc">Waitress at the Skewered Dragon tavern with excellent dock-ward gossip; the party's best lead on Vinny's last known movements.</p></div>
+    <div class="npc-card"><div class="name">Hilga</div><p class="desc">Waitress at the Skewered Dragon tavern with excellent dock-ward gossip; the party's best lead on Vinny's last known movements.</p></div>
     <div class="npc-card"><div class="name">The Kraken Gang</div><p class="desc">Rowdy dockside crew (octopus tattoos); connected to the bar brawl and a bloody crime scene the party stumbled across.</p></div>
     <div class="npc-card"><div class="name">The Z Boys</div><p class="desc">Rival gang believed to have taken Vinny; warehouse marked with snake/Z graffiti at the southeast docks.</p></div>
     <div class="npc-card"><div class="name">Vinny "Vincenzo" Frissetti</div><p class="desc">Tony's missing son; last seen gambling and drinking with Gundren before leaving with a mystery woman connected to the Z Boys.</p></div>
@@ -438,7 +486,7 @@
     <blockquote>It's a beaut, this... this never happens, don't worry about that.<cite>Moth, mid-malfunction</cite></blockquote>
     <blockquote>My adventuring days are behind me... but you might be wrapped up in something that's a lot for a group of young adventurers.<cite>Gundren, handing over the quest</cite></blockquote>
     <blockquote>You fucking twack, my son's not dead. He's just missing.<cite>Tony, refusing to accept the worst</cite></blockquote>
-    <blockquote>You didn't hear it from me.<cite>Helga, dropping the lead</cite></blockquote>
+    <blockquote>You didn't hear it from me.<cite>Hilga, dropping the lead</cite></blockquote>
   </section>
 
   <section class="block">
@@ -463,7 +511,7 @@
       <li>The party is level 2 — the Yawning Portal itself is recommended for level 7+ adventurers, a reminder of how far out of their depth the "real" dungeon below the tavern is.</li>
       <li>The Z Boys are implicated in a kidnapping and operate out of a fortified warehouse — approach with caution rather than a straight assault.</li>
       <li>The gemstone/key is clearly valuable to multiple criminal factions; keeping it secure (and quiet) should be a priority.</li>
-      <li>Local NPC goodwill (Klebob, Helga) was built through gold and persuasion — worth maintaining as informants, though Sheila's loyalty is now in question.</li>
+      <li>Local NPC goodwill (Klebob, Hilga) was built through gold and persuasion — worth maintaining as informants, though Sheila's loyalty is now in question.</li>
     </ul>
   </section>
 
@@ -512,13 +560,13 @@
       <span><span class="role">Lissix Qineiros</span> · Elf Cleric (Nicole)</span>
       <span><span class="role">Tony Frissetti</span> · Guest (Keyan)</span>
     </div>
-    <p class="dm-line">DM: Cole — picks up right where Session 1 left off, chasing Helga's tip on the Z Boys' warehouse.</p>
+    <p class="dm-line">DM: Cole — picks up right where Session 1 left off, chasing Hilga's tip on the Z Boys' warehouse.</p>
     <a class="audio-link" href="https://drive.google.com/file/d/178HU6Hr06Jz-ng3thEysJbVxttZ94HUt/view" target="_blank" rel="noopener">🎧 Listen to the session audio</a>
   </div>
 
   <section class="block">
     <h3 class="head">General Plot Summary<span class="rule"></span></h3>
-    <p>The night picked up right where Helga's lead left off: somewhere in the dock ward sat a warehouse marked with the Z Boys' chalk sigil — a winged snake curled into the shape of a Z. A round of investigation checks found it fast, a run-down two-story building glowing faintly from within despite the late hour. The party split its approach: Tony, Victor, and JoJo would play it straight and knock on the front door under the flimsiest of pretexts (plumbing, AC repair, "picking up a parcel" — the cover story changed by the sentence), while Murky, Moth, and Lissix grappled up to the roof to scout a skylight from above. Murky's moment on that rooftop — a quiet, unguarded beat admiring the harbor view, a nat 20 on the Wisdom check to boot — was a small, real character moment before everything went sideways. Lissix, however, promptly undercut the stealth of it all by scampering forward, dropping a vial that shattered loudly enough to echo through the whole building.</p>
+    <p>The night picked up right where Hilga's lead left off: somewhere in the dock ward sat a warehouse marked with the Z Boys' chalk sigil — a winged snake curled into the shape of a Z. A round of investigation checks found it fast, a run-down two-story building glowing faintly from within despite the late hour. The party split its approach: Tony, Victor, and JoJo would play it straight and knock on the front door under the flimsiest of pretexts (plumbing, AC repair, "picking up a parcel" — the cover story changed by the sentence), while Murky, Moth, and Lissix grappled up to the roof to scout a skylight from above. Murky's moment on that rooftop — a quiet, unguarded beat admiring the harbor view, a nat 20 on the Wisdom check to boot — was a small, real character moment before everything went sideways. Lissix, however, promptly undercut the stealth of it all by scampering forward, dropping a vial that shattered loudly enough to echo through the whole building.</p>
     <p class="matters">This mattered: it planted Murky's homesickness for the sea right before the party dropped into a warehouse full of corpses — and nearly blew their cover before they even got inside.</p>
 
     <p>Inside was a crime scene, not an ambush: six bodies, shattered crates, a fight that had clearly already happened without them. What followed was equal parts loot run and horror show — three intact Sword Coast paintings, a rigged crate that detonated like a flashbang, a squat rack hiding a Potion of Hill Giant Strength, and long tables covered in what turned out to be an arcane drug operation (moon dust and "arcane cocaine," cooked and bagged like a meth lab dressed in wizard's robes). Lissix, trying to patch Murky up mid-search with a confident "yeah, this will probably work," instead saddled him with a nasty debuff that'll dog him the rest of the campaign — a reminder that not every vial in a drug den is medicine.</p>
@@ -527,7 +575,7 @@
     <p>Then came Floon Blagmaar: a terrified, strawberry-blond priest who'd been kidnapped, beaten, and mistaken for Vinny. Murky pinned him to a wall at knifepoint and got the truth — Vinny had been here, tortured for information about "a treasure," chained up, and dragged off only hours before the party's arrival. It was the first hard confirmation Vinny was alive. Making it worse, the city watch showed up mid-search; Tony's silver-tongued (and nat-20-lucky) performance as a distraught, law-abiding father bought the party a clean exit, complete with Officer Brightbraid calling out a Kraken Gang tattoo on one of the corpses — confirming rival gang violence was already tearing through the docks before the party ever got there.</p>
     <p class="matters">This mattered: it tied the warehouse slaughter to the Kraken/Z Boys gang war and cleared the party of suspicion, buying them room to keep digging.</p>
 
-    <p>The trail led into the sewers — a featherfall escape off the warehouse roof, a rest at the Skewered Dragon, and then a manhole dive into a tunnel that ended at a glowing whirlpool vortex. A rope-and-grapple crossing under arrow fire, a bathroom infested by a corpse-eating ooze (defeated after Tony's legendary "ABC Plumbing Co." con job scared off two thugs), and the party finally found Vinny — chained between two braziers of magical fire, Grum'Shar's boot on his chest, and Jimmy Noodles (a mind flayer lieutenant of Don Calamari) in a pinstripe suit, cradling a disembodied brain nearby. Jimmy Noodles fled the instant he clocked them. A brutal, desperate fight got Vinny stabilized and moving — punctuated by Victor's unhinged, half-panicked rant while scrambling to save Tony mid-fight — but a portal tore open and disgorged a corpse and Big Ceff, a monstrous new mind flayer enforcer, right as the party reached Vinny — forcing an all-or-nothing group leap into the vortex itself. They tumbled through and were flushed out into Waterdeep's harbor at dawn, soaked, exhausted, and — for the first time — with Vinny actually in hand.</p>
+    <p>The trail led into the sewers — a featherfall escape off the warehouse roof, a rest at the Skewered Dragon, and then a manhole dive into a tunnel that ended at a glowing whirlpool vortex. A rope-and-grapple crossing under arrow fire, a bathroom infested by a corpse-eating ooze (defeated after Tony's legendary "ABC Plumbing Co." con job scared off two thugs), and the party finally found Vinny — chained between two braziers of magical fire, Grum'Shar's boot on his chest, and Jimmy Noodles (a mind flayer lieutenant of Don Calamari) in a pinstripe suit, cradling a disembodied brain nearby. Jimmy Noodles fled the instant he clocked them. A brutal, desperate fight got Vinny stabilized and moving — punctuated by Victor's unhinged, half-panicked rant while scrambling to save Tony mid-fight — but a portal tore open and disgorged a corpse and Big Seph, a monstrous new mind flayer enforcer, right as the party reached Vinny — forcing an all-or-nothing group leap into the vortex itself. They tumbled through and were flushed out into Waterdeep's harbor at dawn, soaked, exhausted, and — for the first time — with Vinny actually in hand.</p>
     <p class="matters">This mattered: the rescue succeeded, but Don Calamari's organization is now aware of exactly who's been digging into his business.</p>
   </section>
 
@@ -540,7 +588,7 @@
       <li>The city watch encounter — Tony's nat 20 Persuasion talked the party out of a very bad spot; Officer Brightbraid flagged the Kraken Gang tattoos.</li>
       <li>The vortex crossing — a rope-and-grapple traverse over a glowing whirlpool, under arrow fire, capped by a clean axe-throw kill.</li>
       <li>The Jimmy Noodles reveal — a mind flayer lieutenant of Don Calamari, casually petting a disembodied brain, who fled the second he was spotted.</li>
-      <li>The Vinny rescue and vortex escape — a portal disgorged a corpse and Big Ceff, forcing an all-together leap into the vortex with Vinny in tow.</li>
+      <li>The Vinny rescue and vortex escape — a portal disgorged a corpse and Big Seph, forcing an all-together leap into the vortex with Vinny in tow.</li>
     </ul>
   </section>
 
@@ -566,7 +614,7 @@
     <div class="npc-card"><div class="name">Officer Brightbraid</div><p class="desc">Sharp, no-nonsense dwarven officer who nearly hauled the party in on suspicion, then let them go after spotting a Kraken Gang tattoo on one of the bodies.</p></div>
     <div class="npc-card"><div class="name">Jimmy Noodles</div><p class="desc">Mind flayer lieutenant of Don Calamari, found guarding Vinny in a pinstriped suit, calmly stroking a disembodied brain. Fled the instant he was spotted.</p></div>
     <div class="npc-card"><div class="name">Grum'Shar</div><p class="desc">Hulking torturer holding Vinny down between two magical fire braziers; killed by the party.</p></div>
-    <div class="npc-card"><div class="name">Big Ceff</div><p class="desc">Massive, newly-arrived mind flayer enforcer that burst through a portal alongside a corpse just as the party reached Vinny, forcing the group's vortex escape.</p></div>
+    <div class="npc-card"><div class="name">Big Seph</div><p class="desc">Massive, newly-arrived mind flayer enforcer that burst through a portal alongside a corpse just as the party reached Vinny, forcing the group's vortex escape.</p></div>
   </section>
 
   <section class="block">
@@ -624,7 +672,7 @@
     <h3 class="head">TL;DR<span class="rule"></span></h3>
     <div class="tldr">
       <ul class="list">
-        <li>Party finds the Z Boys warehouse via Helga's tip; splits into a front-door team and a rooftop team.</li>
+        <li>Party finds the Z Boys warehouse via Hilga's tip; splits into a front-door team and a rooftop team.</li>
         <li>Warehouse is already a crime scene — six dead bodies, a wrecked drug lab, no live enemies at first.</li>
         <li>Loot: three paintings, a Potion of Hill Giant Strength, a stash of arcane drugs.</li>
         <li>Lissix accidentally curses Murky instead of healing him.</li>
@@ -632,7 +680,7 @@
         <li>City watch shows up; Tony's nat 20 Persuasion and a tattoo ID from Officer Brightbraid gets the party cleared.</li>
         <li>Trail leads into the sewers, across a vortex chamber under arrow fire, through a bathroom-ooze fight, into a final chamber.</li>
         <li>Vinny found tortured between fire braziers, guarded by Jimmy Noodles and Grum'Shar.</li>
-        <li>Jimmy Noodles flees; a portal disgorges a corpse and Big Ceff.</li>
+        <li>Jimmy Noodles flees; a portal disgorges a corpse and Big Seph.</li>
         <li>Party stabilizes Vinny, dives into the vortex together, and is flushed into Waterdeep's harbor at dawn — mission accomplished.</li>
       </ul>
     </div>
@@ -672,7 +720,7 @@
     <p>Dawn broke as they finally reached Trollskull Alley, paying a five-copper "toll" to three street kids guarding the stoop before walking into Trollskull Manor itself — a cobweb-choked ruin where Gundren Rockseeker sat scribbling his memoirs and Tony dozed in a rocking chair. The reunion was warm but bittersweet: Vinny confirmed his own magic item had been lost to the Zhentarim during his torture, though the party still holds the original dragon-eye stone from Session 1. Tony, having done what he came to do, gave the party a gruff, genuinely touching goodbye and headed home to his wife and daughters — closing out his arc for good.</p>
     <p class="matters">This mattered: Tony's story wrapped cleanly, and Vinny stepped into his father's old seat as a permanent party member.</p>
 
-    <p>After a short rest in the sweltering, un-air-conditioned manor, the party discovered they'd inherited more than a ruin: rediscovering Floon Blagmaar squatting on their stoop (bullied by the same three street urchins — Jenks, Squidly, and a sharp-eyed deaf girl named Nat), they recruited him on the spot, adopted the kids as a scrappy "workforce," and sent them off on their first job: convince Helga to come tend bar. A full afternoon of neighborhood diplomacy followed — the block's armorer, a potion-slinging wood elf, a theatrically noir private eye named Vincent Trench, and a long-winded bookstore scholar who let slip a bombshell while pulling local records: Trollskull Manor's deed quietly changed hands overnight, to all six of them. The night ended at a rival bar, Frewn's Brews (reigning two-time "Best Bar in the North Ward"), trying to recruit the Salty Serpent pirate crew — landing the party their first real job: steal a silk handkerchief from a very fat noble and deliver it to a tiefling girl living in a box by the docks, for 400 gold.</p>
+    <p>After a short rest in the sweltering, un-air-conditioned manor, the party discovered they'd inherited more than a ruin: rediscovering Floon Blagmaar squatting on their stoop (bullied by the same three street urchins — Jenks, Squidly, and a sharp-eyed deaf girl named Nat), they recruited him on the spot, adopted the kids as a scrappy "workforce," and sent them off on their first job: convince Hilga to come tend bar. A full afternoon of neighborhood diplomacy followed — the block's armorer, a potion-slinging wood elf, a theatrically noir private eye named Vincent Trench, and a long-winded bookstore scholar who let slip a bombshell while pulling local records: Trollskull Manor's deed quietly changed hands overnight, to all six of them. The night ended at a rival bar, Frewn's Brews (reigning two-time "Best Bar in the North Ward"), trying to recruit the Salty Serpent pirate crew — landing the party their first real job: steal a silk handkerchief from a very fat noble and deliver it to a tiefling girl living in a box by the docks, for 400 gold.</p>
     <p class="matters">This mattered: the party isn't just chasing Vinny's kidnappers anymore — they now own a home, a neighborhood, and a growing staff, and Waterdeep's underworld is already circling the new landlords.</p>
   </section>
 
@@ -731,7 +779,7 @@
     <h3 class="head">What's Next? <span style="font-size:12px; font-weight:normal; color:var(--parchment-dim);">(as of Session 03)</span><span class="rule"></span></h3>
     <ul class="list">
       <li><strong>The handkerchief heist</strong> — steal a silk handkerchief from Laertes Hansburg and deliver it to Yura before Captain Silverhand visits the manor tomorrow.</li>
-      <li><strong>Recruit Helga</strong> — the urchins were sent to convince her to bartend at Trollskull Manor.</li>
+      <li><strong>Recruit Hilga</strong> — the urchins were sent to convince her to bartend at Trollskull Manor.</li>
       <li><strong>Renovate the manor</strong> — roughly 2,000 gold needed to fix the place up; still no agreed business model beyond "bar downstairs."</li>
       <li><strong>Lith's unsolved murder</strong> — the manor's shady Shadow Thieves history and its rumored sewer connection are wide open threads.</li>
       <li><strong>Vincent Trench</strong> is available to hire for real money, and clearly knows more than he's saying.</li>
@@ -768,7 +816,7 @@
       <li>OPEN: Murky's lingering debuff condition — needs a cure.</li>
       <li>OPEN: Three salvaged paintings and a Potion of Hill Giant Strength — unsold loot.</li>
       <li>OPEN (new): Renovate and decide on a business model for Trollskull Manor (~2,000 gold).</li>
-      <li>OPEN (new): Recruit Helga to bartend at Trollskull Manor.</li>
+      <li>OPEN (new): Recruit Hilga to bartend at Trollskull Manor.</li>
       <li>OPEN (new): Complete the Salty Serpent's handkerchief heist for 400 gold.</li>
       <li>OPEN (new): Investigate Lith's unsolved murder and the manor's Shadow Thieves/sewer history.</li>
     </ul>
@@ -896,7 +944,7 @@
     <ul class="list">
       <li>Sit down with Captain Gordo Silverhand — he said there is "a lot to discuss," and the pact is signed in blood.</li>
       <li>Renovate Trollskull Manor — Cole's number is 1,000 gold, and the party's at 985, so close to enough.</li>
-      <li>Recruit Helga to bartend — the urchins were sent to ask, with no result yet.</li>
+      <li>Recruit Hilga to bartend — the urchins were sent to ask, with no result yet.</li>
       <li>Decide what to do about Floon, the arcane drugs in the manor, and Lissix's "Arcane Fizzle" empire.</li>
       <li>The urchin / Vincent Trench brokerage idea — Cole may run it as a downtime mini-quest with a roll every couple of days.</li>
       <li>Remaining treasure in the chuul's lair and around Umberlee's altar — Moth's Investigation found plenty left.</li>
@@ -939,7 +987,7 @@
       <li>OPEN: Murky's lingering debuff condition — needs a cure.</li>
       <li>OPEN: Three salvaged paintings and a Potion of Hill Giant Strength — unsold loot.</li>
       <li>OPEN (updated): Renovate Trollskull Manor and pick a business model — Cole says 1,000 gold (earlier logged as ~2,000); party holds 985.</li>
-      <li>OPEN: Recruit Helga to bartend at Trollskull Manor — urchins were sent to ask; no result yet.</li>
+      <li>OPEN: Recruit Hilga to bartend at Trollskull Manor — urchins were sent to ask; no result yet.</li>
       <li>OPEN: Investigate Lith's unsolved murder and the manor's Shadow Thieves / sewer history.</li>
       <li>OPEN (new): Meet with Captain Gordo Silverhand — "a lot to discuss"; first mate Screamshaw is itching for a fight.</li>
       <li>OPEN (new): Urchin + Vincent Trench antiquities and armor brokerage — a downtime mini-quest Cole may run.</li>
@@ -996,7 +1044,7 @@
     <p>The morning after their pirate initiation, the crew was nursing hangovers at Trollskull Manor when Gundren Rockseeker arrived with coffee and bagels. Murky announced the party was shopping for a gang and had already done “initiation missions” for the Silver Serpent. Gundren has only heard the rumors, but he warned that the captain is nasty work and that he has seen him kill men for less. He then fanned out six gilded invitations to the Starlit Revels, a black-tie mixer at the Cassalanter villa in the wealthy C Ward, tonight at seven, hosted by Victoro and Amalia Cassalanter. Floon came clattering downstairs asking to tag along, and Murky answered with a whiskey bottle between the eyes (23 to hit, 6 damage, teeth bouncing down the stairs), then carried him up and dumped him in the nearest room. A shopping montage followed. A touristy sea-elf shack on the docks was rejected, and Fernando, a very thin elf tailor in a beret, refused every discount (Vinny's bar-owner threats included) and quoted 20 gp for a custom outfit. Murky paid the 120 gp bill (“I pulled that scimitar out of that crustacean's face”) and six outfits came out: Victor in purple snakeskin with an orange tie, Vinny in rhinestoned skin-tight velvet and medieval Jordans, JoJo in a plunging gown with gold tassels, Lissix in cream and pink florals with a tiara, Moth in matte-black armor with tails, and Murky in a velvet pirate coat whose “lace” trim turned out to be much ruder up close. Victor also remembered he can cast Ceremony, so the bar now has a wedding side hustle and every tux is a business expense.</p>
     <p class="matters">This mattered: the crew got into the city's most exclusive party, spent real money doing it, and gained a possible side business.</p>
 
-    <p>The villa was pure Bridgerton: gorgeous, suspiciously young-looking nobles, plus a handful of out-of-place townies. Moth and Victor questioned one couple, Marge and Hank, farmers from outside the gates who were invited by their local magistrate, had never been to such an event, and were told “this is a city ruled by everyone.” Moth's Perception check (15) showed the commoners looked uncomfortable, and the table's mood turned to “this feels like a ritual.” Murky tried to dance with JoJo (15, undone by her electric slide) and stormed off just as Victoro and Amalia Cassalanter appeared in emerald and gold, announcing they would share their feast with those in need. Murky and Vinny then got a read on rival matriarch Yalah Gralhund (Deception 19), who sneered that the Cassalanters only think they run the city, hinting at a family waiting for its turn. While Lissix kept Detect Magic running (the whole house hums with it, floating candles and all, but no charm effects), Victor probed the kitchen, where a live-in head chef refused to gossip and a stairwell led up. Murky staged a chili-flake allergy scare (13), Vinny slipped in disguised as a waiter with Mask of Many Faces, and the chef sent him back out with a tray of oysters as “Bill's” replacement. Then Amalia walked in and a spell stripped his disguise. Vinny's PhD-in-sociology monologue got him thrown out the front door. He spent the next hour re-entering as a Latino cook, “Bradley Cooper with a British accent,” and a little girl named Ginger, and was thrown out every time (a flirt with Duessa Albrandt ended when he asked why the commoners were there). Meanwhile Murky bluffed his way through the magic piano (a 6 on disadvantage) and pocketed an ivory key, and Moth and Murky popped the lock on the upstairs door.</p>
+    <p>The villa was pure Bridgerton: gorgeous, suspiciously young-looking nobles, plus a handful of out-of-place townies. Moth and Victor questioned one couple, Madge and Hank, farmers from outside the gates who were invited by their local magistrate, had never been to such an event, and were told “this is a city ruled by everyone.” Moth's Perception check (15) showed the commoners looked uncomfortable, and the table's mood turned to “this feels like a ritual.” Murky tried to dance with JoJo (15, undone by her electric slide) and stormed off just as Victoro and Amalia Cassalanter appeared in emerald and gold, announcing they would share their feast with those in need. Murky and Vinny then got a read on rival matriarch Yalah Gralhund (Deception 19), who sneered that the Cassalanters only think they run the city, hinting at a family waiting for its turn. While Lissix kept Detect Magic running (the whole house hums with it, floating candles and all, but no charm effects), Victor probed the kitchen, where a live-in head chef refused to gossip and a stairwell led up. Murky staged a chili-flake allergy scare (13), Vinny slipped in disguised as a waiter with Mask of Many Faces, and the chef sent him back out with a tray of oysters as “Bill's” replacement. Then Amalia walked in and a spell stripped his disguise. Vinny's PhD-in-sociology monologue got him thrown out the front door. He spent the next hour re-entering as a Latino cook, “Bradley Cooper with a British accent,” and a little girl named Ginger, and was thrown out every time (a flirt with Duessa Albrandt ended when he asked why the commoners were there). Meanwhile Murky bluffed his way through the magic piano (a 6 on disadvantage) and pocketed an ivory key, and Moth and Murky popped the lock on the upstairs door.</p>
     <p class="matters">This mattered: the party now knows the house runs on magic, the commoners are bait of some kind, and several families openly resent the Cassalanters.</p>
 
     <p>Upstairs was a foyer with two doors. In the first, a child's bedroom, Lissix's Detect Magic lit up a sanded-down pentagram on the floor, and a drop of something landed on Murky's head. A boy was crawling across the ceiling and he dropped onto Murky, biting him for 7, then skittered under the bed after a four-damage dagger stab that oozed black. Holy water made him shriek and flee. Victor talked to him from across the room (“Are you feeling okay, bud?”). The boy was Terenzio Cassalanter (monogrammed TC clothes), and his Friends spell ended with him leaving through the next door. Vinny re-entered via Murky's grappling hook, in Ginger's voice, to join the tea party in the next room. There a girl named Elzurina and her porcelain dolls (each with a horrific face) were waiting, with Terenzio dropping in to sit down. The children said their parents throw these parties “to help us get better,” that they feel better each time, and that their gifts came from a family friend, “Osmodius,” a friend Moth knew from table lore. Several of the group worked out (Arcana, Religion) that this was Asmodeus, essentially the devil. Victor's Charm Person (11 against WIS 13) took the girl out of the picture for a minute while the brother tried to shake her out of it. The party decided that disturbing the kids' closets would escalate things and left. Next door, they picked the lock to a sitting room with a wine bar and an unfinished needlepoint of two red triangles on black, Asmodeus's holy symbol. Moth's nat 20 Investigation turned up test-tube vials with the liquid missing, which Moth replaced with Tinker's Magic copies, and a “Midnight Tears” vial in the master bedroom's bedside table that Victor pocketed.</p>
@@ -1012,7 +1060,7 @@
     <ul class="list">
       <li>Murky floors Floon with a thrown whiskey bottle, then carries him upstairs like a child.</li>
       <li>Six custom black-tie outfits for 120 gp (Murky pays), plus Victor's Ceremony side-hustle pitch.</li>
-      <li>Marge and Hank, rural commoners at the elite gala, set off the table's “this is a ritual” alarm.</li>
+      <li>Madge and Hank, rural commoners at the elite gala, set off the table's “this is a ritual” alarm.</li>
       <li>Victoro and Amalia's speech about sharing the feast with those in need.</li>
       <li>Yalah Gralhund (Deception 19) reveals rival families are waiting for their turn.</li>
       <li>Vinny's disguise, kitchen infiltration, and run of ejections ending in a Ginger disguise and a grappling-hook entry.</li>
@@ -1051,7 +1099,7 @@
     <div class="npc-card"><div class="name">Gundren Rockseeker (returning)</div><p class="desc">Writing a book, always up for a party. Delivered six invitations and warned the party about the Silver Serpent's captain. Not seen again at the villa.</p></div>
     <div class="npc-card"><div class="name">Fernando</div><p class="desc">A very thin elf tailor in a beret. Unimpressed by threats and unwilling to discount; 20 gp per custom outfit, 10 gp to rent.</p></div>
     <div class="npc-card"><div class="name">Victoro &amp; Amalia Cassalanter</div><p class="desc">Hosts of the Starlit Revels and the wealthiest family in Waterdeep, in emerald and gold. Amalia dispelled Vinny's disguise herself.</p></div>
-    <div class="npc-card"><div class="name">Marge and Hank</div><p class="desc">Farmers from outside the city gates, invited via their magistrate. Illiterate and delighted. Likely candidates for the flesh-blob peasants.</p></div>
+    <div class="npc-card"><div class="name">Madge and Hank</div><p class="desc">Farmers from outside the city gates, invited via their magistrate. Illiterate and delighted. Likely candidates for the flesh-blob peasants.</p></div>
     <div class="npc-card"><div class="name">Yalah Gralhund</div><p class="desc">Wealthy rival matriarch who resents the Cassalanters. Presented them roses all the same.</p></div>
     <div class="npc-card"><div class="name">Duessa Albrandt</div><p class="desc">Noble from a rival family, receptive to Vinny's charm until he got caught.</p></div>
     <div class="npc-card"><div class="name">The monocled tiefling butler</div><p class="desc">Guards the gate and the piano room's stairwell. Winced when Murky took a piano key.</p></div>
@@ -1080,7 +1128,7 @@
       <li>Get the second dragon-eye stone out of the Cassalanters' trophy-room safe. Cole hinted there was a way in, and there were magic items the party missed.</li>
       <li>Pick new disguises. The party's faces were seen by guards and the Cassalanter children, and the haberdashery or Fernando are the obvious stops.</li>
       <li>Sort the Bag of Holding haul (10 minutes of searching per pass), including the locked Asmodeus book and the stolen vials.</li>
-      <li>Find out what happened to Marge, Hank and the other peasants at the party, and whether Gundren made it out.</li>
+      <li>Find out what happened to Madge, Hank and the other peasants at the party, and whether Gundren made it out.</li>
       <li>Meet Captain Gordo Silverhand; he said there was a lot to discuss, and the party now has intel on the second key.</li>
       <li>Renovate Trollskull Manor: the party is about 136 gp short of Cole's 1,000 gp quote (see the note in the quest log).</li>
       <li>Decide what to do about Floon, the arcane drugs, and the vials.</li>
@@ -1133,7 +1181,7 @@
       <li>OPEN (new): Retrieve the second dragon-eye stone from the Cassalanter villa. Cole said there was a way in and that the party missed some magic items.</li>
       <li>OPEN (new): Investigate the Cassalanters: Asmodeus worship, devil-touched children, and a party that turns commoners into flesh-blobs.</li>
       <li>OPEN: Meet with Captain Gordo Silverhand. He said there is “a lot to discuss”; first mate Screamshaw is itching for a fight.</li>
-      <li>OPEN (new): Find out what happened to Marge and Hank and the other commoners at the Starlit Revels. Possible rescue or revenge.</li>
+      <li>OPEN (new): Find out what happened to Madge and Hank and the other commoners at the Starlit Revels. Possible rescue or revenge.</li>
       <li>OPEN (new): Check on Gundren Rockseeker: he was at the party and wasn't seen again.</li>
       <li>OPEN (new): Identify the clear vials and the “Midnight Tears” vial. Victor has one and Moth has four; Victor's Arcana said evil, Lissix said transmutation.</li>
       <li>OPEN (new): Decipher the locked book marked with Asmodeus's symbol and red ink, in Moth's Bag of Holding.</li>
@@ -1149,7 +1197,7 @@
       <li>OPEN: Kraken Gang vs. Z Boys conflict.</li>
       <li>OPEN: Murky's lingering debuff condition needs a cure.</li>
       <li>OPEN: Three salvaged paintings and a Potion of Hill Giant Strength: still unsold.</li>
-      <li>OPEN: Recruit Helga to bartend at Trollskull Manor; no result yet.</li>
+      <li>OPEN: Recruit Hilga to bartend at Trollskull Manor; no result yet.</li>
       <li>OPEN: Investigate Lith's unsolved murder and the manor's Shadow Thieves and sewer history.</li>
       <li>OPEN: Urchin and Vincent Trench antiquities and armor brokerage, a possible downtime mini-quest.</li>
       <li>OPEN: Remaining treasure in the chuul's lair and Umberlee's shrine in Deep Harbor.</li>
@@ -1162,7 +1210,7 @@
       <ul class="list">
       <li>Gundren drops six invites to the Starlit Revels at the Cassalanter villa; Murky bottles Floon.</li>
       <li>Six custom outfits from Fernando for 120 gp; Victor pitches wedding side-hustle.</li>
-      <li>At the party: Marge and Hank, the Cassalanters' speech, and Yalah Gralhund's rivalry.</li>
+      <li>At the party: Madge and Hank, the Cassalanters' speech, and Yalah Gralhund's rivalry.</li>
       <li>Vinny infiltrates the kitchen as a waiter, then gets thrown out repeatedly.</li>
       <li>Murky bluffs the magic piano and takes an ivory key.</li>
       <li>Upstairs: Terenzio and Elzurina Cassalanter, devil-touched children whose family friend is “Osmodius” (Asmodeus).</li>
@@ -1195,6 +1243,7 @@
       <span><span class="role">Vinny "Vincenzo" Frissetti</span> · (Keyan)</span>
     </div>
     <p class="dm-line">DM: Cole — Full table. A long downtime-and-fallout session: the crew reads the stolen journal, hires a private eye, runs a reverse heist on a newspaper, opens a bar, and survives the night before opening.</p>
+    <a class="audio-link" href="https://drive.google.com/file/d/1w4izglZd6mABS6EZv6qJu61c9Ze0Xv0u/view" target="_blank" rel="noopener">🎧 Listen to the session audio</a>
   </div>
 
   <section class="block">
@@ -1202,22 +1251,22 @@
     <p>The morning after the Starlit Revels, Murky and Moth were hungover at a corner table in Trollskull Manor while Floon and the street urchins rummaged through the Bag of Holding. Cole let the crew turn the entire trophy-room haul into 1,000 gp of gold, gems and jewelry (no magic items). Floon eyed the Midnight Tears vials and offered to drink one “for science” until Murky snatched it away. Then one of the kids pulled out the red journal that wouldn't open. Murky took it to the window, and with Help from the table he rolled a 20 on Religion. He whispered the name Asmodeus and the book opened. The text was Infernal, and it turned out to be a ledger of the Waterdeep elite's devil-worship: rituals, blood sacrifices, and lists of the murdered. It also says the Cassalanters sold their children's souls for wealth and power, and that the bill is just shy of 1,000,000 gold or 1,000 lives. Cole put the body count at “a couple hundred” so far. The Cassalanters already hold a stone, so they are almost certainly chasing the same million-gold treasure the party is.</p>
     <p class="matters">This mattered: the party now holds hard evidence against the city's richest family, and learned the Cassalanters are racing them for the treasure to pay off a devil.</p>
 
-    <p>Gundren arrived looking fresh, having left the party early with a “busty farmer's wife” (the table decided it was Marge). Told the story, he was blunt: the wealthy own the city, so good luck finding justice. He knew exactly one outlet that isn't bought, the Waterdeep Wazoo in the North Ward, run by editor Gigi Rutterman. He also warned them that the million-gold hoard was embezzled from the people of Waterdeep centuries ago, so the Lords' Alliance and the watch will want it once it surfaces. Cole noted the crew will level up when they open their bar. The crew chose a private investigator first, and popped next door to the Tiger's Eye. Vincent Trench answered in a dark room, in a kimono, with a pipe, and Trench quoted 50 gp a day, and Murky haggled over expenses until coffee and cigarettes were in and whiskey was out. Murky rolled a natural 20 on Persuasion, which Cole said is why the urchin training is included in that rate. Trench agreed to an NDA, sampled Lissix's Arcane Fizzle (it fizzled onto his papers and he slammed it like a shot), and read the journal with JoJo standing guard. He agreed with the plan: don't go to the police (they're bought), and leak the evidence anonymously. Trench asked whether the crew had been identified at the party, and they admitted they probably had. His options were to hit the family hard enough that it can't hit back, ignore it, or plant the evidence and implicate someone else.</p>
+    <p>Gundren arrived looking fresh, having left the party early with a “busty farmer's wife” (Cole implied it was Madge). Told the story, he was blunt: the wealthy own the city, so good luck finding justice. He knew exactly one outlet that isn't bought, the Waterdeep Wazoo in the North Ward, run by editor G.G. Rutterman. He also warned them that the million-gold hoard was embezzled from the people of Waterdeep centuries ago, so the Lords' Alliance and the watch will want it once it surfaces. Cole noted the crew will level up when they open their bar. The crew chose a private investigator first, and popped next door to the Tiger's Eye. Vincent Trench answered in a dark room, in a kimono, with a pipe, and Trench quoted 50 gp a day, and Murky haggled over expenses until coffee and cigarettes were in and whiskey was out. Murky rolled a natural 20 on Persuasion, which Cole said is why the urchin training is included in that rate. Trench agreed to an NDA, sampled Lissix's Arcane Fizzle (it fizzled onto his papers and he slammed it like a shot), and read the journal with JoJo standing guard. He agreed with the plan: don't go to the police (they're bought), and leak the evidence anonymously. Trench asked whether the crew had been identified at the party, and they admitted they probably had. His options were to hit the family hard enough that it can't hit back, ignore it, or plant the evidence and implicate someone else.</p>
     <p class="matters">This mattered: the party picked a fight with the Cassalanters on purpose, with a hired investigator and a plan to expose them through the press.</p>
 
-    <p>That plan became the session's “reverse heist.” Lissix copied the journal into an ordinary book, the crew wrote a cover letter in six different handwritings, and they signed it with a Gossip Girl-style pseudonym. Then they staked out the Wazoo in the dumbest disguises at the table: a man reading a newspaper, a fire hydrant, a bale of hay, JoJo behind a skinny tree, and a Zoolander-style window washer. One player pointed out they could have paid the PI across the street to plant it, and the table decided doing it themselves was more fun. Vinny took a face from the Mask of Many Faces as “Latavius,” a whimsical delivery driver. A Persuasion 21 got him past a clerk who offered to sign for the package as “Gigi,” and Vinny walked up to the editor's glass-walled office. Gigi Rutterman, a dwarf with a flat-top, mustache and suspenders, signed for it, flipped through the book, and declared it “groundbreaking.” Vinny ran. With Lissix's distraction in the newsroom, he got out clean. Cole closed it with “find out what happens at a later date.”</p>
+    <p>That plan became the session's “reverse heist.” Lissix copied the journal into an ordinary book, the crew wrote a cover letter in six different handwritings, and they signed it with a Gossip Girl-style pseudonym. Then they staked out the Wazoo in the dumbest disguises at the table: a man reading a newspaper, a fire hydrant, a bale of hay, JoJo behind a skinny tree, and a Zoolander-style window washer. One player pointed out they could have paid the PI across the street to plant it, and the table decided doing it themselves was more fun. Vinny took a face from the Mask of Many Faces as “Latavius,” a whimsical delivery driver. A Persuasion 21 got him past a clerk who offered to sign for the package as “G.G.,” and Vinny walked up to the editor's glass-walled office. G.G. Rutterman, a dwarf with a flat-top, mustache and suspenders, signed for it, flipped through the book, and declared it “groundbreaking.” Vinny ran. With Lissix's distraction in the newsroom, he got out clean. Cole closed it with “find out what happens at a later date.”</p>
     <p class="matters">This mattered: the evidence is now in a real editor's hands, and the consequences are Cole's to spring.</p>
 
     <p>Then came the bar montage. Cole's checklist was: vibe and name, a bartender, a chef, repairs, and a grand opening. The vibe came from a long tangent on Chipotle and Overcooked, and landed on a medieval urban-fantasy Taco Bell cantina with a wedding chapel (the basement became a VIP room, and the safe moved to the attic). Hilga from the Skewered Dragon, who took the offer on the spot, arrived at work in a sombrero with her cigarette. For the chef, Floon was sent out as a town crier (he mostly yelled about drugs) while ads ran in the Wazoo. The first applicant was a stern, tattooed fine-dining type, and the second was a quiet man named Victor, who got hired on the spot without a taste test. The bar became Victor's Cantina, a pun on the paladin and the chef. The crew had 1,874 gp. They spent 1,000 on repairs (equipment included), 100 on a secret exit, 100 on bar games, 50 on wedding décor and 250 on an MLM sales station. That left about 364 gp, and the PI's retainer took the next 200. On day two they checked in with Trench, who had built a dossier of people who have gone missing around the Cassalanters' parties year after year, with about 50 dead from the party the crew attended. He also said the urchins were “naturals” at tailing, although they complained about being mistreated at home.</p>
     <p class="matters">This mattered: the Cantina is a real business with real expenses, and the party is nearly broke right as the fight arrives.</p>
 
-    <p>On day four, while the crew were painting each other's faces, Captain Gordo Silverhand walked in with a bagged man on his shoulder and asked to borrow the basement for a few days. The crew demanded a 200 gp-a-night storage fee plus discretion. Silverhand tossed the captive to JoJo, held up his spinning hand, and invited the crew to dinner on his ship once the bar opened, so he can walk them through the “entire Waterdeep Dragon Heist” dossier he has been building. He added, looking at the camera, “this campaign's almost over.” The crew then realized he plans to sell the man to another gang in Baldur's Gate, which made them accessories to a pirate slave deal (“yikes, side business”). Vinny, wearing Latavius's face again, pulled off the bag. The prisoner was a broken-up Goliath, a mid-tier lieutenant of Don Calamari's gang who had been jumped on his way home and tortured aboard the pirate ship. Murky's choke attempt rolled a 3, but after Vinny licked the man's face and JoJo hoisted him by the hair, a 20 on the follow-up check got him talking. He knew little the crew cared about, so they padlocked him in a small bedroom with Floon to babysit. The urchins then reported Kraken enforcers, with Big Ceff the mind flayer among them, peeking into shop windows on the street. The crew set traps and pushed on.</p>
+    <p>On day four, while the crew were painting each other's faces, Captain Gordo Silverhand walked in with a bagged man on his shoulder and asked to borrow the basement for a few days. The crew demanded a 200 gp-a-night storage fee plus discretion. Silverhand tossed the captive to JoJo, held up his spinning hand, and invited the crew to dinner on his ship once the bar opened, so he can walk them through the “entire Waterdeep Dragon Heist” dossier he has been building. He added, looking at the camera, “this campaign's almost over.” The crew then realized he plans to sell the man to another gang in Baldur's Gate, which made them accessories to a pirate slave deal (“yikes, side business”). Vinny, wearing Latavius's face again, pulled off the bag. The prisoner was a broken-up Goliath, a mid-tier lieutenant of Don Calamari's gang who had been jumped on his way home and tortured aboard the pirate ship. Murky's choke attempt rolled a 3, but after Vinny licked the man's face and JoJo hoisted him by the hair, a 20 on the follow-up check got him talking. He knew little the crew cared about, so they padlocked him in a small bedroom with Floon to babysit. The urchins then reported Kraken enforcers, with Big Seph the mind flayer among them, peeking into shop windows on the street. The crew set traps and pushed on.</p>
     <p class="matters">This mattered: the party now openly holds a rival gang's lieutenant for a pirate partner who deals in people, and Don Calamari's crew is on their street.</p>
 
     <p>At 3 a.m. the night before the grand opening, the floorboards creaked, and the crew found Kraken mobsters rooting around downstairs for their man. Murky opened with a castle-doctrine speech and initiative began. Vinny attuned his pact greataxe and drew first blood. Two archers missed. A thug jumped on the bar and landed a 12-damage hit. Murky shot a raider in the throat, Victor shield-bashed another off the bar, and Lissix, furious about her stolen glassware, cast Toll the Dead. JoJo raged and rolled a natural 20 for a 19-damage swing that took a head clean off. Vinny was shoved into the fireplace twice (9 fire, then 4) and went down; his silk pajamas burned away, along with his hair. Moth healed and dragged him out. Murky crit the horned leader with a 28-damage crossbow shot and Victor finished him against the bar. The last thug ran for the front door, and Moth's Magic Missile caught him on the porch. All the raiders were dead. The damage: a wrecked bar top, a broken table, a stomped-on set of glasses, scorch marks, blood on the back wall and front window, and no insurance. They fixed most of it with Mending, Prestidigitation and baking-soda seltzer, and found Floon eating cereal among the bodies.</p>
     <p class="matters">This mattered: Calamari's people came for the prisoner and lost the whole raiding party; expect a bigger answer.</p>
 
-    <p>Opening day began with sabotage. Fruin's Brews, the rival tavern down the street, had a half-off banger of a party scheduled to bury the Cantina. While Murky attempted to break its entry bell (Athletics 9 against a DC 14, so it just clanged), Moth dropped stink bombs and triggered them with Prestidigitation, and Vinny cast Minor Illusion on a tiny dwarf rubbing filth on himself. Their bartender cleared the smell with a spell and called for a free round, so the stunt only half worked. Back at Victor's Cantina, the opening was packed: Silverhand's crew, Gundren with a group, and a Wazoo journalist named Broxley chatting with Hilga. Silverhand wanted the prisoner out in fifteen minutes, so the crew staged a distraction. JoJo climbed on the bar and broke it, Vinny took his shirt off, and Lissix's disadvantaged performance check came up a natural 1, with a wardrobe malfunction to match. The pirates slipped out with the bagged man anyway (Stealth 12), but Broxley saw them. Vinny then charmed her, and the table tried to stack more spells on top. The charm only made her friendly, but she went home to file a glowing review. Hilga, unflappable, thanked the room for coming to the “home of the world-famous nachos.” Cole admitted he'd planned for Fruin's to sabotage them, but the crew did enough damage to themselves that it wasn't needed.</p>
+    <p>Opening day began with sabotage. Frewn's Brews, the rival bar the crew already tried to sabotage in Session 3, had a half-off banger of a party scheduled to bury the Cantina. While Murky attempted to break its entry bell (Athletics 9 against a DC 14, so it just clanged), Moth dropped stink bombs and triggered them with Prestidigitation, and Vinny cast Minor Illusion on a tiny dwarf rubbing filth on himself. Their bartender cleared the smell with a spell and called for a free round, so the stunt only half worked. Back at Victor's Cantina, the opening was packed: Silverhand's crew, Gundren with a group, and a Wazoo journalist named Broxley chatting with Hilga. Silverhand wanted the prisoner out in fifteen minutes, so the crew staged a distraction. JoJo climbed on the bar and broke it, Vinny took his shirt off, and Lissix's disadvantaged performance check came up a natural 1, with a wardrobe malfunction to match. The pirates slipped out with the bagged man anyway (Stealth 12), but Broxley saw them. Vinny then charmed her, and the table tried to stack more spells on top. The charm only made her friendly, but she went home to file a glowing review. Hilga, unflappable, thanked the room for coming to the “home of the world-famous nachos.” Cole admitted he'd planned for Frewn's to sabotage them, but the crew did enough damage to themselves that it wasn't needed.</p>
     <p class="matters">This mattered: the Cantina is open, the prisoner is gone, and the crew leaves one reporter mind-scrambled and another holding an explosive journal.</p>
 
   </section>
@@ -1228,15 +1277,15 @@
       <li>Murky's Religion check (20, with Help) opens the red journal when he whispers “Asmodeus.”</li>
       <li>The journal's ledger: devil-worship across Waterdeep's upper class, lists of murder victims, and the Cassalanters' debt of just under 1,000,000 gp or 1,000 lives.</li>
       <li>The Cassalanters hold a stone, so the party is racing them for the same treasure.</li>
-      <li>Gundren points the party at Gigi Rutterman and the Waterdeep Wazoo, and warns the treasure was embezzled from the city.</li>
+      <li>Gundren points the party at G.G. Rutterman and the Waterdeep Wazoo, and warns the treasure was embezzled from the city.</li>
       <li>Vincent Trench hired at 50 gp/day (coffee, no whiskey); Murky's natural 20 gets the urchin training included.</li>
       <li>Trench asks whether the party was identified, and they admit they probably were, so framing someone else is on the table.</li>
-      <li>The reverse heist: Latavius delivers the copied journal and cover letter to editor Gigi Rutterman (Persuasion 21).</li>
+      <li>The reverse heist: Latavius delivers the copied journal and cover letter to editor G.G. Rutterman (Persuasion 21).</li>
       <li>Victor's Cantina is born: a medieval Taco Bell cantina with a wedding chapel, Hilga behind the bar, and chef Victor in the kitchen.</li>
       <li>Trench's dossier lists the missing and the dead, about 50 from the party the crew attended.</li>
       <li>Silverhand drops off a captive Calamari lieutenant and invites the party to dinner on his ship to plan the heist.</li>
       <li>The Kraken raid at 3 a.m.: JoJo's natural 20, Murky's 28-damage crit, Moth's porch Magic Missile finisher. All raiders die.</li>
-      <li>Opening-day sabotage of Fruin's Brews with stink bombs and an illusory dwarf.</li>
+      <li>Opening-day sabotage of Frewn's Brews (round two) with stink bombs and an illusory dwarf.</li>
       <li>The prisoner slips out during the grand-opening distraction; Broxley gets charmed and sent off to write a rave.</li>
     </ul>
   </section>
@@ -1249,7 +1298,7 @@
       <li>Hiring Trench by expense report: “50 plus coffee and cigarettes,” a wasted natural 20, MSAs and procurement jokes, and an NDA signed after the fact.</li>
       <li>Lissix's Arcane Fizzle pitch (first one's free), including the elixir fizzing over Trench's papers.</li>
       <li>The stakeout disguises: a fire hydrant, a bale of hay, JoJo behind a too-skinny tree, a Zoolander window washer, and Lissix asking why everyone was hiding.</li>
-      <li>Vinny as Latavius, a “whimsical but trustworthy” delivery driver, a newsroom clerk voiced by Cole as Steve Buscemi, and the table casting Gigi as J.K. Simmons demanding pictures of Spider-Man.</li>
+      <li>Vinny as Latavius, a “whimsical but trustworthy” delivery driver, a newsroom clerk voiced by Cole as Steve Buscemi, and the table casting G.G. as J.K. Simmons demanding pictures of Spider-Man.</li>
       <li>The anonymous cover letter in six handwritings, signed in Gossip Girl style. The table called it very Always Sunny.</li>
       <li>The concept pitches: Chipotle, Overcooked, a Barnes &amp; Noble Starbucks, and finally the medieval urban-fantasy Taco Bell cantina with a wedding chapel.</li>
       <li>Hilga showing up to work in a sombrero and bolo tie, cigarette in hand.</li>
@@ -1260,26 +1309,26 @@
       <li>Arguing over where to hide the captive (crow's nest, bathroom, Floon's spooning) before settling on a padlocked bedroom.</li>
       <li>Vinny's silk pajamas burning off in the fireplace, and the table's d28 jokes.</li>
       <li>Floon eating cereal among the bodies the next morning.</li>
-      <li>Opening-day guerrilla warfare at Fruin's: stink bombs, an illusory dwarf, and the staff's “mandatory 16 pieces of flair.”</li>
+      <li>Opening-day guerrilla warfare at Frewn's: stink bombs, an illusory dwarf, and the staff's “mandatory 16 pieces of flair.”</li>
       <li>Hilga unflappable through a bar collapse and a kidnapping: “Thanks for coming to Victor's Cantina, home of the world-famous nachos.”</li>
-      <li>Cole admitting he had planned a Fruin's sabotage scene, but the crew wrecked their own night well enough that it wasn't needed.</li>
+      <li>Cole admitting he had planned a Frewn's sabotage scene, but the crew wrecked their own night well enough that it wasn't needed.</li>
     </ul>
   </section>
 
   <section class="block">
     <h3 class="head">Characters Met This Session<span class="rule"></span></h3>
-    <div class="npc-card"><div class="name">Gigi Rutterman</div><p class="desc">Editor of the Waterdeep Wazoo, the city's only unbought paper. A dwarf with a flat-top, mustache and suspenders. Received the copied journal and called it groundbreaking.</p></div>
+    <div class="npc-card"><div class="name">G.G. Rutterman</div><p class="desc">Editor of the Waterdeep Wazoo, the city's only unbought paper. A dwarf with a flat-top, mustache and suspenders. Received the copied journal and called it groundbreaking.</p></div>
     <div class="npc-card"><div class="name">Broxley</div><p class="desc">Waterdeep Wazoo journalist covering the Cantina's opening. Got charmed, scrambled, and sent home to write a glowing review.</p></div>
     <div class="npc-card"><div class="name">Victor (the chef)</div><p class="desc">A quiet cook who walked into the interviews and was hired on the spot. The bar is named after him and the paladin.</p></div>
-    <div class="npc-card"><div class="name">The Goliath prisoner</div><p class="desc">A mid-tier lieutenant in Don Calamari's gang (his name was transcribed as “Steel Toes”). Tortured aboard the Silver Serpent and smuggled out of the Cantina.</p></div>
-    <div class="npc-card"><div class="name">Fruin's Brews staff</div><p class="desc">The rival tavern's bartender, who cleared out the stink and offered a free round, and staff wearing the mandatory 16 pieces of flair.</p></div>
+    <div class="npc-card"><div class="name">The Goliath prisoner</div><p class="desc">A mid-tier lieutenant in Don Calamari's gang (last name Steeltoes; first name unclear). Tortured aboard the Silver Serpent and smuggled out of the Cantina.</p></div>
+    <div class="npc-card"><div class="name">Frewn's Brews staff</div><p class="desc">The rival tavern's bartender, who cleared out the stink and offered a free round, and staff wearing the mandatory 16 pieces of flair.</p></div>
     <div class="npc-card"><div class="name">Vincent Trench (returning)</div><p class="desc">Noir private eye in a kimono. Now on a 50 gp/day retainer and training the urchins.</p></div>
     <div class="npc-card"><div class="name">Gundren Rockseeker (returning)</div><p class="desc">Left the Starlit Revels early with a farmer's wife, briefed the party on the Wazoo, and spread the word for the opening.</p></div>
-    <div class="npc-card"><div class="name">Hilga / Helga (returning)</div><p class="desc">Bartender from the Skewered Dragon, now the Cantina's head of bar.</p></div>
+    <div class="npc-card"><div class="name">Hilga (returning)</div><p class="desc">Bartender from the Skewered Dragon, now the Cantina's head of bar.</p></div>
     <div class="npc-card"><div class="name">Captain Gordo Silverhand (returning)</div><p class="desc">Left a captive in the party's care, invited them to dinner on his ship, and collected the man during the grand opening.</p></div>
     <div class="npc-card"><div class="name">Jenks, Squidly &amp; Nat (returning)</div><p class="desc">The three urchins, now trained by Trench in tailing and scouting.</p></div>
     <div class="npc-card"><div class="name">Floon Blagmaar (returning)</div><p class="desc">Town crier, prisoner-sitter, and cereal enthusiast.</p></div>
-    <div class="npc-card"><div class="name">Big Ceff (mentioned)</div><p class="desc">The mind flayer enforcer, seen by the urchins casing the street. (The transcript spells it “Big Seth.”)</p></div>
+    <div class="npc-card"><div class="name">Big Seph (mentioned)</div><p class="desc">The mind flayer enforcer, seen by the urchins casing the street.</p></div>
   </section>
 
   <section class="block">
@@ -1291,9 +1340,9 @@
     <blockquote>As long as he's alive, it means nothing to me.<cite>Captain Silverhand, on the captive</cite></blockquote>
     <blockquote>This campaign's almost over.<cite>Captain Silverhand, to the camera</cite></blockquote>
     <blockquote>Whoever you're looking for is not here.<cite>Vinny, to the Kraken raiders</cite></blockquote>
-    <blockquote>I have the mandatory 16!<cite>Fruin's Brews staffer, on pieces of flair</cite></blockquote>
+    <blockquote>I have the mandatory 16!<cite>Frewn's Brews staffer, on pieces of flair</cite></blockquote>
     <blockquote>Thanks for coming to Victor's Cantina, home of the world-famous nachos.<cite>Hilga, after a bar collapse and a kidnapping</cite></blockquote>
-    <blockquote>We sabotaged them good enough that they didn't want to sabotage us.<cite>The table, on Fruin's Brews</cite></blockquote>
+    <blockquote>We sabotaged them good enough that they didn't want to sabotage us.<cite>The table, on Frewn's Brews</cite></blockquote>
   </section>
 
   <section class="block">
@@ -1301,12 +1350,12 @@
     <ul class="list">
       <li>Level up: Cole said the party levels when the bar opens, and it just did.</li>
       <li>Dinner on Silverhand's ship, where he has promised the full Dragon Heist dossier.</li>
-      <li>Watch the Wazoo: Gigi's reaction to the Osmodius journal and Broxley's review of the Cantina.</li>
+      <li>Watch the Wazoo: G.G.'s reaction to the Osmodius journal and Broxley's review of the Cantina.</li>
       <li>Check in with Vincent Trench: daily reports, his missing-persons dossier, and the urchins' training.</li>
       <li>Show the dossier names to Gundren, as the party said it would.</li>
       <li>Plan the return trip for the second dragon-eye stone, with new disguises.</li>
       <li>Cover the bills: about 4 gp left after the build-out, the MLM station's income is unknown, and Trench costs 50 gp a day.</li>
-      <li>Expect fallout from Don Calamari and the Kraken Gang, and from Fruin's Brews.</li>
+      <li>Expect fallout from Don Calamari and the Kraken Gang, and from Frewn's Brews.</li>
       <li>Decide on the remaining upgrades (gym, clinic, rooftop garden).</li>
       <li>Handle the aftermath of the raid: the bodies were not mentioned on screen after the cleanup.</li>
     </ul>
@@ -1314,7 +1363,7 @@
 
   <section class="block">
     <h3 class="head">Session Impact<span class="rule"></span></h3>
-    <p>This session moved the party from reacting to the Cassalanters to attacking them. The crew now holds evidence of the family's pact with Asmodeus, knows the debt is nearly 1,000,000 gold or 1,000 lives, and understands that the hunt for the three stones is the Cassalanters' way out as well as theirs. They hired a private investigator and put a copy of the evidence into the one newspaper in Waterdeep that isn't bought. Trollskull Manor became Victor's Cantina, a working business with staff, a wedding chapel and a secret exit. The party also made enemies and obligations: it killed a Kraken Gang raiding party, helped a pirate partner move a captive to a slave sale, and started a feud with Fruin's Brews. Meanwhile the crew is broke, still unleveled, and one reporter's story away from either a hero's welcome or a Cassalanter response.</p>
+    <p>This session moved the party from reacting to the Cassalanters to attacking them. The crew now holds evidence of the family's pact with Asmodeus, knows the debt is nearly 1,000,000 gold or 1,000 lives, and understands that the hunt for the three stones is the Cassalanters' way out as well as theirs. They hired a private investigator and put a copy of the evidence into the one newspaper in Waterdeep that isn't bought. Trollskull Manor became Victor's Cantina, a working business with staff, a wedding chapel and a secret exit. The party also made enemies and obligations: it killed a Kraken Gang raiding party, helped a pirate partner move a captive to a slave sale, and started a feud with Frewn's Brews. Meanwhile the crew is broke, still unleveled, and one reporter's story away from either a hero's welcome or a Cassalanter response.</p>
   </section>
 
   <section class="block">
@@ -1322,11 +1371,11 @@
     <ul class="list">
       <li>The Cassalanters have a deadline of their own. If the debt is close to 1,000,000 gp or 1,000 lives, they will try for the hoard themselves, and every victim at their parties moves them closer.</li>
       <li>The party was likely seen at the Starlit Revels, and Trench warned the evidence could trace back to them. Keep the cover story tight, or let someone else take the blame.</li>
-      <li>The reverse heist worked, but the party gave up control: whatever Gigi publishes will be on Cole's schedule, and the Cassalanters may act before it prints.</li>
+      <li>The reverse heist worked, but the party gave up control: whatever G.G. publishes will be on Cole's schedule, and the Cassalanters may act before it prints.</li>
       <li>Silverhand is a partner and also a slaver. Dinner on his ship is leverage, but each favor the party does for him ties it closer to that business.</li>
       <li>The Kraken Gang has now lost a raiding party in the party's building, and the urchins' early warning is the party's best defense. Keep the secret exit and the traps maintained.</li>
       <li>Money is tight: about 4 gp left, a 50 gp/day PI, and an MLM station of unknown yield. Weddings, wedding photos and bar games should start paying for themselves.</li>
-      <li>Fruin's Brews will retaliate: Cole said he planned a sabotage scene that never needed to happen.</li>
+      <li>Frewn's Brews will retaliate: Cole said he planned a sabotage scene that never needed to happen.</li>
       <li>No insurance on the Cantina. A second fight there will cost real money.</li>
       <li>Floon is a liability around prisoners, vials and public events.</li>
     </ul>
@@ -1342,7 +1391,7 @@
       <li>Minor Illusion is capped at a five-foot cube, so the illusory dwarf could roll in filth but not fling it.</li>
       <li>Prestidigitation can produce smells, which made it the table's stink bomb, and it also cleans.</li>
       <li>Cole allowed Sneak Attack on Murky's ranged shots when other raiders stood near the target.</li>
-      <li>Bar upgrades per Cole: secret exit 100 gp, bar games 100 gp, wedding decorations 50 gp, MLM station 250 gp (passive income), rooftop garden 250 gp (extra 1d4 on short rests), gym 500 gp (+5 ft movement; the transcript says “gem”), clinic 500 gp (one automatic death-save success each, once). Players recalled the clinic as 550.</li>
+      <li>Bar upgrades per Cole: secret exit 100 gp, bar games 100 gp, wedding decorations 50 gp, MLM station 250 gp (passive income), rooftop garden 250 gp (extra 1d4 on short rests), gym 500 gp (+5 ft movement), clinic 500 gp (one automatic death-save success each, once). Players recalled the clinic as 550.</li>
     </ul>
   </section>
 
@@ -1359,23 +1408,23 @@
       <li>RESOLVED: Kill the chain devil that was once Laertes Hansburg.</li>
       <li>RESOLVED (new): Decipher the locked book marked with Asmodeus's symbol. Murky opened it with a Religion 20 by whispering “Asmodeus”: it is an Infernal ledger of Waterdeep's devil-worshipping elite, with murder lists and the Cassalanters' debt.</li>
       <li>RESOLVED (new): Sort the Bag of Holding haul from the Cassalanter trophy room: it came to 1,000 gp of gold, gems and jewelry, with no magic items.</li>
-      <li>RESOLVED (new): Check on Gundren Rockseeker: he is fine, left the party early with a farmer's wife (the table assumed Marge), and briefed the party on the Waterdeep Wazoo.</li>
+      <li>RESOLVED (new): Check on Gundren Rockseeker: he is fine, left the party early with a farmer's wife (implied to be Madge), and briefed the party on the Waterdeep Wazoo.</li>
       <li>RESOLVED (new): Hire a private investigator: Vincent Trench is on a 50 gp/day retainer (coffee in, whiskey out), with an NDA, and is training the urchins.</li>
-      <li>RESOLVED (new): The reverse heist: Vinny, disguised as delivery driver “Latavius,” delivered a copied Osmodius journal and an anonymous cover letter to Gigi Rutterman, editor of the Waterdeep Wazoo. (Follow-up is open below.)</li>
-      <li>RESOLVED (new): Recruit Hilga (Helga) to bartend at Trollskull Manor: she took the job and now works at Victor's Cantina.</li>
+      <li>RESOLVED (new): The reverse heist: Vinny, disguised as delivery driver “Latavius,” delivered a copied Osmodius journal and an anonymous cover letter to G.G. Rutterman, editor of the Waterdeep Wazoo. (Follow-up is open below.)</li>
+      <li>RESOLVED (new): Recruit Hilga (Hilga) to bartend at Trollskull Manor: she took the job and now works at Victor's Cantina.</li>
       <li>RESOLVED (new): Hire a chef: Victor was hired on the spot and gave the bar its name.</li>
       <li>RESOLVED (updated): Renovate Trollskull Manor and pick a business model: it opened as Victor's Cantina, a medieval Taco Bell-style cantina with a wedding chapel, VIP basement and secret exit to the back alley.</li>
       <li>RESOLVED (new): Hold Captain Silverhand's captive Calamari lieutenant: the party kept him padlocked in a small bedroom, then helped the pirates smuggle him out during the grand opening.</li>
       <li>RESOLVED (new): Survive the 3 a.m. Kraken Gang raid the night before opening: every raider died and the bar took fire, blood and arrow damage.</li>
-      <li>RESOLVED (new): Sabotage Fruin's Brews on opening day with stink bombs and an illusory dwarf; it half worked, since their bartender cleared the smell and offered a free round.</li>
+      <li>RESOLVED (new): Sabotage Frewn's Brews on opening day with stink bombs and an illusory dwarf; it half worked, since their bartender cleared the smell and offered a free round.</li>
       <li>OPEN (updated): Investigate the 1,000,000-gold treasure and the three stone keys. The party holds one dragon-eye stone and signed a blood pact with Captain Gordo Silverhand. The second stone is in the Cassalanters' trophy-room safe. New this session: the Cassalanters owe Asmodeus just under 1,000,000 gp or 1,000 lives and are chasing the same hoard, which was embezzled from the people of Waterdeep centuries ago.</li>
       <li>OPEN: Retrieve the second dragon-eye stone from the Cassalanter villa. Cole said there was a way in and that the party missed some magic items.</li>
       <li>OPEN (updated): Investigate the Cassalanters: Asmodeus worship, devil-touched children, a party that turns commoners into flesh-blobs, and now a journal and Trench's dossier showing about 50 killed at the party the crew attended and years of earlier missing persons.</li>
-      <li>OPEN (new): Watch the Wazoo: see what Gigi Rutterman does with the copied journal, and read Broxley's review of Victor's Cantina (she was charmed and scrambled before writing it).</li>
+      <li>OPEN (new): Watch the Wazoo: see what G.G. Rutterman does with the copied journal, and read Broxley's review of Victor's Cantina (she was charmed and scrambled before writing it).</li>
       <li>OPEN (new): Retain Vincent Trench: pay the 50 gp/day (200 gp paid at the day-two check-in), collect his daily reports, and follow up on his missing-persons dossier.</li>
       <li>OPEN (new): Show Trench's list of the missing and dead to Gundren, as the party planned.</li>
       <li>OPEN (updated): Meet with Captain Gordo Silverhand: he invited the party to dinner on his ship after the opening to break down his full Dragon Heist dossier. The 200 gp/night storage fee the party demanded was never shown being paid. He planned to sell the captive to a gang in Baldur's Gate, so the pirates are slavers.</li>
-      <li>OPEN (updated): Find out what happened to Marge and Hank and the other commoners at the Starlit Revels. Gundren left early with a farmer's wife (the table assumed Marge); Trench says about 50 died that night.</li>
+      <li>OPEN (updated): Find out what happened to Madge and Hank and the other commoners at the Starlit Revels. Gundren left early with a farmer's wife (implied to be Madge); Trench says about 50 died that night.</li>
       <li>OPEN: Identify the clear vials and the “Midnight Tears” vial. Victor has one and Moth has four; Floon wanted to try one, and the party joked they could turn him into a goo monster.</li>
       <li>OPEN (updated): Source new disguises to get back into the villa, via the haberdashery, Fernando or Vinny's Mask of Many Faces. Trench warned the party was probably seen.</li>
       <li>OPEN: Cultivate Yalah Gralhund and Duessa Albrandt, rival nobles who resent the Cassalanters, as possible allies.</li>
@@ -1383,9 +1432,9 @@
       <li>OPEN (updated): The wedding side hustle: Victor's Cantina has a chapel upstairs, wedding décor (50 gp), and Victor can officiate with Ceremony. The crew offers to pose in wedding photos for 50 gp.</li>
       <li>OPEN: The infernal angle: Yura, the devil's contract, and Laertes Hansburg. Yura and the Silver Serpent's link to the Cassalanters is unexplained.</li>
       <li>OPEN (updated): The arcane drug lab and Floon. Floon tried to drink a vial, slept through the Kraken raid, and spent the hiring week as a town crier yelling about drugs.</li>
-      <li>OPEN (updated): Don Calamari's organization is aware of the party and has lost a raiding party at the Cantina; its mid-tier lieutenant went to the pirates. Expect consequences, with Big Ceff already spotted casing the street. The raiders' bodies were not mentioned after the cleanup.</li>
+      <li>OPEN (updated): Don Calamari's organization is aware of the party and has lost a raiding party at the Cantina; its mid-tier lieutenant went to the pirates. Expect consequences, with Big Seph already spotted casing the street. The raiders' bodies were not mentioned after the cleanup.</li>
       <li>OPEN: Kraken Gang vs. Z Boys conflict.</li>
-      <li>OPEN (new): Fruin's Brews: the rival tavern down the street was sabotaged on opening day and had planned its own sabotage. Expect retaliation.</li>
+      <li>OPEN (new): Frewn's Brews: the rival bar the party already sabotaged in Session 3 was hit again on opening day, and had planned its own sabotage. Expect retaliation.</li>
       <li>OPEN (new): Money: about 4 gp left after the build-out, with the PI's retainer running and the MLM station's income unknown.</li>
       <li>OPEN (new): Remaining Cantina upgrades: gym (500 gp, +5 ft movement), clinic (500 gp, one automatic death-save success each), and rooftop garden (250 gp, extra 1d4 on short rests). The MLM station (250 gp) is built.</li>
       <li>OPEN (new): The urchins say they are mistreated at home; Jenks, Squidly and Nat are now trained scouts.</li>
@@ -1404,14 +1453,14 @@
       <ul class="list">
       <li>Trophy-room haul sells for 1,000 gp; Murky opens the Asmodeus journal with a Religion 20.</li>
       <li>The journal: devil-worship ledger, murder lists, and the Cassalanters' debt of ~1,000,000 gp or 1,000 lives.</li>
-      <li>Gundren points to the Waterdeep Wazoo and editor Gigi Rutterman; warns the treasure was embezzled.</li>
+      <li>Gundren points to the Waterdeep Wazoo and editor G.G. Rutterman; warns the treasure was embezzled.</li>
       <li>Vincent Trench hired at 50 gp/day; he trains the urchins and builds a missing-persons dossier.</li>
-      <li>Reverse heist: Vinny, as delivery driver “Latavius,” hands Gigi a copy of the journal.</li>
+      <li>Reverse heist: Vinny, as delivery driver “Latavius,” hands G.G. a copy of the journal.</li>
       <li>Trollskull Manor becomes Victor's Cantina: Taco Bell cantina, wedding chapel, VIP basement, secret exit.</li>
       <li>Hilga hired as bartender; Victor the chef hired on the spot.</li>
       <li>Silverhand leaves a captive Calamari lieutenant; he invites the party to dinner on his ship.</li>
       <li>3 a.m. Kraken raid: the party kills every raider and wrecks half the bar.</li>
-      <li>Opening day: stink-bomb sabotage of Fruin's Brews; prisoner smuggled out; Broxley charmed.</li>
+      <li>Opening day: stink-bomb sabotage of Frewn's Brews; prisoner smuggled out; Broxley charmed.</li>
       <li>Party is broke (~4 gp), owed a level-up, and waiting on the Wazoo.</li>
       </ul>
     </div>
@@ -1426,6 +1475,21 @@
 <!-- ============================================================ -->
 <!-- QUEST LOG (persistent, current, all sessions) -->
 <!-- ============================================================ -->
+<nav class="secnav" id="secnav" aria-label="Jump to section"></nav>
+<button class="sec-fab" id="sec-fab" onclick="openSecs()" aria-label="Jump to section">☰</button>
+<div class="overlay" id="sec-overlay" onclick="closeSecs()"></div>
+<div class="drawer" id="sec-drawer">
+  <div class="drawer-head"><h3>Jump to</h3><button onclick="closeSecs()" aria-label="Close">×</button></div>
+  <div class="sec-list" id="sec-list"></div>
+</div>
+<div class="lightbox" id="lightbox">
+  <button class="car-btn lb-close" onclick="closeLb()" aria-label="Close">×</button>
+  <button class="car-btn lb-prev" onclick="lbStep(-1)" aria-label="Previous">‹</button>
+  <img id="lb-img" alt="">
+  <div class="lb-cap" id="lb-cap"></div>
+  <button class="car-btn lb-next" onclick="lbStep(1)" aria-label="Next">›</button>
+</div>
+
 <button class="quest-fab" onclick="openQuests()">
   📜 Quest Log <span class="count" id="quest-count">7 open</span>
 </button>
@@ -1453,23 +1517,23 @@
     <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved</span><p>Kill the chain devil that was once Laertes Hansburg.</p></div></div>
     <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>Decipher the locked book marked with Asmodeus's symbol. Murky opened it with a Religion 20 by whispering “Asmodeus”: it is an Infernal ledger of Waterdeep's devil-worshipping elite, with murder lists and the Cassalanters' debt.</p></div></div>
     <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>Sort the Bag of Holding haul from the Cassalanter trophy room: it came to 1,000 gp of gold, gems and jewelry, with no magic items.</p></div></div>
-    <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>Check on Gundren Rockseeker: he is fine, left the party early with a farmer's wife (the table assumed Marge), and briefed the party on the Waterdeep Wazoo.</p></div></div>
+    <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>Check on Gundren Rockseeker: he is fine, left the party early with a farmer's wife (implied to be Madge), and briefed the party on the Waterdeep Wazoo.</p></div></div>
     <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>Hire a private investigator: Vincent Trench is on a 50 gp/day retainer (coffee in, whiskey out), with an NDA, and is training the urchins.</p></div></div>
-    <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>The reverse heist: Vinny, disguised as delivery driver “Latavius,” delivered a copied Osmodius journal and an anonymous cover letter to Gigi Rutterman, editor of the Waterdeep Wazoo. (Follow-up is open below.)</p></div></div>
-    <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>Recruit Hilga (Helga) to bartend at Trollskull Manor: she took the job and now works at Victor's Cantina.</p></div></div>
+    <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>The reverse heist: Vinny, disguised as delivery driver “Latavius,” delivered a copied Osmodius journal and an anonymous cover letter to G.G. Rutterman, editor of the Waterdeep Wazoo. (Follow-up is open below.)</p></div></div>
+    <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>Recruit Hilga (Hilga) to bartend at Trollskull Manor: she took the job and now works at Victor's Cantina.</p></div></div>
     <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>Hire a chef: Victor was hired on the spot and gave the bar its name.</p></div></div>
     <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · updated</span><p>Renovate Trollskull Manor and pick a business model: it opened as Victor's Cantina, a medieval Taco Bell-style cantina with a wedding chapel, VIP basement and secret exit to the back alley.</p></div></div>
     <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>Hold Captain Silverhand's captive Calamari lieutenant: the party kept him padlocked in a small bedroom, then helped the pirates smuggle him out during the grand opening.</p></div></div>
     <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>Survive the 3 a.m. Kraken Gang raid the night before opening: every raider died and the bar took fire, blood and arrow damage.</p></div></div>
-    <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>Sabotage Fruin's Brews on opening day with stink bombs and an illusory dwarf; it half worked, since their bartender cleared the smell and offered a free round.</p></div></div>
+    <div class="quest done"><div class="dot"></div><div class="qtext"><span class="tag">Resolved · new</span><p>Sabotage Frewn's Brews on opening day with stink bombs and an illusory dwarf; it half worked, since their bartender cleared the smell and offered a free round.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · updated</span><p>Investigate the 1,000,000-gold treasure and the three stone keys. The party holds one dragon-eye stone and signed a blood pact with Captain Gordo Silverhand. The second stone is in the Cassalanters' trophy-room safe. New this session: the Cassalanters owe Asmodeus just under 1,000,000 gp or 1,000 lives and are chasing the same hoard, which was embezzled from the people of Waterdeep centuries ago.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open</span><p>Retrieve the second dragon-eye stone from the Cassalanter villa. Cole said there was a way in and that the party missed some magic items.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · updated</span><p>Investigate the Cassalanters: Asmodeus worship, devil-touched children, a party that turns commoners into flesh-blobs, and now a journal and Trench's dossier showing about 50 killed at the party the crew attended and years of earlier missing persons.</p></div></div>
-    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>Watch the Wazoo: see what Gigi Rutterman does with the copied journal, and read Broxley's review of Victor's Cantina (she was charmed and scrambled before writing it).</p></div></div>
+    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>Watch the Wazoo: see what G.G. Rutterman does with the copied journal, and read Broxley's review of Victor's Cantina (she was charmed and scrambled before writing it).</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>Retain Vincent Trench: pay the 50 gp/day (200 gp paid at the day-two check-in), collect his daily reports, and follow up on his missing-persons dossier.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>Show Trench's list of the missing and dead to Gundren, as the party planned.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · updated</span><p>Meet with Captain Gordo Silverhand: he invited the party to dinner on his ship after the opening to break down his full Dragon Heist dossier. The 200 gp/night storage fee the party demanded was never shown being paid. He planned to sell the captive to a gang in Baldur's Gate, so the pirates are slavers.</p></div></div>
-    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · updated</span><p>Find out what happened to Marge and Hank and the other commoners at the Starlit Revels. Gundren left early with a farmer's wife (the table assumed Marge); Trench says about 50 died that night.</p></div></div>
+    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · updated</span><p>Find out what happened to Madge and Hank and the other commoners at the Starlit Revels. Gundren left early with a farmer's wife (implied to be Madge); Trench says about 50 died that night.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open</span><p>Identify the clear vials and the “Midnight Tears” vial. Victor has one and Moth has four; Floon wanted to try one, and the party joked they could turn him into a goo monster.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · updated</span><p>Source new disguises to get back into the villa, via the haberdashery, Fernando or Vinny's Mask of Many Faces. Trench warned the party was probably seen.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open</span><p>Cultivate Yalah Gralhund and Duessa Albrandt, rival nobles who resent the Cassalanters, as possible allies.</p></div></div>
@@ -1477,9 +1541,9 @@
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · updated</span><p>The wedding side hustle: Victor's Cantina has a chapel upstairs, wedding décor (50 gp), and Victor can officiate with Ceremony. The crew offers to pose in wedding photos for 50 gp.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open</span><p>The infernal angle: Yura, the devil's contract, and Laertes Hansburg. Yura and the Silver Serpent's link to the Cassalanters is unexplained.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · updated</span><p>The arcane drug lab and Floon. Floon tried to drink a vial, slept through the Kraken raid, and spent the hiring week as a town crier yelling about drugs.</p></div></div>
-    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · updated</span><p>Don Calamari's organization is aware of the party and has lost a raiding party at the Cantina; its mid-tier lieutenant went to the pirates. Expect consequences, with Big Ceff already spotted casing the street. The raiders' bodies were not mentioned after the cleanup.</p></div></div>
+    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · updated</span><p>Don Calamari's organization is aware of the party and has lost a raiding party at the Cantina; its mid-tier lieutenant went to the pirates. Expect consequences, with Big Seph already spotted casing the street. The raiders' bodies were not mentioned after the cleanup.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open</span><p>Kraken Gang vs. Z Boys conflict.</p></div></div>
-    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>Fruin's Brews: the rival tavern down the street was sabotaged on opening day and had planned its own sabotage. Expect retaliation.</p></div></div>
+    <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>Frewn's Brews: the rival bar the party already sabotaged in Session 3 was hit again on opening day, and had planned its own sabotage. Expect retaliation.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>Money: about 4 gp left after the build-out, with the PI's retainer running and the MLM station's income unknown.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>Remaining Cantina upgrades: gym (500 gp, +5 ft movement), clinic (500 gp, one automatic death-save success each), and rooftop garden (250 gp, extra 1d4 on short rests). The MLM station (250 gp) is built.</p></div></div>
     <div class="quest open"><div class="dot"></div><div class="qtext"><span class="tag">Open · new</span><p>The urchins say they are mistreated at home; Jenks, Squidly and Nat are now trained scouts.</p></div></div>
@@ -1503,7 +1567,17 @@
   <div class="npc-filters" id="npc-filters">
     <!-- populated by JS from NPC_TAGS -->
   </div>
-  <p class="npc-hint">★ shows the party's running consensus. Tap the stars to set your own — saved only in this browser, not shared with the group.</p>
+  <div class="npc-extra" id="npc-extra">
+    <button data-r="all" class="active" onclick="setNpcRecur('all')">All</button>
+    <button data-r="recurring" onclick="setNpcRecur('recurring')">🔁 Recurring</button>
+    <button data-r="oneoff" onclick="setNpcRecur('oneoff')">One-offs</button>
+    <select id="npc-sort" onchange="setNpcSort(this.value)" aria-label="Sort NPCs">
+      <option value="first">Sort: first met</option>
+      <option value="most">Sort: most sessions</option>
+      <option value="az">Sort: A–Z</option>
+    </select>
+  </div>
+  <p class="npc-hint">★ shows the party's running consensus. Tap the stars to set your own — saved only in this browser, not shared with the group. “Recurring” means an NPC shows up in two or more session recaps.</p>
   <div class="drawer-body" id="npc-list">
     <!-- populated by JS from the NPCS array -->
   </div>
@@ -1579,8 +1653,8 @@
       notes: 'Cranky potion-shop owner in the Dock Ward. Relationship soured fast after the party cracked his prized fish tank.' },
     { id: 'sheila', name: 'Sheila (the fish)', session: 'session-01', tag: 'hostile', rating: 1,
       notes: "Old Klebob's \u201Call-seeing\u201D fish \u2014 actually a spy feeding information to Don Calamari. Trust nothing with gills." },
-    { id: 'helga', name: 'Helga', session: 'session-01', tag: 'ally', rating: 5,
-      notes: 'Waitress at the Skewered Dragon with the best gossip in the Dock Ward. Hired in Session 6 as the bartender at Victor\'s Cantina. Cole spells her name "Hilga" (with an I). Unflappable through a bar collapse and a kidnapping.' },
+    { id: 'helga', name: 'Hilga', session: 'session-01', tag: 'ally', rating: 5,
+      notes: 'Waitress at the Skewered Dragon with the best gossip in the Dock Ward. Hired in Session 6 as the bartender at Victor\'s Cantina. Unflappable through a bar collapse and a kidnapping.' },
     { id: 'floon', name: "Floon Blagmaar", session: 'session-02', tag: 'ally', rating: 3,
       notes: "Kidnapped priest turned reluctant tenant and employee. Means well, gets punched in the groin by nine-year-olds regularly — caught smoking arcane drugs in the manor closet in Session 4, in Session 5 knocked out by a thrown whiskey bottle and dumped in a room, and in Session 6 tried to drink a vial for science, served as town crier (mostly yelling about drugs), babysat the prisoner, and slept through the Kraken raid." },
     { id: 'brightbraid', name: 'Officer Brightbraid', session: 'session-02', tag: 'neutral', rating: 4,
@@ -1589,8 +1663,8 @@
       notes: 'Mind flayer lieutenant of Don Calamari. Fled the Session 2 fight and is still at large.' },
     { id: 'grumshar', name: "Grum'Shar", session: 'session-02', tag: 'hostile', rating: 1,
       notes: "Vinny's torturer, holding him between the fire braziers. Killed in the Session 2 rescue." },
-    { id: 'bigceff', name: 'Big Ceff', session: 'session-02', tag: 'hostile', rating: 1,
-      notes: 'Massive mind flayer enforcer that nearly caught the party mid-escape through the portal. Whereabouts unknown until Session 6, when the urchins spotted a huge squid-headed enforcer casing the party\'s street (the transcript calls him "Big Seth").' },
+    { id: 'bigceff', name: 'Big Seph', session: 'session-02', tag: 'hostile', rating: 1,
+      notes: 'Massive mind flayer enforcer that nearly caught the party mid-escape through the portal. Whereabouts unknown until Session 6, when the urchins spotted a huge squid-headed enforcer casing the party\'s street (the transcript calls him "Big Seph").' },
     { id: 'calamari', name: 'Don Calamari', session: 'session-02', tag: 'hostile', rating: 1,
       notes: 'The crime lord behind the Z Boys/Kraken conflict and Jimmy Noodles. Never met directly \u2014 but very much aware of the party now. In Session 6 his Kraken Gang raided Victor\'s Cantina for a captured lieutenant and lost the whole raiding party.' },
     { id: 'urchins', name: "Jenks, Squidly & Nat", session: 'session-03', tag: 'ally', rating: 5,
@@ -1625,26 +1699,26 @@
       notes: "Archdevil of the Nine Hells, named by the Cassalanter children as their family friend. His red-triangle symbol is on the villa's unfinished needlepoint and on a locked book in Moth's bag." },
     { id: "fernando", name: "Fernando", session: 'session-05', tag: "neutral", rating: null,
       notes: "Very thin elf tailor in a beret. Refuses discounts, quotes 20 gp per custom outfit, and made all six black-tie looks (Murky paid)." },
-    { id: "margehank", name: "Marge and Hank", session: 'session-05', tag: "unknown", rating: null,
+    { id: "margehank", name: "Madge and Hank", session: 'session-05', tag: "unknown", rating: null,
       notes: "Farmers from outside the city gates, invited to the Starlit Revels by their local magistrate. Illiterate and delighted. Probably among the peasants turned into flesh-blobs; fate unknown." },
     { id: "yalah", name: "Yalah Gralhund", session: 'session-05', tag: "unknown", rating: null,
       notes: "Wealthy rival matriarch who resents the Cassalanters (\"someday it will be us\") but presents them roses anyway. Talked with Murky and Vinny (Deception 19)." },
     { id: "duessa", name: "Duessa Albrandt", session: 'session-05', tag: "unknown", rating: null,
-      notes: "Noble from a rival family, receptive to Vinny's Bradley Cooper routine until he got thrown out again. (Spelling uncertain from the transcript.)" },
+      notes: "Noble from a rival family, receptive to Vinny's Bradley Cooper routine until he got thrown out again. (Spelling uncertain.)" },
     { id: "butler", name: "The monocled tiefling butler", session: 'session-05', tag: "unknown", rating: null,
       notes: "Guards the villa gate and the piano room's stairwell. Winced when Murky yanked out an ivory piano key." },
     { id: "chef", name: "The head chef", session: 'session-05', tag: "unknown", rating: null,
       notes: "Round tiefling who lives at the villa and runs a tight kitchen. Mistook Vinny for a substitute named \"Bill.\"" },
-    { id: "gigi", name: "Gigi Rutterman", session: 'session-06', tag: "neutral", rating: null,
-      notes: "Editor of the Waterdeep Wazoo, the only paper in the city not bought by the wealthy. A dwarf with a flat-top, mustache and suspenders. Received a copy of the Osmodius journal from \"Latavius\" and called it groundbreaking. (Spelled \"Rudderman\" in places in the transcript.)" },
+    { id: "gigi", name: "G.G. Rutterman", session: 'session-06', tag: "neutral", rating: null,
+      notes: "Editor of the Waterdeep Wazoo, the only paper in the city not bought by the wealthy. A dwarf with a flat-top, mustache and suspenders. Received a copy of the Osmodius journal from \"Latavius\" and called it groundbreaking. " },
     { id: "broxley", name: "Broxley", session: 'session-06', tag: "unknown", rating: null,
       notes: "Waterdeep Wazoo journalist who covered the Cantina\'s grand opening. Saw the pirates carry out a bagged man, then was charmed and scrambled by the party and left to write a glowing review." },
     { id: "victor-chef", name: "Victor (the chef)", session: 'session-06', tag: "ally", rating: null,
       notes: "Quiet cook who walked into the chef interviews and was hired on the spot, no tasting. Victor\'s Cantina is named after him and the paladin." },
     { id: "prisoner", name: "The Goliath prisoner", session: 'session-06', tag: "hostile", rating: null,
-      notes: "A mid-tier lieutenant in Don Calamari\'s gang who ran a corner and led a crew. Tortured aboard the Silver Serpent, held in the Cantina, and smuggled out for sale in Baldur\'s Gate. (Name transcribed as \"Steel Toes.\")" },
-    { id: "fruins", name: "Fruin\'s Brews (rival tavern)", session: 'session-06', tag: "hostile", rating: null,
-      notes: "The rival tavern down the street. Staff wear the mandatory 16 pieces of flair. Its bartender cleared out the stink bombs with magic and offered a free round. (Spelled many ways in the transcript.)" }
+      notes: "A mid-tier lieutenant in Don Calamari\'s gang who ran a corner and led a crew. Tortured aboard the Silver Serpent, held in the Cantina, and smuggled out for sale in Baldur\'s Gate. (Last name Steeltoes; first name unclear.)" },
+    { id: "fruins", name: "Frewn\'s Brews (rival tavern)", session: 'session-06', tag: "hostile", rating: null,
+      notes: "The rival bar and reigning “Best Bar in the North Ward,” already targeted by the party's sabotage in Session 3. Staff wear the mandatory 16 pieces of flair. Its bartender cleared out the stink bombs with magic and offered a free round." }
   ];
 
   var NPC_TAGS = [
@@ -1655,7 +1729,11 @@
     { key: 'unknown', label: '❓ Unknown' }
   ];
 
-  var npcFilter = 'all';
+  var APPEARANCES = {"gundren": [1, 2, 3, 5, 6], "tony": [1, 2, 3], "klebob": [1], "sheila": [1], "helga": [1, 2, 3, 4, 6], "floon": [2, 3, 4, 5, 6], "brightbraid": [2], "noodles": [2], "grumshar": [2], "bigceff": [2, 6], "calamari": [1, 2, 3, 6], "urchins": [3, 4, 6], "trench": [3, 4, 6], "rishal": [3], "thalla": [3], "lith": [3], "jbnevercut": [3, 4, 5, 6], "hansburg": [3, 4, 5], "yura": [3, 4], "screamshaw": [4], "mermaid": [4], "umberlee": [4], "steamsteel": [4], "cassalanters": [5, 6], "cass-kids": [5], "asmodeus": [5, 6], "fernando": [5], "margehank": [5, 6], "yalah": [5], "duessa": [5], "butler": [5], "chef": [5], "gigi": [6], "broxley": [6], "victor-chef": [6], "prisoner": [6], "fruins": [3, 6]};
+  var npcFilter = 'all', npcRecur = 'all', npcSort = 'first';
+  function npcSessions(npc){ return (APPEARANCES[npc.id] && APPEARANCES[npc.id].length) ? APPEARANCES[npc.id] : [parseInt(npc.session.slice(-2),10)]; }
+  function setNpcRecur(v){ npcRecur = v; Array.prototype.forEach.call(document.querySelectorAll('#npc-extra button'), function(b){ b.classList.toggle('active', b.getAttribute('data-r') === v); }); renderNpcs(); }
+  function setNpcSort(v){ npcSort = v; renderNpcs(); }
   var sessionLabels = { 'session-01': 'Session 01', 'session-02': 'Session 02', 'session-03': 'Session 03', 'session-04': 'Session 04', 'session-05': 'Session 05', 'session-06': 'Session 06' };
 
   function initNpcFilters(){
@@ -1693,8 +1771,14 @@
     list.innerHTML = '';
     var shown = 0;
 
-    NPCS.forEach(function(npc){
+    var ordered = NPCS.map(function(n, i){ return { n: n, i: i, c: npcSessions(n).length }; });
+    if (npcSort === 'most') ordered.sort(function(a, b){ return (b.c - a.c) || (a.i - b.i); });
+    else if (npcSort === 'az') ordered.sort(function(a, b){ return a.n.name.replace(/^The /,'').localeCompare(b.n.name.replace(/^The /,'')); });
+    ordered.forEach(function(o){
+      var npc = o.n, seen = npcSessions(npc);
       if (npcFilter !== 'all' && npc.tag !== npcFilter) return;
+      if (npcRecur === 'recurring' && seen.length < 2) return;
+      if (npcRecur === 'oneoff' && seen.length > 1) return;
       var haystack = (npc.name + ' ' + npc.notes).toLowerCase();
       if (q && haystack.indexOf(q) === -1) return;
       shown++;
@@ -1720,10 +1804,11 @@
 
       card.innerHTML =
         '<div class="npc-top">' +
-          '<div class="name">' + npc.name + '</div>' +
+          '<div class="name">' + npc.name + (seen.length > 1 ? '<span class="npc-seen recurring">🔁 ' + seen.length + ' sessions</span>' : '<span class="npc-seen oneoff">one-off</span>') + '</div>' +
           '<span class="npc-tag">' + (NPC_TAGS.filter(function(t){return t.key===npc.tag;})[0] || {}).label + '</span>' +
         '</div>' +
         '<p class="desc">' + npc.notes + '</p>' +
+        (seen.length > 1 ? '<p class="desc" style="font-size:13px;color:var(--parchment-dim)">Seen in: ' + seen.map(function(n){ return 'S' + n; }).join(', ') + '</p>' : '') +
         '<div class="npc-bottom">' +
           '<div>' + starsHtml + ratingLabel + resetBtn + '</div>' +
           '<button class="npc-goto" onclick="closeNpcs(); activate(\'' + npc.session + '\');">Met in ' + sessionLabels[npc.session] + ' \u2192</button>' +
@@ -1758,6 +1843,115 @@
     initNpcFilters();
     renderNpcs();
   });
+
+  /* ============================================================ */
+  /* SECTION JUMP NAV + ILLUSTRATED RECAP GALLERY                   */
+  /* Gallery images live in waterdeep-heist/images/session-0N/ —    */
+  /* drop image files in that folder and they appear automatically. */
+  /* ============================================================ */
+  var SEC_SHORT = { 'General Plot Summary':'Plot Summary', 'Key Moments & Highlights':'Key Moments', 'Funny & Memorable Moments':'Funny Moments', 'Characters Met This Session':'Characters Met', "What's Next?":"What's Next", 'Strategic Considerations':'Strategy', 'Rules & Rulings From the Table':'Rules & Rulings', 'Session Impact':'Impact' };
+  var GH_REPO = 'angryalexg/dnd', GAL_PATH = 'waterdeep-heist/images/';
+  var currentSession = null;
+
+  function secLabel(h){
+    var c = h.cloneNode(true);
+    Array.prototype.forEach.call(c.querySelectorAll('span'), function(x){ x.remove(); });
+    var t = c.textContent.replace(/\s+/g,' ').trim();
+    return SEC_SHORT[t] || t;
+  }
+
+  function buildSectionNav(id){
+    var sess = document.getElementById(id); if (!sess) return;
+    var items = [];
+    Array.prototype.forEach.call(sess.querySelectorAll('.block'), function(b, i){
+      var h = b.querySelector('.head'); if (!h || b.hidden) return;
+      if (!b.id) b.id = 'sec-' + id + '-' + i;
+      items.push({ id: b.id, label: secLabel(h) });
+    });
+    var rail = '<h4>On this page</h4>', list = '';
+    items.forEach(function(it){
+      rail += '<a data-sec="' + it.id + '" onclick="goSec(\'' + it.id + '\')">' + it.label + '</a>';
+      list += '<a data-sec="' + it.id + '" onclick="goSec(\'' + it.id + '\', true)">' + it.label + '</a>';
+    });
+    document.getElementById('secnav').innerHTML = rail;
+    document.getElementById('sec-list').innerHTML = list;
+    spySections();
+  }
+  function goSec(id, closeDrawer){
+    if (closeDrawer) closeSecs();
+    var el = document.getElementById(id); if (el) el.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+  function openSecs(){ document.getElementById('sec-drawer').classList.add('open'); document.getElementById('sec-overlay').classList.add('open'); }
+  function closeSecs(){ document.getElementById('sec-drawer').classList.remove('open'); document.getElementById('sec-overlay').classList.remove('open'); }
+  function spySections(){
+    if (!currentSession) return;
+    var blocks = document.querySelectorAll('#' + currentSession + ' .block'), cur = null;
+    Array.prototype.forEach.call(blocks, function(b){ if (b.id && !b.hidden && b.getBoundingClientRect().top <= 120) cur = b.id; });
+    Array.prototype.forEach.call(document.querySelectorAll('#secnav a, #sec-list a'), function(a){ a.classList.toggle('active', a.getAttribute('data-sec') === cur); });
+  }
+  var spyTick = false;
+  window.addEventListener('scroll', function(){ if (spyTick) return; spyTick = true; requestAnimationFrame(function(){ spyTick = false; spySections(); }); }, { passive:true });
+
+  /* ---- gallery ---- */
+  function prettyCap(name){ return name.replace(/\.[^.]+$/, '').replace(/^[\d\s._-]+/, '').replace(/[_-]+/g, ' ').trim(); }
+  function listImages(id){
+    var key = 'wh-gal-' + id, now = Date.now();
+    try { var c = JSON.parse(sessionStorage.getItem(key)); if (c && now - c.t < 300000) return Promise.resolve(c.f); } catch(e){}
+    var ok = /\.(png|jpe?g|webp|gif|avif)$/i;
+    return fetch('https://api.github.com/repos/' + GH_REPO + '/contents/' + GAL_PATH + id)
+      .then(function(r){ if (!r.ok) throw 0; return r.json(); })
+      .then(function(l){ return l.filter(function(f){ return f.type === 'file' && ok.test(f.name); }).map(function(f){ return f.name; }); })
+      .catch(function(){ return fetch('images/' + id + '/manifest.json').then(function(r){ if (!r.ok) throw 0; return r.json(); }).catch(function(){ return []; }); })
+      .then(function(f){ f.sort(function(a, b){ return a.localeCompare(b, undefined, { numeric:true }); }); try { sessionStorage.setItem(key, JSON.stringify({ t:now, f:f })); } catch(e){} return f; });
+  }
+  var galData = {}, lbSet = null, lbIdx = 0;
+  function loadGallery(id){
+    var sess = document.getElementById(id); if (!sess || sess.getAttribute('data-gal')) return;
+    sess.setAttribute('data-gal', '1');
+    listImages(id).then(function(files){
+      if (!files.length) return;
+      var sec = document.createElement('section');
+      sec.className = 'block gallery'; sec.id = 'gal-' + id;
+      sec.innerHTML = '<h3 class="head">Illustrated Recap<span class="rule"></span></h3><div class="car"><button class="car-btn" aria-label="Previous">‹</button><figure><img alt=""><figcaption></figcaption></figure><button class="car-btn" aria-label="Next">›</button></div><div class="car-thumbs"></div><div class="car-count"></div>';
+      var head = sess.querySelector('.session-head'); head.parentNode.insertBefore(sec, head.nextSibling);
+      var urls = files.map(function(n){ return 'images/' + id + '/' + encodeURIComponent(n); });
+      var caps = files.map(prettyCap), idx = 0;
+      var img = sec.querySelector('figure img'), cap = sec.querySelector('figcaption'), cnt = sec.querySelector('.car-count'), th = sec.querySelector('.car-thumbs');
+      urls.forEach(function(u, i){ var t = document.createElement('img'); t.src = u; t.loading = 'lazy'; t.alt = caps[i]; t.onclick = function(){ show(i); }; th.appendChild(t); });
+      function show(i){
+        idx = (i + urls.length) % urls.length;
+        img.src = urls[idx]; img.alt = caps[idx]; cap.textContent = caps[idx];
+        cnt.textContent = (idx + 1) + ' / ' + urls.length;
+        Array.prototype.forEach.call(th.children, function(t, j){ t.classList.toggle('active', j === idx); });
+        var a = th.children[idx]; if (a && a.scrollIntoView) { try { th.scrollTo({ left: a.offsetLeft - th.clientWidth/2 + a.clientWidth/2, behavior:'smooth' }); } catch(e){} }
+      }
+      var btns = sec.querySelectorAll('.car > .car-btn');
+      btns[0].onclick = function(){ show(idx - 1); }; btns[1].onclick = function(){ show(idx + 1); };
+      img.onclick = function(){ openLb(urls, caps, idx); };
+      swipe(sec.querySelector('figure'), function(d){ show(idx + d); });
+      show(0);
+      if (currentSession === id) buildSectionNav(id);
+    });
+  }
+  function swipe(el, cb){
+    var x0 = null;
+    el.addEventListener('touchstart', function(e){ x0 = e.touches[0].clientX; }, { passive:true });
+    el.addEventListener('touchend', function(e){ if (x0 === null) return; var dx = e.changedTouches[0].clientX - x0; x0 = null; if (Math.abs(dx) > 40) cb(dx < 0 ? 1 : -1); }, { passive:true });
+  }
+  function openLb(urls, caps, i){ lbSet = { u: urls, c: caps }; lbIdx = i; lbShow(); document.getElementById('lightbox').classList.add('open'); }
+  function lbShow(){ document.getElementById('lb-img').src = lbSet.u[lbIdx]; document.getElementById('lb-cap').textContent = lbSet.c[lbIdx]; }
+  function lbStep(d){ lbIdx = (lbIdx + d + lbSet.u.length) % lbSet.u.length; lbShow(); }
+  function closeLb(){ document.getElementById('lightbox').classList.remove('open'); }
+  document.addEventListener('keydown', function(e){
+    if (!document.getElementById('lightbox').classList.contains('open')) return;
+    if (e.key === 'Escape') closeLb(); else if (e.key === 'ArrowLeft') lbStep(-1); else if (e.key === 'ArrowRight') lbStep(1);
+  });
+  swipe(document.getElementById('lightbox'), function(d){ lbStep(d); });
+
+  /* hook: whenever a session tab is shown, rebuild the nav and load its gallery */
+  var _activate = activate;
+  activate = function(id, push){ _activate(id, push); currentSession = id; buildSectionNav(id); loadGallery(id); };
+
 </script>
 
 </body>

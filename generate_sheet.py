@@ -1192,6 +1192,7 @@ def generate_html(char: Character) -> str:
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>{esc(name)} — {esc(title_cls)} {char.total_level}</title>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%231b1416'/%3E%3Cpolygon points='32,6 55,19 55,45 32,58 9,45 9,19' fill='%232a1d20' stroke='%23c9a227' stroke-width='3' stroke-linejoin='round'/%3E%3Cpolygon points='32,17 46,41 18,41' fill='none' stroke='%23c9a227' stroke-width='2.5' stroke-linejoin='round'/%3E%3Cpath d='M32 6V17M55 19L46 41M9 19L18 41M32 58L18 41M32 58L46 41M55 45L46 41M9 45L18 41' stroke='%23c9a227' stroke-width='2' fill='none'/%3E%3C/svg%3E">
 <style>
 {CSS}
 </style>
