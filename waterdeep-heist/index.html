@@ -1302,6 +1302,7 @@
       <li>The anonymous cover letter in six handwritings, signed in Gossip Girl style. The table called it very Always Sunny.</li>
       <li>The concept pitches: Chipotle, Overcooked, a Barnes &amp; Noble Starbucks, and finally the medieval urban-fantasy Taco Bell cantina with a wedding chapel.</li>
       <li>Hilga showing up to work in a sombrero and bolo tie, cigarette in hand.</li>
+      <li>Hilga quitting her old job on the spot: “Hey Marcus, I quit.” The table piled on (“fuck you Marcus”), a glass got knocked off the table, and someone noted, “That escalated quickly.”</li>
       <li>Floon as town crier mostly yelling about drugs.</li>
       <li>Cole, mid-hiring: “I don't have characters for all of these people.”</li>
       <li>Silverhand's hand spinning, and “this campaign's almost over,” delivered to the camera.</li>
@@ -1309,6 +1310,7 @@
       <li>Arguing over where to hide the captive (crow's nest, bathroom, Floon's spooning) before settling on a padlocked bedroom.</li>
       <li>Vinny's silk pajamas burning off in the fireplace, and the table's d28 jokes.</li>
       <li>Floon eating cereal among the bodies the next morning.</li>
+      <li>Vinny announcing he was about to snap-kick Broxley into the fireplace so she could “go back to the Wazoo and run this story.” Someone stopped him mid-wind-up, and the table spent the next minutes on charms until Broxley was commanded to go write up the review.</li>
       <li>Opening-day guerrilla warfare at Frewn's: stink bombs, an illusory dwarf, and the staff's “mandatory 16 pieces of flair.”</li>
       <li>Hilga unflappable through a bar collapse and a kidnapping: “Thanks for coming to Victor's Cantina, home of the world-famous nachos.”</li>
       <li>Cole admitting he had planned a Frewn's sabotage scene, but the crew wrecked their own night well enough that it wasn't needed.</li>
@@ -1328,6 +1330,7 @@
     <div class="npc-card"><div class="name">Captain Gordo Silverhand (returning)</div><p class="desc">Left a captive in the party's care, invited them to dinner on his ship, and collected the man during the grand opening.</p></div>
     <div class="npc-card"><div class="name">Jenks, Squidly &amp; Nat (returning)</div><p class="desc">The three urchins, now trained by Trench in tailing and scouting.</p></div>
     <div class="npc-card"><div class="name">Floon Blagmaar (returning)</div><p class="desc">Town crier, prisoner-sitter, and cereal enthusiast.</p></div>
+    <div class="npc-card"><div class="name">Marcus (mentioned)</div><p class="desc">Hilga's old boss, on the receiving end of her resignation.</p></div>
     <div class="npc-card"><div class="name">Big Seph (mentioned)</div><p class="desc">The mind flayer enforcer, seen by the urchins casing the street.</p></div>
   </section>
 
@@ -1341,6 +1344,8 @@
     <blockquote>This campaign's almost over.<cite>Captain Silverhand, to the camera</cite></blockquote>
     <blockquote>Whoever you're looking for is not here.<cite>Vinny, to the Kraken raiders</cite></blockquote>
     <blockquote>I have the mandatory 16!<cite>Frewn's Brews staffer, on pieces of flair</cite></blockquote>
+    <blockquote>Hey Marcus, I quit.<cite>Hilga, leaving her old job</cite></blockquote>
+    <blockquote>That escalated quickly.<cite>The table, after Hilga quit and a glass hit the floor</cite></blockquote>
     <blockquote>Thanks for coming to Victor's Cantina, home of the world-famous nachos.<cite>Hilga, after a bar collapse and a kidnapping</cite></blockquote>
     <blockquote>We sabotaged them good enough that they didn't want to sabotage us.<cite>The table, on Frewn's Brews</cite></blockquote>
   </section>
@@ -1712,7 +1717,9 @@
     { id: "gigi", name: "G.G. Rutterman", session: 'session-06', tag: "neutral", rating: null,
       notes: "Editor of the Waterdeep Wazoo, the only paper in the city not bought by the wealthy. A dwarf with a flat-top, mustache and suspenders. Received a copy of the Osmodius journal from \"Latavius\" and called it groundbreaking. " },
     { id: "broxley", name: "Broxley", session: 'session-06', tag: "unknown", rating: null,
-      notes: "Waterdeep Wazoo journalist who covered the Cantina\'s grand opening. Saw the pirates carry out a bagged man, then was charmed and scrambled by the party and left to write a glowing review." },
+      notes: "Waterdeep Wazoo journalist who covered the Cantina\'s grand opening. Saw the pirates carry out a bagged man. Vinny almost snap-kicked her into the fireplace, but the party stopped him, charmed her, and sent her off to write a glowing review." },
+    { id: "marcus", name: "Marcus", session: 'session-06', tag: "neutral", rating: null,
+      notes: "Hilga's old boss, the one she quit on the spot (\"Hey Marcus, I quit\"). The party later said to invite him to the Cantina's party." },
     { id: "victor-chef", name: "Victor (the chef)", session: 'session-06', tag: "ally", rating: null,
       notes: "Quiet cook who walked into the chef interviews and was hired on the spot, no tasting. Victor\'s Cantina is named after him and the paladin." },
     { id: "prisoner", name: "The Goliath prisoner", session: 'session-06', tag: "hostile", rating: null,
@@ -1729,7 +1736,7 @@
     { key: 'unknown', label: '❓ Unknown' }
   ];
 
-  var APPEARANCES = {"gundren": [1, 2, 3, 5, 6], "tony": [1, 2, 3], "klebob": [1], "sheila": [1], "helga": [1, 2, 3, 4, 6], "floon": [2, 3, 4, 5, 6], "brightbraid": [2], "noodles": [2], "grumshar": [2], "bigceff": [2, 6], "calamari": [1, 2, 3, 6], "urchins": [3, 4, 6], "trench": [3, 4, 6], "rishal": [3], "thalla": [3], "lith": [3], "jbnevercut": [3, 4, 5, 6], "hansburg": [3, 4, 5], "yura": [3, 4], "screamshaw": [4], "mermaid": [4], "umberlee": [4], "steamsteel": [4], "cassalanters": [5, 6], "cass-kids": [5], "asmodeus": [5, 6], "fernando": [5], "margehank": [5, 6], "yalah": [5], "duessa": [5], "butler": [5], "chef": [5], "gigi": [6], "broxley": [6], "victor-chef": [6], "prisoner": [6], "fruins": [3, 6]};
+  var APPEARANCES = {"gundren": [1, 2, 3, 5, 6], "tony": [1, 2, 3], "klebob": [1], "sheila": [1], "helga": [1, 2, 3, 4, 6], "floon": [2, 3, 4, 5, 6], "brightbraid": [2], "noodles": [2], "grumshar": [2], "bigceff": [2, 6], "calamari": [1, 2, 3, 6], "urchins": [3, 4, 6], "trench": [3, 4, 6], "rishal": [3], "thalla": [3], "lith": [3], "jbnevercut": [3, 4, 5, 6], "hansburg": [3, 4, 5], "yura": [3, 4], "screamshaw": [4], "mermaid": [4], "umberlee": [4], "steamsteel": [4], "cassalanters": [5, 6], "cass-kids": [5], "asmodeus": [5, 6], "fernando": [5], "margehank": [5, 6], "yalah": [5], "duessa": [5], "butler": [5], "chef": [5], "gigi": [6], "broxley": [6], "marcus": [6], "victor-chef": [6], "prisoner": [6], "fruins": [3, 6]};
   var npcFilter = 'all', npcRecur = 'all', npcSort = 'first';
   function npcSessions(npc){ return (APPEARANCES[npc.id] && APPEARANCES[npc.id].length) ? APPEARANCES[npc.id] : [parseInt(npc.session.slice(-2),10)]; }
   function setNpcRecur(v){ npcRecur = v; Array.prototype.forEach.call(document.querySelectorAll('#npc-extra button'), function(b){ b.classList.toggle('active', b.getAttribute('data-r') === v); }); renderNpcs(); }
